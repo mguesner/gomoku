@@ -1,11 +1,7 @@
-NAME = libsfml.so
+NAME = gomoku
 
 SRC = SFMLData.cpp\
-	init.cpp \
-	  ../core/GameObject.cpp \
-	  ../core/Point.cpp \
-	  ../core/Snake.cpp \
-	  ../Data.cpp \
+	main.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
@@ -20,7 +16,7 @@ lib:
 	$(CC) -c -o $@ $<
 
 $(NAME): $(OBJ)
-	$(CC) -dynamiclib -o $(NAME) $(OBJ)  -Wl,-rpath,$(shell pwd)/SFML-2.2-osx-clang-universal/Frameworks -Wl,-rpath,$(shell pwd)/SFML-2.2-osx-clang-universal/extlibs -F $(shell pwd)/SFML-2.2-osx-clang-universal/Frameworks -framework SFML -framework sfml-system -framework sfml-window -framework sfml-graphics
+	$(CC) -o $(NAME) $(OBJ)  -Wl,-rpath,$(shell pwd)/SFML-2.2-osx-clang-universal/Frameworks -Wl,-rpath,$(shell pwd)/SFML-2.2-osx-clang-universal/extlibs -F $(shell pwd)/SFML-2.2-osx-clang-universal/Frameworks -framework SFML -framework sfml-system -framework sfml-window -framework sfml-graphics
 
 SFML:
 	mkdir -p SFML/junk
