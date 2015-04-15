@@ -1,7 +1,11 @@
 NAME = gomoku
 
 SRC = SFMLData.cpp\
-	main.cpp
+	main.cpp\
+	GameState.cpp\
+	Game.cpp\
+	VictoryException.cpp\
+	Point.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
