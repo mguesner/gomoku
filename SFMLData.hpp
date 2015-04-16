@@ -4,10 +4,11 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Gamestate.hpp"
 
 #define WIDTH		1920
 #define HEIGHT		1080
-
+#define CASESIZE	42
 class SFMLData
 {
 public:
@@ -17,7 +18,7 @@ public:
 	void Lock();
 	int GetInput();
 	void SetInput(int);
-	void SetGameState(Gamestate*);
+	void SetGameState(GameState*);
 	~SFMLData();
 
 private:
@@ -40,7 +41,7 @@ private:
 	sf::Font 			*font;
 	sf::Texture			*texture;
 	sf::RectangleShape	*background;
-	Gamestate			*game;
+	GameState			*game;
 	//sf::Sprite			*sprite;
 	//SFML_Surface	*screenSurface;
 };

@@ -21,6 +21,7 @@ SFMLData::SFMLData()
 	//texture->setRepeated(true);
 	texture->setSmooth(true);
 	background->setTexture(texture);
+	game = NULL;
 	//background->setFillColor(sf::Color(40,40,40));
 
 
@@ -56,7 +57,7 @@ void SFMLData::DrawMainMenu()
        // }
 }
 
-void SFMLData::SetGameState(Gamestate *myEffeilTower)
+void SFMLData::SetGameState(GameState *myEffeilTower)
 {
 	game = myEffeilTower;
 }
@@ -69,7 +70,30 @@ void SFMLData::DrawHiScoreMenu()
 
 void SFMLData::DrawNormalMode()
 {
+	if (game == NULL)
+		return;
+	auto truc = game->GetMap();
+	for (int i = 0; i < 19 * 19; i++)
+	{
+			if (truc[i] == BLACK)
+			{
+				sf::CircleShape shape(10);
+				shape.setFillColor(sf::Color(0, 0, 0));
 
+// set a 10-pixel wide orange outline
+				shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
+				win->draw(shape);
+			}
+			else if (truc[i] == WHITE)
+			{
+				sf::CircleShape shape(10);
+				shape.setFillColor(sf::Color(250, 250, 250));
+
+// set a 10-pixel wide orange outline
+				shape.setPosition(i % 19 * CASESIZE + 2110, i / 19 * CASESIZE + 110);
+				win->draw(shape);
+			}
+	}
 }
 
 void SFMLData::DrawMultiMode()
@@ -166,8 +190,17 @@ int SFMLData::GetInput()
             {
             	ret = (int)sf::Event::KeyPressed;
             }
+            if (event.type == sf::Event::MouseButtonPressed)
+			{
+				if (event.mouseButton.button == sf::Mouse::Right)
+				{
+					std::cout << "the right button was pressed" << std::endl;
+					std::cout << "mouse x: " << event.mouseButton.x << std::endl;
+					std::cout << "mouse y: " << event.mouseButton.y << std::endl;
+				}
+			}
 
-    }
+	}
 	return ret;
 }
 

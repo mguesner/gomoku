@@ -11,6 +11,7 @@ int main()
 	// char buff[10];
 	int x, y;
 	auto color = WHITE;
+	win->Draw();
 	while (1)
 	{
 		std::cin >> x;

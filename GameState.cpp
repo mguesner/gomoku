@@ -185,9 +185,9 @@ bool GameState::checkVoisin(int x, int y, eState color)
 		|| (x < 18 && y > 0 && map[y - 1][x + 1] != NONE) || (y < 18 && x > 0 && map[y + 1][x - 1] != NONE));
 }
 
-eState **GameState::GetMap()
+eState *GameState::GetMap()
 {
-	return (eState **)map;
+	return (eState *)map;
 }
 
 void GameState::checkVictoire(int x, int y, eState color)
