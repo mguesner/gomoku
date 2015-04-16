@@ -4,15 +4,14 @@
 
 int main()
 {
-	// SFMLData *win = new SFMLData();
-	// (void)win;
+	SFMLData *win = new SFMLData();
 	GameState game;
 	game.GameStart();
+	win->SetGameState(&game);
 	// char buff[10];
 	int x, y;
 	while (1)
 	{
-		game.Display();
 		std::cin >> x;
 		std::cin >> y;
 		try
@@ -24,5 +23,6 @@ int main()
 		{
 			std::cout << e->what() << std::endl;
 		}
+		win->Draw();
 	}
 }

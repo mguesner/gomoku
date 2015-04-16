@@ -17,6 +17,7 @@ public:
 	void Lock();
 	int GetInput();
 	void SetInput(int);
+	void SetGameState(Gamestate*);
 	~SFMLData();
 
 private:
@@ -39,6 +40,7 @@ private:
 	sf::Font 			*font;
 	sf::Texture			*texture;
 	sf::RectangleShape	*background;
+	Gamestate			*game;
 	//sf::Sprite			*sprite;
 	//SFML_Surface	*screenSurface;
 };
