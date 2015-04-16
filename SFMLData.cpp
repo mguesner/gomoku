@@ -86,11 +86,12 @@ void SFMLData::DrawNormalMode()
 			}
 			else if (truc[i] == WHITE)
 			{
+				std::cout << "BLANC" << std::endl;
 				sf::CircleShape shape(10);
 				shape.setFillColor(sf::Color(250, 250, 250));
 
 // set a 10-pixel wide orange outline
-				shape.setPosition(i % 19 * CASESIZE + 2110, i / 19 * CASESIZE + 110);
+				shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
 				win->draw(shape);
 			}
 	}
@@ -174,10 +175,9 @@ void SFMLData::SetInput(int keycode)
 	(void)keycode;
 }
 
-int SFMLData::GetInput()
+Input SFMLData::GetInput()
 {
 	sf::Event event;
-	int ret = 0;
     while (win->pollEvent(event))
     {
             if (event.type == sf::Event::Closed)
@@ -188,20 +188,18 @@ int SFMLData::GetInput()
             }
             else if (event.type == sf::Event::KeyPressed)
             {
-            	ret = (int)sf::Event::KeyPressed;
+            	return Input(UP);
             }
             if (event.type == sf::Event::MouseButtonPressed)
 			{
-				if (event.mouseButton.button == sf::Mouse::Right)
+				if (event.mouseButton.button == sf::Mouse::Left)
 				{
-					std::cout << "the right button was pressed" << std::endl;
-					std::cout << "mouse x: " << event.mouseButton.x << std::endl;
-					std::cout << "mouse y: " << event.mouseButton.y << std::endl;
+					return Input(MOUSE, (event.mouseButton.x - 100) / CASESIZE, (event.mouseButton.y - 100) / CASESIZE);
 				}
 			}
 
 	}
-	return ret;
+	return Input(NOINPUT);
 }
 
 

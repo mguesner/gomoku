@@ -9,25 +9,29 @@ int main()
 	game.GameStart();
 	win->SetGameState(&game);
 	// char buff[10];
-	int x, y;
+	// int x, y;
 	auto color = WHITE;
 	win->Draw();
 	while (1)
 	{
-		std::cin >> x;
-		std::cin >> y;
-		try
+		// std::cin >> x;
+		// std::cin >> y;
+		auto input = win->GetInput();
+		if (input.GetType() == MOUSE)
 		{
-			if (!game.Play(x, y, color))
-				std::cout << "wrong move" << std::endl;
-			else
-				color = (color == WHITE ? BLACK : WHITE);
+			try
+			{
+				if (!game.Play(input.GetX(), input.GetY(), color))
+					std::cout << "wrong move" << std::endl;
+				else
+					color = (color == WHITE ? BLACK : WHITE);
+			}
+			catch (std::exception *e)
+			{
+				game.Display();
+				std::cout << e->what() << std::endl;
+			}
+			win->Draw();
 		}
-		catch (std::exception *e)
-		{
-			game.Display();
-			std::cout << e->what() << std::endl;
-		}
-		win->Draw();
 	}
 }

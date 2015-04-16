@@ -314,7 +314,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				map[y + i - 2][x] = NONE;
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
-					throw VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
+					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
 				break;
 			}
 			capt = -1;

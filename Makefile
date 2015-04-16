@@ -5,7 +5,8 @@ SRC = SFMLData.cpp\
 	GameState.cpp\
 	Game.cpp\
 	VictoryException.cpp\
-	Point.cpp
+	Point.cpp\
+	Input.cpp
 
 OBJ = $(SRC:.cpp=.o)
 

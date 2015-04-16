@@ -5,10 +5,12 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Gamestate.hpp"
+#include "Input.hpp"
 
 #define WIDTH		1920
 #define HEIGHT		1080
 #define CASESIZE	42
+
 class SFMLData
 {
 public:
@@ -16,7 +18,7 @@ public:
 	void Draw();
 	void Close();
 	void Lock();
-	int GetInput();
+	Input GetInput();
 	void SetInput(int);
 	void SetGameState(GameState*);
 	~SFMLData();
