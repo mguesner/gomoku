@@ -19,6 +19,7 @@ public:
 	GameState& operator=(GameState const & rhs);
 	void Display();
 	void GameStart();
+	eState **GetMap();
 	bool Play(int, int, eState color);
 	~GameState();
 private:
