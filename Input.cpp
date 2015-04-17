@@ -15,12 +15,16 @@ Input::Input(eInput input, int x, int y) : input(input), x(x), y(y)
 
 Input::Input(Input const & src)
 {
-	(void)src;
+	input = src.input;
+	x = src.x;
+	y = src.y;
 }
 
-Input& Input::operator=(Input const & rhs)
+Input& Input::operator=(Input const & src)
 {
-	(void)rhs;
+	input = src.input;
+	x = src.x;
+	y = src.y;
 	return *this;
 }
 

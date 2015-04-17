@@ -13,6 +13,17 @@ GameState::GameState()
 	}
 }
 
+GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt)
+{
+	(void)test;
+	(void)real;
+	//map = real; // !!! MEMCPY
+	//APPLIQUER LE MOVE sur map jamais modifier real (CONST ??? :D)
+	//heuristic = HeuristicOfMovementForADeathBeforeLife();
+	nbCaptBlack = blackcpt;
+	nbCaptWhite = whitecpt;
+}
+
 GameState::GameState(GameState const & src)
 {
 	(void)src;
@@ -422,11 +433,39 @@ bool GameState::Play(int x, int y, eState color)
 	return false;
 }
 
+bool GameState::CheckMove(int x, int y, eState color)
+{
+	if (map[y][x] == NONE && checkVoisin(x, y, color))
+		return true;
+	return false;
+}
+
 GameState& GameState::operator=(GameState const & rhs)
 {
 	(void)rhs;
 	return *this;
 }
+
+std::vector<GameState*> GameState::GenerateSons()
+{
+	std::vector<GameState*> sons;
+
+// generate possible sons
+// verifier la valideter , constuire le fils et ajouter au vecteur
+
+	return sons;
+}
+
+int GameState::GetHeuristic()
+{
+	return heuristic;
+}
+
+Input GameState::GetMove()
+{
+	return move;
+}
+
 
 GameState::~GameState()
 {
