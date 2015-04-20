@@ -32,8 +32,10 @@ public:
 	bool CheckMove(int, int, eState color);
 	~GameState();
 private:
-	bool checkVoisin(int, int, eState);
+	void checkVoisin(int, int, eState);
 	void checkVictoire(int, int, eState);
+	bool checkThree(int, int, eState);
+	std::set<Point> coups;
 	eState map[19][19];
 	int nbCaptBlack;
 	int nbCaptWhite;

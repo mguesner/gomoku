@@ -8,7 +8,7 @@ int MinMax(GameState *node, int depth, int *alpha, int *beta, bool Me, Input *re
 {
 	if (depth == 0)
 	{
-		*ret = node->GetMove(); 
+		*ret = node->GetMove();
 		return node->GetHeuristic();
 	}
 	if (Me)
@@ -80,13 +80,14 @@ int main()
 		// std::cin >> y;
 
 		Input input;
-		if (HumanTurn)
-			input = win->GetInput();
-		else
-		{
-			auto runUntil = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
-			input = do_MinMax(&game, runUntil);
-		}
+		input = win->GetInput();
+		// if (HumanTurn)
+		// 	input = win->GetInput();
+		// else
+		// {
+		// 	auto runUntil = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
+		// 	input = do_MinMax(&game, runUntil);
+		// }
 		if (input.GetType() == MOUSE)
 		{
 			try

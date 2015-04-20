@@ -32,9 +32,17 @@ GameState::GameState(GameState const & src)
 void GameState::GameStart()
 {
 	map[9][9] = BLACK;
+	coups.insert(Point(8, 9, 0));
+	coups.insert(Point(8, 8, 0));
+	coups.insert(Point(8, 10, 0));
+	coups.insert(Point(10, 8, 0));
+	coups.insert(Point(10, 10, 0));
+	coups.insert(Point(9, 8, 0));
+	coups.insert(Point(10, 9, 0));
+	coups.insert(Point(9, 10, 0));
 }
 
-bool GameState::checkVoisin(int x, int y, eState color)
+bool GameState::checkThree(int x, int y, eState color)
 {
 	eState opponent = (color == BLACK ? WHITE : BLACK);
 	int nbThrees = 0;
@@ -188,12 +196,28 @@ bool GameState::checkVoisin(int x, int y, eState color)
 
 	if (nbThrees > 1)
 		return false;
+	return true;
+}
 
-	return ((x > 0 && map[y][x - 1] != NONE) || (y > 0 && map[y - 1][x] != NONE)
-		|| (y > 0 && x > 0 && map[y - 1][x - 1] != NONE)
-		|| (x < 18 && map[y][x + 1] != NONE) || (y < 18 && map[y + 1][x] != NONE)
-		|| (y < 18 && x < 18 && map[y + 1][x + 1] != NONE)
-		|| (x < 18 && y > 0 && map[y - 1][x + 1] != NONE) || (y < 18 && x > 0 && map[y + 1][x - 1] != NONE));
+void GameState::checkVoisin(int x, int y, eState color)
+{
+	(void) color;
+	if (map[y - 1][x] == NONE)
+		coups.insert(Point(x, y - 1, 0));
+	if (map[y - 1][x - 1] == NONE)
+		coups.insert(Point(x - 1, y - 1, 0));
+	if (map[y - 1][x + 1] == NONE)
+		coups.insert(Point(x + 1, y - 1, 0));
+	if (map[y + 1][x] == NONE)
+		coups.insert(Point(x, y + 1, 0));
+	if (map[y + 1][x + 1] == NONE)
+		coups.insert(Point(x + 1, y + 1, 0));
+	if (map[y + 1][x - 1] == NONE)
+		coups.insert(Point(x - 1, y + 1, 0));
+	if (map[y][x + 1] == NONE)
+		coups.insert(Point(x + 1, y, 0));
+	if (map[y][x - 1] == NONE)
+		coups.insert(Point(x - 1, y, 0));
 }
 
 eState *GameState::GetMap()
@@ -424,10 +448,12 @@ void GameState::checkVictoire(int x, int y, eState color)
 
 bool GameState::Play(int x, int y, eState color)
 {
-	if (map[y][x] == NONE && checkVoisin(x, y, color))
+	if (coups.count(Point(x, y, 0)) > 0 && checkThree(x, y, color))
 	{
 		map[y][x] = color;
 		checkVictoire(x, y, color);
+		coups.erase(Point(x, y, 0));
+		checkVoisin(x, y, color);
 		return true;
 	}
 	return false;
@@ -435,8 +461,11 @@ bool GameState::Play(int x, int y, eState color)
 
 bool GameState::CheckMove(int x, int y, eState color)
 {
-	if (map[y][x] == NONE && checkVoisin(x, y, color))
-		return true;
+	(void)x;
+	(void)y;
+	(void)color;
+	// if (map[y][x] == NONE && checkVoisin(x, y, color))
+	// 	return true;
 	return false;
 }
 

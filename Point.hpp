@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <math.h>
+#include <set>
 
 class Point
 {
@@ -13,12 +14,12 @@ class Point
 		Point& operator=(Point const & rhs);
 		~Point();
 
-		void Rotation(double anglex, double angley, double anglez);
+		void	Rotation(double anglex, double angley, double anglez);
 		double	GetPerspectiveY(double distance);
 		double	GetPerspectiveX(double distance);
-		double		getX();
-		double		getY();
-		double		getZ();
+		double	getX();
+		double	getY();
+		double	getZ();
 
 		void	SetX(double value);
 		void	SetY(double value);
@@ -29,11 +30,14 @@ class Point
 
 		Point& operator+=(Point const & ref);
 		Point& operator-=(Point const & ref);
+		bool operator<(Point const & ref) const;
 		bool operator==(Point const & ref);
 		bool operator!=(Point const & ref);
 		Point& operator+(Point const & ref);
 		Point& operator-(Point const & ref);
 	protected:
+		bool		black;
+		bool		white;
 		double		x;
 		double		y;
 		double		z;

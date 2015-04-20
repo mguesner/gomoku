@@ -61,6 +61,11 @@ Point& Point::operator+(Point const & ref)
 	return *this;
 }
 
+bool Point::operator<(Point const & ref) const
+{
+	return (x < ref.x || (x == ref.x && y < ref.y));
+}
+
 Point& Point::operator-(Point const & ref)
 {
 	x -= ref.x;
