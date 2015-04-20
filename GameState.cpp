@@ -13,20 +13,27 @@ GameState::GameState()
 	}
 }
 
-GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt)
+GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt, eState oldColor)
 {
-	(void)test;
+	move = test;
 	(void)real;
 	//map = real; // !!! MEMCPY
 	//APPLIQUER LE MOVE sur map jamais modifier real (CONST ??? :D)
 	//heuristic = HeuristicOfMovementForADeathBeforeLife();
 	nbCaptBlack = blackcpt;
 	nbCaptWhite = whitecpt;
+	currentColor = oldColor == BLACK ? WHITE : BLACK;
 }
 
 GameState::GameState(GameState const & src)
 {
-	(void)src;
+	coups = src.coups;
+	// map;
+	nbCaptBlack = src.nbCaptBlack;
+	nbCaptWhite = src.nbCaptWhite;
+	currentColor = src.currentColor;
+	heuristic = src.heuristic;
+	move = src.move;
 }
 
 void GameState::GameStart()
@@ -469,23 +476,32 @@ bool GameState::CheckMove(int x, int y, eState color)
 	return false;
 }
 
-GameState& GameState::operator=(GameState const & rhs)
+GameState& GameState::operator=(GameState const & src)
 {
-	(void)rhs;
+	coups = src.coups;
+	// map;
+	nbCaptBlack = src.nbCaptBlack;
+	nbCaptWhite = src.nbCaptWhite;
+	currentColor = src.currentColor;
+	heuristic = src.heuristic;
+	move = src.move;
 	return *this;
 }
 
 std::vector<GameState*> GameState::GenerateSons()
 {
 	std::vector<GameState*> sons;
+
+
 	for (auto i = coups.begin(); i != coups.end(); ++i)
 	{
-		if(checkThree(*i.getX(), *i.getY(), color))
-			sons.push_back()
+		if(checkThree((*i).getX(), (*i).getY(), currentColor))
+		{
+			Input test(NOINPUT, (*i).getX(), (*i).getY());
+			GameState *son = new GameState(map, test, nbCaptBlack, nbCaptWhite, currentColor);
+			sons.push_back(son);
+		}
 	}
-// generate possible sons
-// verifier la valideter , constuire le fils et ajouter au vecteur
-
 	return sons;
 }
 

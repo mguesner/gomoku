@@ -17,7 +17,7 @@ class GameState
 {
 public:
 	GameState(); //empty constructor == root map
-	GameState(eState real[19][19], Input test, int blackcpt, int whitecpt); //constructeur pour generer les fils
+	GameState(eState real[19][19], Input test, int blackcpt, int whitecpt, eState); //constructeur pour generer les fils
 	GameState(GameState const & src);
 	GameState& operator=(GameState const & rhs);
 	void Display();
@@ -39,6 +39,7 @@ private:
 	eState map[19][19];
 	int nbCaptBlack;
 	int nbCaptWhite;
+	eState currentColor;
 	int heuristic;
 	Input move;
 };

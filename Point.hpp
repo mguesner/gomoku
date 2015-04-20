@@ -17,9 +17,9 @@ class Point
 		void	Rotation(double anglex, double angley, double anglez);
 		double	GetPerspectiveY(double distance);
 		double	GetPerspectiveX(double distance);
-		double	getX();
-		double	getY();
-		double	getZ();
+		double	getX() const;
+		double	getY() const;
+		double	getZ() const;
 
 		void	SetX(double value);
 		void	SetY(double value);
