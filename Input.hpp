@@ -9,6 +9,7 @@ enum eInput
 	RIGHT,
 	LEFT,
 	VALIDATE,
+	ESC,
 	NOINPUT,
 };
 
@@ -19,6 +20,7 @@ public:
 	Input(eInput);
 	Input(eInput, int, int);
 	Input(Input const & src);
+	void SetType(eInput type);
 	Input& operator=(Input const & rhs);
 	eInput GetType();
 	int GetX();

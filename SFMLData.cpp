@@ -188,6 +188,8 @@ Input SFMLData::GetInput()
             }
             else if (event.type == sf::Event::KeyPressed)
             {
+            	if (event.key.code == sf::Keyboard::Escape)
+            		return Input(ESC);
             	return Input(UP);
             }
             if (event.type == sf::Event::MouseButtonPressed)

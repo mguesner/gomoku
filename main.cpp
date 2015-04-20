@@ -48,17 +48,22 @@ int MinMax(GameState *node, int depth, int *alpha, int *beta, bool Me, Input *re
 
 Input do_MinMax(GameState *root, Timer timeout)
 {
-	int depth = 1;
-	int best = 0;
-	int ALPHA = ALPHA_START;
-	int BETA = BETA_START;
+	// int depth = 1;
+	// int best = 0;
+	// int ALPHA = ALPHA_START;
+	// int BETA = BETA_START;
 	Input ret;
-	while (timeout < std::chrono::system_clock::now())
-	{
-		best = MinMax(root, depth, &ALPHA, &BETA, true, &ret);
-		depth++;
+	(void)timeout;
+	//while (timeout < std::chrono::system_clock::now())
+	//{
+		//best = MinMax(root, depth, &ALPHA, &BETA, true, &ret);
+		auto john = root->GenerateSons();
+		auto lol = std::min_element(john.begin(), john.end());
+		//depth++;
 		// do timeout-- or be sure it will.
-	}
+	//}
+	ret = (*lol)->GetMove();
+	ret.SetType(MOUSE);
 	return ret;
 }
 
@@ -74,21 +79,23 @@ int main()
 	auto color = WHITE;
 	win->Draw();
 	bool HumanTurn = true;
+	bool noIA = false;
 	while (1)
 	{
 		// std::cin >> x;
 		// std::cin >> y;
 
 		Input input;
-		input = win->GetInput();
-		// if (HumanTurn)
-		// 	input = win->GetInput();
-		// else
-		// {
-		// 	auto runUntil = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
-		// 	input = do_MinMax(&game, runUntil);
-		// }
-		if (input.GetType() == MOUSE)
+		if (HumanTurn || noIA)
+		 	input = win->GetInput();
+		else
+		{
+			game.SetColor((color == WHITE ? BLACK : WHITE));
+		 	auto runUntil = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
+		 	input = do_MinMax(&game, runUntil);
+		}
+		auto type = input.GetType();
+		if (type == MOUSE)
 		{
 			try
 			{
@@ -107,5 +114,7 @@ int main()
 			}
 			win->Draw();
 		}
+		else if (type == ESC)
+			exit(0);
 	}
 }

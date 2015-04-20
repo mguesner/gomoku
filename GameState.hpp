@@ -6,6 +6,20 @@
 #include "VictoryException.hpp"
 #include "Input.hpp"
 
+#define TWOROW 20
+#define THREEROW 40
+#define FOURROW 70
+#define FIVEROW 4000
+#define ENEMYTWO -19
+#define ENEMYTHREE -39
+#define ENEMYFOUR -71
+#define ENEMYFIVE -4500
+#define CAPTUREONE 40
+#define CAPTURETWO 70
+#define CAPTURETHREE 90
+#define CAPTUREFOUR 200
+#define CAPTUREFIVE 10000
+
 enum eState
 {
 	NONE = 0,
@@ -20,12 +34,17 @@ public:
 	GameState(eState real[19][19], Input test, int blackcpt, int whitecpt, eState); //constructeur pour generer les fils
 	GameState(GameState const & src);
 	GameState& operator=(GameState const & rhs);
+	bool	operator<(GameState const & src);
+	bool	operator==(GameState const & src);
+	bool	operator<=(GameState const & src);
 	void Display();
 	void GameStart();
 
 	std::vector<GameState*> GenerateSons();
 	int GetHeuristic();
 	Input GetMove();
+	int BrainDead() const;
+	void SetColor(eState color);
 
 	eState *GetMap();
 	bool Play(int, int, eState color);

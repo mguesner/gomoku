@@ -33,6 +33,11 @@ eInput Input::GetType()
 	return input;
 }
 
+void Input::SetType(eInput type)
+{
+	input = type;
+}
+
 int Input::GetX()
 {
 	return x;

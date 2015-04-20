@@ -13,27 +13,79 @@ GameState::GameState()
 	}
 }
 
-GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt, eState oldColor)
+GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt, eState turnColor)
 {
 	move = test;
-	(void)real;
-	//map = real; // !!! MEMCPY
-	//APPLIQUER LE MOVE sur map jamais modifier real (CONST ??? :D)
-	//heuristic = HeuristicOfMovementForADeathBeforeLife();
+	std::memcpy(&map, &real, sizeof(eState) * 19 * 19);
+	map[test.GetY()][test.GetX()] = turnColor;
+	heuristic = BrainDead();
 	nbCaptBlack = blackcpt;
 	nbCaptWhite = whitecpt;
-	currentColor = oldColor == BLACK ? WHITE : BLACK;
+	currentColor = turnColor;
 }
 
 GameState::GameState(GameState const & src)
 {
 	coups = src.coups;
-	// map;
+	std::memcpy(&map, &(src.map), sizeof(eState) * 19 * 19);
 	nbCaptBlack = src.nbCaptBlack;
 	nbCaptWhite = src.nbCaptWhite;
 	currentColor = src.currentColor;
 	heuristic = src.heuristic;
 	move = src.move;
+}
+
+bool	GameState::operator<(GameState const & src)
+{
+	if (heuristic < src.heuristic)
+		return true;
+	return false;
+}
+
+bool	GameState::operator==(GameState const & src)
+{
+	if (heuristic == src.heuristic)
+		return true;
+	return false;
+}
+
+bool	GameState::operator<=(GameState const & src)
+{
+	if (heuristic <= src.heuristic)
+		return true;
+	return false;
+}
+
+//HEURISTIC FUNCTION RETURN MAX VALUE EVALUATING CURRENT PLAYER POSITION
+
+int		GameState::BrainDead() const
+{
+	int ret = 0;
+	//auto opponentColor = (currentColor == WHITE ? BLACK : WHITE);
+
+	//count my columns lines and diagonal 
+	//add my capture
+	//substract opponents lines columns and diagonals
+	//substract opponents captures
+	// ret += nbTwoRow * TWOROW;
+	// ret += nbThreeRow * THREEROW;
+	// ret += nbFourRow * FOURROW;
+	// ret += nbFiveRow * FIVEROW;
+	// ret += opponentNbTwoRow * ENEMYTWO;
+	// ret += opponentNbThreeRow * ENEMYTHREE;
+	// ret += opponentNbFourRow * ENEMYFOUR;
+	// ret += opponentNbFiveRow * ENEMYFIVE;
+	// if (currentColor == WHITE)
+	// {
+	// 	ret += nbCaptWhite * 50;
+	// 	ret -= nbCaptBlack * 30;
+	// }
+	// else
+	// {
+	// 	ret -= nbCaptWhite * 50;
+	// 	ret += nbCaptBlack * 30;
+	// }
+	return ret;
 }
 
 void GameState::GameStart()
@@ -479,7 +531,7 @@ bool GameState::CheckMove(int x, int y, eState color)
 GameState& GameState::operator=(GameState const & src)
 {
 	coups = src.coups;
-	// map;
+	std::memcpy(&map, &(src.map), sizeof(eState) * 19 * 19);
 	nbCaptBlack = src.nbCaptBlack;
 	nbCaptWhite = src.nbCaptWhite;
 	currentColor = src.currentColor;
@@ -492,13 +544,13 @@ std::vector<GameState*> GameState::GenerateSons()
 {
 	std::vector<GameState*> sons;
 
-
+	auto reverse = (currentColor == WHITE ? BLACK : WHITE);
 	for (auto i = coups.begin(); i != coups.end(); ++i)
 	{
-		if(checkThree((*i).getX(), (*i).getY(), currentColor))
+		if(checkThree((*i).getX(), (*i).getY(), reverse))
 		{
 			Input test(NOINPUT, (*i).getX(), (*i).getY());
-			GameState *son = new GameState(map, test, nbCaptBlack, nbCaptWhite, currentColor);
+			GameState *son = new GameState(map, test, nbCaptBlack, nbCaptWhite, reverse);
 			sons.push_back(son);
 		}
 	}
@@ -515,6 +567,10 @@ Input GameState::GetMove()
 	return move;
 }
 
+void GameState::SetColor(eState color)
+{
+	currentColor = color;
+}
 
 GameState::~GameState()
 {
