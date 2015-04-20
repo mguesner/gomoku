@@ -478,7 +478,11 @@ GameState& GameState::operator=(GameState const & rhs)
 std::vector<GameState*> GameState::GenerateSons()
 {
 	std::vector<GameState*> sons;
-
+	for (auto i = coups.begin(); i != coups.end(); ++i)
+	{
+		if(checkThree(*i.getX(), *i.getY(), color))
+			sons.push_back()
+	}
 // generate possible sons
 // verifier la valideter , constuire le fils et ajouter au vecteur
 
