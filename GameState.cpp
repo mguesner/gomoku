@@ -4,6 +4,14 @@ GameState::GameState()
 {
 	nbCaptWhite = 0;
 	nbCaptBlack = 0;
+	nbWhiteTwoRow = 0;
+	nbWhiteThreeRow = 0;
+	nbWhiteFourRow = 0;
+	nbWhiteFiveRow = 0;
+	nbBlackTwoRow = 0;
+	nbBlackThreeRow = 0;
+	nbBlackFourRow = 0;
+	nbBlackFiveRow = 0;
 	for (int i = 0; i < 19; ++i)
 	{
 		for (int j = 0; j < 19; ++j)
@@ -67,24 +75,32 @@ int		GameState::BrainDead() const
 	//add my capture
 	//substract opponents lines columns and diagonals
 	//substract opponents captures
-	// ret += nbTwoRow * TWOROW;
-	// ret += nbThreeRow * THREEROW;
-	// ret += nbFourRow * FOURROW;
-	// ret += nbFiveRow * FIVEROW;
-	// ret += opponentNbTwoRow * ENEMYTWO;
-	// ret += opponentNbThreeRow * ENEMYTHREE;
-	// ret += opponentNbFourRow * ENEMYFOUR;
-	// ret += opponentNbFiveRow * ENEMYFIVE;
-	// if (currentColor == WHITE)
-	// {
-	// 	ret += nbCaptWhite * 50;
-	// 	ret -= nbCaptBlack * 30;
-	// }
-	// else
-	// {
-	// 	ret -= nbCaptWhite * 50;
-	// 	ret += nbCaptBlack * 30;
-	// }
+	if (currentColor == WHITE)
+	{
+		ret += nbWhiteTwoRow * TWOROW;
+		ret += nbWhiteThreeRow * THREEROW;
+		ret += nbWhiteFourRow * FOURROW;
+		ret += nbWhiteFiveRow * FIVEROW;
+		ret += nbBlackTwoRow * ENEMYTWO;
+		ret += nbBlackThreeRow * ENEMYTHREE;
+		ret += nbBlackFourRow * ENEMYFOUR;
+		ret += nbBlackFiveRow * ENEMYFIVE;
+		ret += nbCaptWhite * 50;
+		ret -= nbCaptBlack * 30;
+	}
+	else
+	{
+		ret += nbBlackTwoRow * TWOROW;
+		ret += nbBlackThreeRow * THREEROW;
+		ret += nbBlackFourRow * FOURROW;
+		ret += nbBlackFiveRow * FIVEROW;
+		ret += nbWhiteTwoRow * ENEMYTWO;
+		ret += nbWhiteThreeRow * ENEMYTHREE;
+		ret += nbWhiteFourRow * ENEMYFOUR;
+		ret += nbWhiteFiveRow * ENEMYFIVE;
+		ret -= nbCaptWhite * 50;
+		ret += nbCaptBlack * 30;
+	}
 	return ret;
 }
 
