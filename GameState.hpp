@@ -37,6 +37,8 @@ public:
 	bool	operator<(GameState const & src);
 	bool	operator==(GameState const & src);
 	bool	operator<=(GameState const & src);
+	bool	operator>(GameState const & src);
+	bool	operator>=(GameState const & src);
 	void Display();
 	void GameStart();
 

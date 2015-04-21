@@ -58,7 +58,7 @@ Input do_MinMax(GameState *root, Timer timeout)
 	//{
 		//best = MinMax(root, depth, &ALPHA, &BETA, true, &ret);
 		auto john = root->GenerateSons();
-		auto lol = std::min_element(john.begin(), john.end());
+		auto lol = std::max_element(john.begin(), john.end());
 		//depth++;
 		// do timeout-- or be sure it will.
 	//}
@@ -87,10 +87,10 @@ int main()
 
 		Input input;
 		if (HumanTurn || noIA)
-		 	input = win->GetInput();
+			input = win->GetInput();
 		else
 		{
-			game.SetColor((color == WHITE ? BLACK : WHITE));
+			game.SetColor(WHITE);
 		 	auto runUntil = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
 		 	input = do_MinMax(&game, runUntil);
 		}
