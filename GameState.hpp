@@ -42,8 +42,9 @@ public:
 	void	Update(Input test, eState turnColor);
 	void Display();
 	void GameStart();
+	void Info();
 
-	std::vector<GameState*> GenerateSons();
+	std::vector<GameState> GenerateSons();
 	int GetHeuristic();
 	Input GetMove();
 	int BrainDead() const;

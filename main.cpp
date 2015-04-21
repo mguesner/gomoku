@@ -4,7 +4,7 @@
 
 
 
-int MinMax(GameState *node, int depth, int *alpha, int *beta, bool Me, Input *ret)
+int MinMax(GameState node, int depth, int *alpha, int *beta, bool Me, Input *ret)
 {
 	if (depth == 0)
 	{
@@ -18,7 +18,7 @@ int MinMax(GameState *node, int depth, int *alpha, int *beta, bool Me, Input *re
 		int bestValue = DEFAULT_MY_BEST;
 		while (cur != tmp.end())
 		{
-			int value = MinMax(*cur, depth - 1, alpha, beta, false, ret);
+			int value = MinMax(cur, depth - 1, alpha, beta, false, ret);
 			bestValue = fmax(bestValue, value);
 			*alpha = fmax(*alpha, bestValue);
 			if (*beta <= *alpha)
@@ -32,7 +32,7 @@ int MinMax(GameState *node, int depth, int *alpha, int *beta, bool Me, Input *re
 	int bestValue = DEFAULT_ENEMY_BEST;
 	while (cur != tmp.end())
 	{
-		int value = MinMax(*cur, depth - 1, alpha, beta, true, ret);
+		int value = MinMax(cur, depth - 1, alpha, beta, true, ret);
 		bestValue = fmin(bestValue, value);
 		*beta = fmin(*beta, bestValue);
 		if (*beta <= *alpha)
@@ -57,12 +57,10 @@ Input do_MinMax(GameState *root, Timer timeout)
 	//while (timeout < std::chrono::system_clock::now())
 	//{
 		//best = MinMax(root, depth, &ALPHA, &BETA, true, &ret);
-		auto john = root->GenerateSons();
-		auto lol = std::max_element(john.begin(), john.end());
-		//depth++;
-		// do timeout-- or be sure it will.
-	//}
-	ret = (*lol)->GetMove();
+	auto john = root->GenerateSons();
+	auto lol = std::max_element(john.begin(), john.end());
+	(*lol).Info();
+	ret = (*lol).GetMove();
 	ret.SetType(MOUSE);
 	return ret;
 }

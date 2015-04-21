@@ -617,6 +617,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y][x - i + 1] = NONE;
 				map[y][x - i + 2] = NONE;
+				coups.insert(Point(x - 1 + 1, y, 0));
+				coups.insert(Point(x - 1 + 2, y, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -644,6 +646,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y - i + 1][x] = NONE;
 				map[y - i + 2][x] = NONE;
+				coups.insert(Point(x, y - i + 1, 0));
+				coups.insert(Point(x, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -671,6 +675,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y - i + 1][x - i + 1] = NONE;
 				map[y - i + 2][x - i + 2] = NONE;
+				coups.insert(Point(x - i + 1, y - i + 1, 0));
+				coups.insert(Point(x - i + 2, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -698,6 +704,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y][x + i - 1] = NONE;
 				map[y][x + i - 2] = NONE;
+				coups.insert(Point(x + i - 1, y, 0));
+				coups.insert(Point(x + i - 2, y, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -725,6 +733,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y + i - 1][x] = NONE;
 				map[y + i - 2][x] = NONE;
+				coups.insert(Point(x, y + i - 1, 0));
+				coups.insert(Point(x, y + i - 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -752,6 +762,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y + i - 1][x + i - 1] = NONE;
 				map[y + i - 2][x + i - 2] = NONE;
+				coups.insert(Point(x + i - 1, y + i - 1, 0));
+				coups.insert(Point(x + i - 2, y + i - 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -779,6 +791,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y + i - 1][x - i + 1] = NONE;
 				map[y + i - 2][x - i + 2] = NONE;
+				coups.insert(Point(x - i + 1, y + i - 1, 0));
+				coups.insert(Point(x - i + 2, y + i - 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -806,6 +820,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y - i + 1][x + i - 1] = NONE;
 				map[y - i + 2][x + i - 2] = NONE;
+				coups.insert(Point(x + i - 1, y - i + 1, 0));
+				coups.insert(Point(x + i - 2, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -867,9 +883,9 @@ GameState& GameState::operator=(GameState const & src)
 	return *this;
 }
 
-std::vector<GameState*> GameState::GenerateSons()
+std::vector<GameState> GameState::GenerateSons()
 {
-	std::vector<GameState*> sons;
+	std::vector<GameState> sons;
 
 	auto reverse = (currentColor == WHITE ? BLACK : WHITE);
 	for (auto i = coups.begin(); i != coups.end(); ++i)
@@ -877,9 +893,8 @@ std::vector<GameState*> GameState::GenerateSons()
 		if(checkThree((*i).getX(), (*i).getY(), reverse))
 		{
 			Input test(NOINPUT, (*i).getX(), (*i).getY());
-			GameState *son = new GameState();
-			*son = *this;
-			son->Update(test, reverse);
+			GameState son(*this);
+			son.Update(test, reverse);
 			sons.push_back(son);
 		}
 	}
@@ -903,6 +918,11 @@ void GameState::SetColor(eState color)
 
 GameState::~GameState()
 {
+}
+
+void GameState::Info()
+{
+	std::cout << "This map is value at : " << heuristic << std::endl;
 }
 
 void GameState::Display()
