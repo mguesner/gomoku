@@ -600,6 +600,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y][x - i + 1] = NONE;
 				map[y][x - i + 2] = NONE;
+				coups.insert(Point(x - 1 + 1, y, 0));
+				coups.insert(Point(x - 1 + 2, y, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -627,6 +629,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y - i + 1][x] = NONE;
 				map[y - i + 2][x] = NONE;
+				coups.insert(Point(x, y - i + 1, 0));
+				coups.insert(Point(x, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -654,6 +658,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y - i + 1][x - i + 1] = NONE;
 				map[y - i + 2][x - i + 2] = NONE;
+				coups.insert(Point(x - i + 1, y - i + 1, 0));
+				coups.insert(Point(x - i + 2, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -681,6 +687,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y][x + i - 1] = NONE;
 				map[y][x + i - 2] = NONE;
+				coups.insert(Point(x + i - 1, y, 0));
+				coups.insert(Point(x + i - 2, y, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -708,6 +716,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y + i - 1][x] = NONE;
 				map[y + i - 2][x] = NONE;
+				coups.insert(Point(x, y + i - 1, 0));
+				coups.insert(Point(x, y + i - 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -735,6 +745,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y + i - 1][x + i - 1] = NONE;
 				map[y + i - 2][x + i - 2] = NONE;
+				coups.insert(Point(x + i - 1, y + i - 1, 0));
+				coups.insert(Point(x + i - 2, y + i - 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -762,6 +774,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y + i - 1][x - i + 1] = NONE;
 				map[y + i - 2][x - i + 2] = NONE;
+				coups.insert(Point(x - i + 1, y + i - 1, 0));
+				coups.insert(Point(x - i + 2, y + i - 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
@@ -789,6 +803,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y - i + 1][x + i - 1] = NONE;
 				map[y - i + 2][x + i - 2] = NONE;
+				coups.insert(Point(x + i - 1, y - i + 1, 0));
+				coups.insert(Point(x + i - 2, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
