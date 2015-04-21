@@ -25,7 +25,7 @@ GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt
 {
 	move = test;
 	std::memcpy(&map, &real, sizeof(eState) * 19 * 19);
-	map[test.GetY()][test.GetX()] = turnColor;
+	Play(test.GetX(), test.GetY(), turnColor);
 	heuristic = BrainDead();
 	nbCaptBlack = blackcpt;
 	nbCaptWhite = whitecpt;
@@ -41,6 +41,14 @@ GameState::GameState(GameState const & src)
 	currentColor = src.currentColor;
 	heuristic = src.heuristic;
 	move = src.move;
+	nbWhiteTwoRow = src.nbWhiteTwoRow;
+	nbWhiteThreeRow = src.nbWhiteThreeRow;
+	nbWhiteFourRow = src.nbWhiteFourRow;
+	nbWhiteFiveRow = src.nbWhiteFiveRow;
+	nbBlackTwoRow = src.nbBlackTwoRow;
+	nbBlackThreeRow = src.nbBlackThreeRow;
+	nbBlackFourRow = src.nbBlackFourRow;
+	nbBlackFiveRow = src.nbBlackFiveRow;
 }
 
 bool	GameState::operator<(GameState const & src)
@@ -76,6 +84,14 @@ bool	GameState::operator>(GameState const & src)
 	if (heuristic > src.heuristic)
 		return true;
 	return false;
+}
+
+void	GameState::Update(Input test, eState turnColor)
+{
+	move = test;
+	currentColor = turnColor;
+	Play(test.GetX(), test.GetY(), turnColor);
+	heuristic = BrainDead();
 }
 
 //HEURISTIC FUNCTION RETURN MAX VALUE EVALUATING CURRENT PLAYER POSITION
@@ -115,6 +131,7 @@ int		GameState::BrainDead() const
 		ret -= nbCaptWhite * 50;
 		ret += nbCaptBlack * 30;
 	}
+	std::cout << ret << std::endl;
 	return ret;
 }
 
@@ -839,6 +856,14 @@ GameState& GameState::operator=(GameState const & src)
 	currentColor = src.currentColor;
 	heuristic = src.heuristic;
 	move = src.move;
+	nbWhiteTwoRow = src.nbWhiteTwoRow;
+	nbWhiteThreeRow = src.nbWhiteThreeRow;
+	nbWhiteFourRow = src.nbWhiteFourRow;
+	nbWhiteFiveRow = src.nbWhiteFiveRow;
+	nbBlackTwoRow = src.nbBlackTwoRow;
+	nbBlackThreeRow = src.nbBlackThreeRow;
+	nbBlackFourRow = src.nbBlackFourRow;
+	nbBlackFiveRow = src.nbBlackFiveRow;
 	return *this;
 }
 
@@ -852,7 +877,9 @@ std::vector<GameState*> GameState::GenerateSons()
 		if(checkThree((*i).getX(), (*i).getY(), reverse))
 		{
 			Input test(NOINPUT, (*i).getX(), (*i).getY());
-			GameState *son = new GameState(map, test, nbCaptBlack, nbCaptWhite, reverse);
+			GameState *son = new GameState();
+			*son = *this;
+			son->Update(test, reverse);
 			sons.push_back(son);
 		}
 	}

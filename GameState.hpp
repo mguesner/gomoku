@@ -39,6 +39,7 @@ public:
 	bool	operator<=(GameState const & src);
 	bool	operator>(GameState const & src);
 	bool	operator>=(GameState const & src);
+	void	Update(Input test, eState turnColor);
 	void Display();
 	void GameStart();
 
