@@ -63,7 +63,7 @@ int		GameState::BrainDead() const
 	int ret = 0;
 	//auto opponentColor = (currentColor == WHITE ? BLACK : WHITE);
 
-	//count my columns lines and diagonal 
+	//count my columns lines and diagonal
 	//add my capture
 	//substract opponents lines columns and diagonals
 	//substract opponents captures
@@ -264,10 +264,75 @@ void GameState::checkVoisin(int x, int y, eState color)
 		coups.insert(Point(x, y - 1, 0));
 	else if (y - 1 > 0 && map[y - 1][x] == color)
 	{
+		int i = 1;
+		while (y - i >= 0 && map[y - i][x] == color)
+			i++;
+		if (i == 1)
+		{
+			if (color == WHITE)
+				nbWhiteTwoRow +=1;
+			else
+				nbBlackTwoRow +=1;
+		}
+		else if (i == 2)
+		{
+			if (color == WHITE)
+				nbWhiteThreeRow +=1;
+			else
+				nbBlackThreeRow +=1;
+		}
+		else if (i == 3)
+		{
+			if (color == WHITE)
+				nbWhiteFourRow +=1;
+			else
+				nbBlackFourRow +=1;
+		}
+		else if (i >= 4)
+		{
+			if (color == WHITE)
+				nbWhiteFiveRow +=1;
+			else
+				nbBlackFiveRow +=1;
+		}
 		//check le reste de l'alignement compte et incrementer / decrementer ce qu'il faut
 	}
 	if (y - 1 > 0 && x - 1 > 0 && map[y - 1][x - 1] == NONE)
 		coups.insert(Point(x - 1, y - 1, 0));
+	else if (y - 1 > 0 && x - 1 > 0 && map[y - 1][x - 1] == color)
+	{
+		int i = 1;
+		while (y - i >= 0 && map[y - i][x - i] == color)
+			i++;
+		if (i == 1)
+		{
+			if (color == WHITE)
+				nbWhiteTwoRow +=1;
+			else
+				nbBlackTwoRow +=1;
+		}
+		else if (i == 2)
+		{
+			if (color == WHITE)
+				nbWhiteThreeRow +=1;
+			else
+				nbBlackThreeRow +=1;
+		}
+		else if (i == 3)
+		{
+			if (color == WHITE)
+				nbWhiteFourRow +=1;
+			else
+				nbBlackFourRow +=1;
+		}
+		else if (i >= 4)
+		{
+			if (color == WHITE)
+				nbWhiteFiveRow +=1;
+			else
+				nbBlackFiveRow +=1;
+		}
+	}
 	if (y - 1 > 0 && x + 1 < 19 && map[y - 1][x + 1] == NONE)
 		coups.insert(Point(x + 1, y - 1, 0));
 	if (y + 1 < 19 && map[y + 1][x] == NONE)
