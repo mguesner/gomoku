@@ -56,6 +56,14 @@ private:
 	bool checkThree(int, int, eState);
 	std::set<Point> coups;
 	eState map[19][19];
+	int nbWhiteTwoRow;
+	int nbWhiteThreeRow;
+	int nbWhiteFourRow;
+	int nbWhiteFiveRow;
+	int nbBlackTwoRow;
+	int nbBlackThreeRow;
+	int nbBlackFourRow;
+	int nbBlackFiveRow;
 	int nbCaptBlack;
 	int nbCaptWhite;
 	eState currentColor;
