@@ -260,25 +260,25 @@ bool GameState::checkThree(int x, int y, eState color)
 
 void GameState::checkVoisin(int x, int y, eState color)
 {
-	if (map[y - 1][x] == NONE)
+	if (y - 1 > 0 && map[y - 1][x] == NONE)
 		coups.insert(Point(x, y - 1, 0));
-	else if (map[y - 1][x] == color)
+	else if (y - 1 > 0 && map[y - 1][x] == color)
 	{
 		//check le reste de l'alignement compte et incrementer / decrementer ce qu'il faut
 	}
-	if (map[y - 1][x - 1] == NONE)
+	if (y - 1 > 0 && x - 1 > 0 && map[y - 1][x - 1] == NONE)
 		coups.insert(Point(x - 1, y - 1, 0));
-	if (map[y - 1][x + 1] == NONE)
+	if (y - 1 > 0 && x + 1 < 19 && map[y - 1][x + 1] == NONE)
 		coups.insert(Point(x + 1, y - 1, 0));
-	if (map[y + 1][x] == NONE)
+	if (y + 1 < 19 && map[y + 1][x] == NONE)
 		coups.insert(Point(x, y + 1, 0));
-	if (map[y + 1][x + 1] == NONE)
+	if (y + 1 < 19 && x + 1 < 19 && map[y + 1][x + 1] == NONE)
 		coups.insert(Point(x + 1, y + 1, 0));
-	if (map[y + 1][x - 1] == NONE)
+	if (y + 1 < 19 && x - 1 > 0 && map[y + 1][x - 1] == NONE)
 		coups.insert(Point(x - 1, y + 1, 0));
-	if (map[y][x + 1] == NONE)
+	if (x + 1 < 19 && map[y][x + 1] == NONE)
 		coups.insert(Point(x + 1, y, 0));
-	if (map[y][x - 1] == NONE)
+	if (x - 1 > 0 && map[y][x - 1] == NONE)
 		coups.insert(Point(x - 1, y, 0));
 }
 
