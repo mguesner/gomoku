@@ -34,11 +34,11 @@ public:
 	GameState(eState real[19][19], Input test, int blackcpt, int whitecpt, eState); //constructeur pour generer les fils
 	GameState(GameState const & src);
 	GameState& operator=(GameState const & rhs);
-	bool	operator<(GameState const & src);
-	bool	operator==(GameState const & src);
-	bool	operator<=(GameState const & src);
-	bool	operator>(GameState const & src);
-	bool	operator>=(GameState const & src);
+	bool	operator<(GameState const & src) const;
+	bool	operator==(GameState const & src) const;
+	bool	operator<=(GameState const & src) const;
+	bool	operator>(GameState const & src) const;
+	bool	operator>=(GameState const & src) const;
 	void	Update(Input test, eState turnColor);
 	void Display();
 	void GameStart();
@@ -51,6 +51,7 @@ public:
 	void SetColor(eState color);
 
 	eState *GetMap();
+	bool TheoricPlay(int, int, eState color);
 	bool Play(int, int, eState color);
 	bool CheckMove(int, int, eState color);
 	~GameState();
