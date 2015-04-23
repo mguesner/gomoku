@@ -12,6 +12,7 @@ GameState::GameState()
 	nbBlackThreeRow = 0;
 	nbBlackFourRow = 0;
 	nbBlackFiveRow = 0;
+	Finalstate = false;
 	for (int i = 0; i < 19; ++i)
 	{
 		for (int j = 0; j < 19; ++j)
@@ -41,6 +42,7 @@ GameState::GameState(GameState const & src)
 	currentColor = src.currentColor;
 	heuristic = src.heuristic;
 	move = src.move;
+	Finalstate = src.Finalstate;
 	nbWhiteTwoRow = src.nbWhiteTwoRow;
 	nbWhiteThreeRow = src.nbWhiteThreeRow;
 	nbWhiteFourRow = src.nbWhiteFourRow;
@@ -127,7 +129,8 @@ int		GameState::BrainDead() const
 		ret += nbWhiteTwoRow * ENEMYTWO;
 		ret += nbWhiteThreeRow * ENEMYTHREE;
 		ret += nbWhiteFourRow * ENEMYFOUR;
-		ret += nbWhiteFiveRow * ENEMYFIVE;
+		if (nbWhiteFiveRow)
+			return ret = nbWhiteFiveRow * ENEMYFIVE;
 		if (nbCaptBlack == 1)
 			ret += CAPTUREONE;
 		else if (nbCaptBlack == 2)
@@ -147,9 +150,10 @@ int		GameState::BrainDead() const
 		else if (nbCaptWhite == 4)
 			ret -= CAPTUREFOUR;
 		else if (nbCaptWhite >= 5)
-			ret -= CAPTUREFIVE;
+			ret = CAPTUREFIVE * -2;
+		std::cout << ret << std::endl;
+		Display();
 	//}
-		//std::cout << ret << std::endl;
 	return ret;
 }
 
@@ -332,7 +336,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 		int i = 1;
 		while (y - i >= 0 && map[y - i][x] == color)
 			i++;
-		if (y - i >= 0 && map[y - i][x] != NONE)
+		if (y - i >= 0 && map[y - i][x] == NONE)
 		{
 			if (i == 1)
 			{
@@ -390,7 +394,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 		int i = 1;
 		while (y - i >= 0 && x - i >= 0 && map[y - i][x - i] == color)
 			i++;
-		if (y - i >= 0 && x - i >= 0 && map[y - i][x - i] != NONE)
+		if (y - i >= 0 && x - i >= 0 && map[y - i][x - i] == NONE)
 		{
 			if (i == 1)
 			{
@@ -447,7 +451,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 		int i = 1;
 		while (y - i >= 0 && x + i < 19 && map[y - i][x + i] ==color)
 			i++;
-		if (y - i >= 0 && x + i < 19 && map[y - i][x + i] != NONE)
+		if (y - i >= 0 && x + i < 19 && map[y - i][x + i] == NONE)
 		{
 			if (i == 1)
 			{
@@ -504,7 +508,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 		int i = 1;
 		while (y + i < 19 && map[y + i][x] == color)
 			i++;
-		if (y + i < 19 && map[y + i][x] != NONE)
+		if (y + i < 19 && map[y + i][x] == NONE)
 		{
 			if (i == 1)
 			{
@@ -561,7 +565,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 		int i = 1;
 		while (y + i < 19 && x + i < 19 && map[y + i][x + i] == color)
 			i++;
-		if (y + i < 19 && x + i < 19 && map[y + i][x + i] != NONE)
+		if (y + i < 19 && x + i < 19 && map[y + i][x + i] == NONE)
 		{
 			if (i == 1)
 			{
@@ -618,7 +622,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 		int i = 1;
 		while (y + i < 19 && x - i >= 0 && map[y + i][x - i] == color)
 			i++;
-		if (y + i < 19 && x - i >= 0 && map[y + i][x - i] != NONE)
+		if (y + i < 19 && x - i >= 0 && map[y + i][x - i] == NONE)
 		{
 			if (i == 1)
 			{
@@ -675,7 +679,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 		int i = 1;
 		while (x + i < 19 && map[y][x + i] == color)
 			i++;
-		if (x + i < 19 && map[y][x + i] == NONE)
+		if (x + i < 19 && (map[y][x + i] == NONE || i >= 4))
 		{
 			if (i == 1)
 			{
@@ -1040,9 +1044,10 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 			{
 				map[y][x - i + 1] = NONE;
 				map[y][x - i + 2] = NONE;
-				coups.insert(Point(x - 1 + 1, y, 0));
-				coups.insert(Point(x - 1 + 2, y, 0));
+				coups.insert(Point(x - i + 1, y, 0));
+				coups.insert(Point(x - i + 2, y, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
+				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				break;
 			}
 			capt = -1;
@@ -1054,6 +1059,8 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 		}
 		i++;
 	}
+	if (win == 5)
+		Finalstate = true;
 	capt = 0;
 	win = 1;
 	i = 1;
@@ -1068,6 +1075,7 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 				coups.insert(Point(x, y - i + 1, 0));
 				coups.insert(Point(x, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
+				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				break;
 			}
 			capt = -1;
@@ -1079,6 +1087,8 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 		}
 		i++;
 	}
+	if (win == 5)
+		Finalstate = true;
 	capt = 0;
 	win = 1;
 	i = 1;
@@ -1093,6 +1103,7 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 				coups.insert(Point(x - i + 1, y - i + 1, 0));
 				coups.insert(Point(x - i + 2, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
+				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				break;
 			}
 			capt = -1;
@@ -1104,6 +1115,8 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 		}
 		i++;
 	}
+	if (win == 5)
+		Finalstate = true;
 	capt = 0;
 	win = 1;
 	i = 1;
@@ -1118,6 +1131,7 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 				coups.insert(Point(x + i - 1, y, 0));
 				coups.insert(Point(x + i - 2, y, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
+				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				break;
 			}
 			capt = -1;
@@ -1129,6 +1143,8 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 		}
 		i++;
 	}
+	if (win == 5)
+		Finalstate = true;
 	capt = 0;
 	win = 1;
 	i = 1;
@@ -1143,6 +1159,7 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 				coups.insert(Point(x, y + i - 1, 0));
 				coups.insert(Point(x, y + i - 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
+				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				break;
 			}
 			capt = -1;
@@ -1154,6 +1171,8 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 		}
 		i++;
 	}
+	if (win == 5)
+		Finalstate = true;
 	capt = 0;
 	win = 1;
 	i = 1;
@@ -1168,6 +1187,7 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 				coups.insert(Point(x + i - 1, y + i - 1, 0));
 				coups.insert(Point(x + i - 2, y + i - 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
+				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				break;
 			}
 			capt = -1;
@@ -1179,6 +1199,8 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 		}
 		i++;
 	}
+	if (win == 5)
+		Finalstate = true;
 	capt = 0;
 	win = 1;
 	i = 1;
@@ -1193,6 +1215,7 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 				coups.insert(Point(x - i + 1, y + i - 1, 0));
 				coups.insert(Point(x - i + 2, y + i - 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
+				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				break;
 			}
 			capt = -1;
@@ -1204,6 +1227,8 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 		}
 		i++;
 	}
+	if (win == 5)
+		Finalstate = true;
 	capt = 0;
 	win = 1;
 	i = 1;
@@ -1218,6 +1243,7 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 				coups.insert(Point(x + i - 1, y - i + 1, 0));
 				coups.insert(Point(x + i - 2, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
+				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				break;
 			}
 			capt = -1;
@@ -1302,7 +1328,6 @@ std::vector<GameState> GameState::GenerateSons()
 			sons.push_back(son);
 		}
 	}
-	std::cout << "J ai " << sons.size() << "fils viable "<<std::endl;
 	return sons;
 }
 
@@ -1326,6 +1351,13 @@ void GameState::SetColor(eState color)
 	currentColor = color;
 }
 
+bool GameState::IsFinalState() const
+{
+	if (nbCaptWhite == 5 || nbCaptBlack == 5)
+		return true;
+	return Finalstate;
+}
+
 GameState::~GameState()
 {
 }
@@ -1335,7 +1367,7 @@ void GameState::Info()
 	std::cout << "This map is value at : " << heuristic << std::endl;
 }
 
-void GameState::Display()
+void GameState::Display() const
 {
 	for (int i = 0; i < 19; ++i)
 	{

@@ -4,9 +4,9 @@
 
 
 
-int MinMax(GameState &node, int depth, int *alpha, int *beta, bool Me, Input *ret, bool first)
+int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret, bool first)
 {
-	if (depth == 0)
+	if (depth == 0 || node.IsFinalState())
 	{
 		//*ret = node.GetMove();
 		return node.GetHeuristic();
@@ -22,8 +22,8 @@ int MinMax(GameState &node, int depth, int *alpha, int *beta, bool Me, Input *re
 			if (first && value > bestValue)
 				*ret = (*cur).GetMove();
 			bestValue = fmax(bestValue, value);
-			*alpha = fmax(*alpha, bestValue);
-			if (*beta <= *alpha)
+			alpha = fmax(alpha, bestValue);
+			if (beta <= alpha)
 				break;
 			cur++;
 		}
@@ -39,13 +39,11 @@ int MinMax(GameState &node, int depth, int *alpha, int *beta, bool Me, Input *re
 		if (value < bestValue)
 				lol = cur;
 		bestValue = fmin(bestValue, value);
-		*beta = fmin(*beta, bestValue);
-		if (*beta <= *alpha)
+		beta = fmin(beta, bestValue);
+		if (beta <= alpha)
 			break;
 		cur++;
 	}
-	//(*lol).Info();
-	//std::cout << depth << "  at this (opponent) level i return : " << bestValue << std::endl;
 	return bestValue;
 
 }
@@ -55,14 +53,14 @@ int MinMax(GameState &node, int depth, int *alpha, int *beta, bool Me, Input *re
 
 Input do_MinMax(GameState *root, Timer timeout)
 {
-	int depth = 1;
+	int depth = 2;
 	int best = 0;
 	int ALPHA = ALPHA_START;
 	int BETA = BETA_START;
 	Input ret;
-	while (timeout > std::chrono::system_clock::now() && depth < 2)
+	while (timeout > std::chrono::system_clock::now() && depth < 3)
 	{
-		best = MinMax(*root, depth, &ALPHA, &BETA, true, &ret, true);
+		best = MinMax(*root, depth, ALPHA, BETA, true, &ret, true);
 		depth++;
 		//auto john = root->GenerateSons();
 		//auto lol = std::max_element(john.begin(), john.end());
@@ -101,7 +99,7 @@ int main()
 		else
 		{
 			game.SetColor(WHITE);
-		 	auto runUntil = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
+		 	auto runUntil = std::chrono::system_clock::now() + std::chrono::milliseconds(500);
 		 	input = do_MinMax(&game, runUntil);
 		}
 		if (menu)
