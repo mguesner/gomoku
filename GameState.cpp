@@ -373,8 +373,9 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFourRow +=1;
 				}
 			}
-			else if (i >= 4)
-			{
+		}
+		if (i >= 4)
+		{
 				if (color == WHITE)
 				{
 					nbWhiteFourRow -=1;
@@ -385,7 +386,6 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFourRow -=1;
 					nbBlackFiveRow +=1;
 				}
-			}
 		}
 		//check le reste de l'alignement compte et incrementer / decrementer ce qu'il faut
 	}
@@ -431,7 +431,8 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFourRow +=1;
 				}
 			}
-			else if (i >= 4)
+		}
+		if (i >= 4)
 			{
 				if (color == WHITE)
 				{
@@ -444,7 +445,6 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFiveRow +=1;
 				}
 			}
-		}
 	}
 	if (y - 1 >= 0 && x + 1 < 19 && map[y - 1][x + 1] == NONE)
 		coups.insert(Point(x + 1, y - 1, 0));
@@ -488,7 +488,8 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFourRow +=1;
 				}
 			}
-			else if (i >= 4)
+		}
+		if (i >= 4)
 			{
 				if (color == WHITE)
 				{
@@ -501,7 +502,6 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFiveRow +=1;
 				}
 			}
-		}
 	}
 	if (y + 1 < 19 && map[y + 1][x] == NONE)
 		coups.insert(Point(x, y + 1, 0));
@@ -545,7 +545,8 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFourRow +=1;
 				}
 			}
-			else if (i >= 4)
+		}
+		if (i >= 4)
 			{
 				if (color == WHITE)
 				{
@@ -558,7 +559,6 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFiveRow +=1;
 				}
 			}
-		}
 	}
 	if (y + 1 < 19 && x + 1 < 19 && map[y + 1][x + 1] == NONE)
 		coups.insert(Point(x + 1, y + 1, 0));
@@ -602,7 +602,8 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFourRow +=1;
 				}
 			}
-			else if (i >= 4)
+		}
+		if (i >= 4)
 			{
 				if (color == WHITE)
 				{
@@ -615,7 +616,6 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFiveRow +=1;
 				}
 			}
-		}
 	}
 	if (y + 1 < 19 && x - 1 >= 0 && map[y + 1][x - 1] == NONE)
 		coups.insert(Point(x - 1, y + 1, 0));
@@ -659,7 +659,8 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFourRow +=1;
 				}
 			}
-			else if (i >= 4)
+		}
+		if (y + i < 19 && x - i >= 0 && i >= 4)
 			{
 				if (color == WHITE)
 				{
@@ -672,7 +673,6 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFiveRow +=1;
 				}
 			}
-		}
 	}
 	if (x + 1 < 19 && map[y][x + 1] == NONE)
 		coups.insert(Point(x + 1, y, 0));
@@ -716,7 +716,8 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFourRow +=1;
 				}
 			}
-			else if (i >= 4)
+		}
+		if (x + i < 19 && i >= 4)
 			{
 				if (color == WHITE)
 				{
@@ -729,7 +730,6 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFiveRow +=1;
 				}
 			}
-		}
 	}
 	if (x - 1 >= 0 && map[y][x - 1] == NONE)
 		coups.insert(Point(x - 1, y, 0));
@@ -773,7 +773,8 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFourRow +=1;
 				}
 			}
-			else if (i >= 4)
+		}
+	if (x - i >= 0 &&  i >= 4)
 			{
 				if (color == WHITE)
 				{
@@ -786,7 +787,6 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackFiveRow +=1;
 				}
 			}
-		}
 	}
 }
 
