@@ -149,7 +149,7 @@ int		GameState::BrainDead() const
 		else if (nbCaptWhite >= 5)
 			ret -= CAPTUREFIVE;
 	//}
-		std::cout << ret << std::endl;
+		//std::cout << ret << std::endl;
 	return ret;
 }
 
@@ -1302,6 +1302,7 @@ std::vector<GameState> GameState::GenerateSons()
 			sons.push_back(son);
 		}
 	}
+	std::cout << "J ai " << sons.size() << "fils viable "<<std::endl;
 	return sons;
 }
 
