@@ -21,11 +21,11 @@ public:
 	Input GetInput();
 	void SetInput(int);
 	void SetGameState(GameState*);
+	void		DrawMainMenu(Input input, bool *noIa, int *choice, bool *menu);
 	~SFMLData();
 
 private:
 
-	void		DrawMainMenu();
 	void		DrawHiScoreMenu();
 	void		DrawNormalMode();
 	void		DrawMultiMode();
@@ -44,6 +44,7 @@ private:
 	sf::Texture			*texture;
 	sf::RectangleShape	*background;
 	GameState			*game;
+	std::string			mainMenu[3];
 	//sf::Sprite			*sprite;
 	//SFML_Surface	*screenSurface;
 };

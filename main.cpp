@@ -69,7 +69,7 @@ Input do_MinMax(GameState *root, Timer timeout)
 		//auto lol = std::max_element(john.begin(), john.end());
 		//(*lol).Info();
 		//ret = (*lol).GetMove();
-		
+
 	}
 	std::cout << depth << std::endl;
 	ret.SetType(MOUSE);
@@ -86,22 +86,31 @@ int main()
 	// char buff[10];
 	// int x, y;
 	auto color = WHITE;
-	win->Draw();
+	// win->Draw();
 	bool HumanTurn = true;
 	bool noIA = false;
+	bool menu = true;
+	int choice = 0;
+		Input input;
+	win->DrawMainMenu(input, &noIA, &choice, &menu);
 	while (1)
 	{
 		// std::cin >> x;
 		// std::cin >> y;
-
-		Input input;
-		if (HumanTurn || noIA)
+		if (HumanTurn || noIA || menu)
 			input = win->GetInput();
 		else
 		{
 			game.SetColor(WHITE);
 		 	auto runUntil = std::chrono::system_clock::now() + std::chrono::seconds(TIMEOUT);
 		 	input = do_MinMax(&game, runUntil);
+		}
+		if (menu)
+		{
+			// std::cout << "menu" << std::endl;
+			if (input.GetType() != NOINPUT)
+				win->DrawMainMenu(input, &noIA, &choice, &menu);
+			continue;
 		}
 		auto type = input.GetType();
 		if (type == MOUSE)
@@ -124,6 +133,9 @@ int main()
 			win->Draw();
 		}
 		else if (type == ESC)
+		{
+			delete win;
 			exit(0);
+		}
 	}
 }

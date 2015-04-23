@@ -7,11 +7,11 @@ SFMLData::SFMLData()
 	texture = new sf::Texture();
 	background = new sf::RectangleShape(sf::Vector2f(800, 800));
 
-	// if (!font->loadFromFile("SPECIAL.TTF"))
-	// {
-	// 	std::cerr << "WTF FONT CANT BE OPEN" << std::endl;
-	// 	exit(-1);
-	// }
+	if (!font->loadFromFile("SPECIAL.TTF"))
+	{
+		std::cerr << "WTF FONT CANT BE OPEN" << std::endl;
+		exit(-1);
+	}
 	if (!texture->loadFromFile("table.jpg"))
 	{
 		std::cerr << "WTF TExture CANT BE OPEN" << std::endl;
@@ -22,6 +22,9 @@ SFMLData::SFMLData()
 	texture->setSmooth(true);
 	background->setTexture(texture);
 	game = NULL;
+	mainMenu[0] = "play";
+	mainMenu[1] = "ia : ";
+	mainMenu[2] = "quit";
 	//background->setFillColor(sf::Color(40,40,40));
 
 
@@ -35,26 +38,44 @@ void SFMLData::Draw()
 	win->display();
 }
 
-void SFMLData::DrawMainMenu()
+void SFMLData::DrawMainMenu(Input input, bool *noIa, int *choice, bool *menu)
 {
-       sf::Text menuEntry;
+	win->clear(sf::Color::Black);
+	sf::Text menuEntry;
 
-       menuEntry.setFont(*font);
-       menuEntry.setCharacterSize(35);
+	menuEntry.setFont(*font);
+	menuEntry.setCharacterSize(35);
 
 
-       //int i = 0;
-       // while (i < SIZEMENUCHOICES)
-       // {
-       // 		if (i == choice)
-       // 			menuEntry.setColor(sf::Color::Red);
-       // 		else
-       // 			menuEntry.setColor(sf::Color::White);
-       // 		menuEntry.setString(mainMenu[i] + (i == WALL ? (wall ? "ON" : "OFF") : ""));
-       // 		menuEntry.setPosition(950, 500 + i * 100);
-       // 		win->draw(menuEntry);
-       // 		i++;
-       // }
+	if (input.GetType() == UP)
+		*choice = ((*choice - 1 >= 0) ? (*choice - 1) : 2);
+	else if (input.GetType() == DOWN)
+		*choice = (*choice + 1 < 3) ? (*choice + 1) : 0;
+	else if (input.GetType() == VALIDATE && *choice == 0)
+	{
+		*menu = false;
+		std::cout << "draw" << std::endl;
+		Draw();
+		return ;
+	}
+	else if (input.GetType() == VALIDATE && *choice == 1)
+		*noIa = !*noIa;
+	else if (input.GetType() == VALIDATE && *choice == 2)
+		exit(0);
+
+	int i = 0;
+	while (i < 3)
+	{
+		if (i == *choice)
+			menuEntry.setColor(sf::Color::Red);
+		else
+			menuEntry.setColor(sf::Color::White);
+		menuEntry.setString(mainMenu[i] + (i == 1 ? (!*noIa ? "ON" : "OFF") : ""));
+		menuEntry.setPosition(400, 400 + i * 100);
+		win->draw(menuEntry);
+		i++;
+	}
+	win->display();
 }
 
 void SFMLData::SetGameState(GameState *myEffeilTower)
@@ -190,7 +211,13 @@ Input SFMLData::GetInput()
             {
             	if (event.key.code == sf::Keyboard::Escape)
             		return Input(ESC);
-            	return Input(UP);
+            	else if (event.key.code == sf::Keyboard::Up)
+            		return Input(UP);
+            	else if (event.key.code == sf::Keyboard::Down)
+            		return Input(DOWN);
+            	else if (event.key.code == sf::Keyboard::Return)
+            		return Input(VALIDATE);
+            	return Input(NOINPUT);
             }
             if (event.type == sf::Event::MouseButtonPressed)
 			{
