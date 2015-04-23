@@ -55,12 +55,12 @@ int MinMax(GameState &node, int depth, int *alpha, int *beta, bool Me, Input *re
 
 Input do_MinMax(GameState *root, Timer timeout)
 {
-	int depth = 2;
+	int depth = 1;
 	int best = 0;
 	int ALPHA = ALPHA_START;
 	int BETA = BETA_START;
 	Input ret;
-	while (timeout > std::chrono::system_clock::now() && depth < 3)
+	while (timeout > std::chrono::system_clock::now() && depth < 2)
 	{
 		best = MinMax(*root, depth, &ALPHA, &BETA, true, &ret, true);
 		depth++;
