@@ -325,9 +325,9 @@ bool GameState::checkThree(int x, int y, eState color)
 
 void GameState::checkVoisin(int x, int y, eState color)
 {
-	if (y - 1 > 0 && map[y - 1][x] == NONE)
+	if (y - 1 >= 0 && map[y - 1][x] == NONE)
 		coups.insert(Point(x, y - 1, 0));
-	else if (y - 1 > 0 && map[y - 1][x] == color)
+	else if (y - 1 >= 0 && map[y - 1][x] == color)
 	{
 		int i = 1;
 		while (y - i >= 0 && map[y - i][x] == color)
@@ -383,9 +383,9 @@ void GameState::checkVoisin(int x, int y, eState color)
 		}
 		//check le reste de l'alignement compte et incrementer / decrementer ce qu'il faut
 	}
-	if (y - 1 > 0 && x - 1 > 0 && map[y - 1][x - 1] == NONE)
+	if (y - 1 >= 0 && x - 1 >= 0 && map[y - 1][x - 1] == NONE)
 		coups.insert(Point(x - 1, y - 1, 0));
-	else if (y - 1 > 0 && x - 1 > 0 && map[y - 1][x - 1] == color)
+	else if (y - 1 >= 0 && x - 1 >= 0 && map[y - 1][x - 1] == color)
 	{
 		int i = 1;
 		while (y - i >= 0 && x - i >= 0 && map[y - i][x - i] == color)
@@ -440,7 +440,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 			}
 		}
 	}
-	if (y - 1 > 0 && x + 1 < 19 && map[y - 1][x + 1] == NONE)
+	if (y - 1 >= 0 && x + 1 < 19 && map[y - 1][x + 1] == NONE)
 		coups.insert(Point(x + 1, y - 1, 0));
 	else if (y - 1 >= 0 && x + 1 < 19 && map[y - 1][x + 1] == color)
 	{
@@ -611,7 +611,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 			}
 		}
 	}
-	if (y + 1 < 19 && x - 1 > 0 && map[y + 1][x - 1] == NONE)
+	if (y + 1 < 19 && x - 1 >= 0 && map[y + 1][x - 1] == NONE)
 		coups.insert(Point(x - 1, y + 1, 0));
 	else if (y + 1 < 19 && x - 1 >= 0 && map[y + 1][x - 1] == color)
 	{
@@ -969,7 +969,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 	capt = 0;
 	win = 1;
 	i = 1;
-	while (x - i > 0 && y + i < 19 && i < 5)
+	while (x - i >= 0 && y + i < 19 && i < 5)
 	{
 		if (map[y + i][x - i] == color)
 		{
@@ -998,7 +998,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 	capt = 0;
 	win = 1;
 	i = 1;
-	while (x + i < 19 && y - i > 0 && i < 5 && map[y - i][x + i] == color)
+	while (x + i < 19 && y - i >= 0 && i < 5 && map[y - i][x + i] == color)
 	{
 		if (map[y - i][x + i] == color)
 		{
@@ -1309,6 +1309,11 @@ std::vector<GameState> GameState::GenerateSons()
 int GameState::GetHeuristic()
 {
 	return heuristic;
+}
+
+std::set<Point> GameState::GetCoups()
+{
+	return coups;
 }
 
 Input GameState::GetMove()

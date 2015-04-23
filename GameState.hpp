@@ -51,6 +51,7 @@ public:
 	void SetColor(eState color);
 
 	eState *GetMap();
+	std::set<Point> GetCoups();
 	bool TheoricPlay(int, int, eState color);
 	bool Play(int, int, eState color);
 	bool CheckMove(int, int, eState color);

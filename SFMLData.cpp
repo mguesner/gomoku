@@ -94,6 +94,7 @@ void SFMLData::DrawNormalMode()
 	if (game == NULL)
 		return;
 	auto truc = game->GetMap();
+	auto machin = game->GetCoups();
 	for (int i = 0; i < 19 * 19; i++)
 	{
 			if (truc[i] == BLACK)
@@ -109,6 +110,15 @@ void SFMLData::DrawNormalMode()
 			{
 				sf::CircleShape shape(10);
 				shape.setFillColor(sf::Color(250, 250, 250));
+
+// set a 10-pixel wide orange outline
+				shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
+				win->draw(shape);
+			}
+			else if (machin.count(Point(i % 19, i / 19, 0)))
+				{
+				sf::CircleShape shape(10);
+				shape.setFillColor(sf::Color(250, 0, 0));
 
 // set a 10-pixel wide orange outline
 				shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
