@@ -107,7 +107,6 @@ void SFMLData::DrawNormalMode()
 			}
 			else if (truc[i] == WHITE)
 			{
-				std::cout << "BLANC" << std::endl;
 				sf::CircleShape shape(10);
 				shape.setFillColor(sf::Color(250, 250, 250));
 

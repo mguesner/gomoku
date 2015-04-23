@@ -129,6 +129,7 @@ int main()
 			{
 				game.Display();
 				std::cout << e->what() << std::endl;
+				exit(0);
 			}
 			win->Draw();
 		}

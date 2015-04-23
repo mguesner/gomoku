@@ -1023,7 +1023,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 		i++;
 	}
 	if (win == 5)
-		throw new VictoryException(!color);
+		throw new VictoryException(color);
 }
 
 void GameState::checkVictoireCrazy(int x, int y, eState color)
