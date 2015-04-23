@@ -14,7 +14,7 @@
 #define ENEMYTHREE -39
 #define ENEMYFOUR -71
 #define ENEMYFIVE -4500
-#define CAPTUREONE 40
+#define CAPTUREONE 55
 #define CAPTURETWO 70
 #define CAPTURETHREE 90
 #define CAPTUREFOUR 200
@@ -58,6 +58,7 @@ public:
 private:
 	void checkVoisin(int, int, eState);
 	void checkVictoire(int, int, eState);
+	void checkVictoireCrazy(int x, int y, eState color);
 	bool checkThree(int, int, eState);
 	std::set<Point> coups;
 	eState map[19][19];
