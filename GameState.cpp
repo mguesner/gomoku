@@ -149,7 +149,7 @@ int		GameState::BrainDead() const
 		else if (nbCaptWhite >= 5)
 			ret -= CAPTUREFIVE;
 	//}
-		std::cout << ret << std::endl;
+		std::cout << "heuristic : " << ret << " and coups number :" <<coups.size() << std::endl;
 	return ret;
 }
 
