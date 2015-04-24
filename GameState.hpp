@@ -12,8 +12,8 @@
 #define FIVEROW 4000
 #define ENEMYTWO -19
 #define ENEMYTHREE -39
-#define ENEMYFOUR -71
-#define ENEMYFIVE -4500
+#define ENEMYFOUR -400
+#define ENEMYFIVE -100000
 #define CAPTUREONE 55
 #define CAPTURETWO 70
 #define CAPTURETHREE 90
@@ -40,7 +40,7 @@ public:
 	bool	operator>(GameState const & src) const;
 	bool	operator>=(GameState const & src) const;
 	void	Update(Input test, eState turnColor);
-	void Display();
+	void Display() const;
 	void GameStart();
 	void Info();
 
@@ -51,9 +51,11 @@ public:
 	void SetColor(eState color);
 
 	eState *GetMap();
+	std::set<Point> GetCoups();
 	bool TheoricPlay(int, int, eState color);
 	bool Play(int, int, eState color);
 	bool CheckMove(int, int, eState color);
+	bool IsFinalState() const;
 	~GameState();
 private:
 	void checkVoisin(int, int, eState);
@@ -72,6 +74,7 @@ private:
 	int nbBlackFiveRow;
 	int nbCaptBlack;
 	int nbCaptWhite;
+	bool Finalstate;
 	eState currentColor;
 	int heuristic;
 	Input move;
