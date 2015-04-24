@@ -20,12 +20,6 @@
 #define CAPTUREFOUR 200
 #define CAPTUREFIVE 10000
 
-enum eState
-{
-	NONE = 0,
-	BLACK,
-	WHITE
-};
 
 class GameState
 {
@@ -47,7 +41,7 @@ public:
 	std::vector<GameState> GenerateSons();
 	int GetHeuristic();
 	Input GetMove();
-	int BrainDead() const;
+	int BrainDead();
 	void SetColor(eState color);
 
 	eState *GetMap();

@@ -98,7 +98,7 @@ void	GameState::Update(Input test, eState turnColor)
 
 //HEURISTIC FUNCTION RETURN MAX VALUE EVALUATING CURRENT PLAYER POSITION
 
-int		GameState::BrainDead() const
+int		GameState::BrainDead()
 {
 	int ret = 0;
 	//auto opponentColor = (currentColor == WHITE ? BLACK : WHITE);
@@ -122,6 +122,8 @@ int		GameState::BrainDead() const
 	// }
 	// else
 	// {
+		printf("nbBlackTwoRow->%d nbBlackthreeRow->%d nbBlackfourRow->%d nbwhiteTwoRow->%d nbwhitethreeRow->%d nbwhitefourRow->%d\n"
+			,nbBlackTwoRow, nbBlackThreeRow, nbBlackFourRow, nbWhiteTwoRow, nbWhiteThreeRow, nbWhiteFourRow);
 		ret += nbBlackTwoRow * TWOROW;
 		ret += nbBlackThreeRow * THREEROW;
 		ret += nbBlackFourRow * FOURROW;
@@ -159,6 +161,7 @@ int		GameState::BrainDead() const
 			std::cout << ret << std::endl;
 		}
 	//}
+		heuristic = ret;
 	return ret;
 }
 
@@ -338,19 +341,19 @@ void GameState::checkVoisin(int x, int y, eState color)
 		coups.insert(Point(x, y - 1, 0));
 	else if (y - 1 >= 0 && map[y - 1][x] == color)
 	{
-		int i = 1;
+		int i = 2;
 		while (y - i >= 0 && map[y - i][x] == color)
 			i++;
 		if (y - i >= 0 && map[y - i][x] == NONE)
 		{
-			if (i == 1)
+			if (i == 2)
 			{
 				if (color == WHITE)
 					nbWhiteTwoRow +=1;
 				else
 					nbBlackTwoRow +=1;
 			}
-			else if (i == 2)
+			else if (i == 3)
 			{
 				if (color == WHITE)
 				{
@@ -363,7 +366,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackThreeRow += 1;
 				}
 			}
-			else if (i == 3)
+			else if (i == 4)
 			{
 				if (color == WHITE)
 				{
@@ -377,7 +380,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 				}
 			}
 		}
-		if (i >= 4)
+		if (i >= 5)
 		{
 				if (color == WHITE)
 				{
@@ -396,19 +399,19 @@ void GameState::checkVoisin(int x, int y, eState color)
 		coups.insert(Point(x - 1, y - 1, 0));
 	else if (y - 1 >= 0 && x - 1 >= 0 && map[y - 1][x - 1] == color)
 	{
-		int i = 1;
+		int i = 2;
 		while (y - i >= 0 && x - i >= 0 && map[y - i][x - i] == color)
 			i++;
 		if (y - i >= 0 && x - i >= 0 && map[y - i][x - i] == NONE)
 		{
-			if (i == 1)
+			if (i == 2)
 			{
 				if (color == WHITE)
 					nbWhiteTwoRow +=1;
 				else
 					nbBlackTwoRow +=1;
 			}
-			else if (i == 2)
+			else if (i == 3)
 			{
 				if (color == WHITE)
 				{
@@ -421,7 +424,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackThreeRow +=1;
 				}
 			}
-			else if (i == 3)
+			else if (i == 4)
 			{
 				if (color == WHITE)
 				{
@@ -435,7 +438,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 				}
 			}
 		}
-		if (i >= 4)
+		if (i >= 5)
 			{
 				if (color == WHITE)
 				{
@@ -453,19 +456,19 @@ void GameState::checkVoisin(int x, int y, eState color)
 		coups.insert(Point(x + 1, y - 1, 0));
 	else if (y - 1 >= 0 && x + 1 < 19 && map[y - 1][x + 1] == color)
 	{
-		int i = 1;
+		int i = 2;
 		while (y - i >= 0 && x + i < 19 && map[y - i][x + i] ==color)
 			i++;
 		if (y - i >= 0 && x + i < 19 && map[y - i][x + i] == NONE)
 		{
-			if (i == 1)
+			if (i == 2)
 			{
 				if (color == WHITE)
 					nbWhiteTwoRow +=1;
 				else
 					nbBlackTwoRow +=1;
 			}
-			else if (i == 2)
+			else if (i == 3)
 			{
 				if (color == WHITE)
 				{
@@ -478,7 +481,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackThreeRow +=1;
 				}
 			}
-			else if (i == 3)
+			else if (i == 4)
 			{
 				if (color == WHITE)
 				{
@@ -492,7 +495,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 				}
 			}
 		}
-		if (i >= 4)
+		if (i >= 5)
 			{
 				if (color == WHITE)
 				{
@@ -510,19 +513,19 @@ void GameState::checkVoisin(int x, int y, eState color)
 		coups.insert(Point(x, y + 1, 0));
 	else if (y + 1 < 19 && map[y + 1][x] == color)
 	{
-		int i = 1;
+		int i = 2;
 		while (y + i < 19 && map[y + i][x] == color)
 			i++;
 		if (y + i < 19 && map[y + i][x] == NONE)
 		{
-			if (i == 1)
+			if (i == 2)
 			{
 				if (color == WHITE)
 					nbWhiteTwoRow +=1;
 				else
 					nbBlackTwoRow +=1;
 			}
-			else if (i == 2)
+			else if (i == 3)
 			{
 				if (color == WHITE)
 				{
@@ -535,7 +538,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackThreeRow +=1;
 				}
 			}
-			else if (i == 3)
+			else if (i == 4)
 			{
 				if (color == WHITE)
 				{
@@ -549,7 +552,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 				}
 			}
 		}
-		if (i >= 4)
+		if (i >= 5)
 			{
 				if (color == WHITE)
 				{
@@ -567,19 +570,19 @@ void GameState::checkVoisin(int x, int y, eState color)
 		coups.insert(Point(x + 1, y + 1, 0));
 	else if (y + 1 < 19 && x + 1 < 19 && map[y + 1][x + 1] == color)
 	{
-		int i = 1;
+		int i = 2;
 		while (y + i < 19 && x + i < 19 && map[y + i][x + i] == color)
 			i++;
 		if (y + i < 19 && x + i < 19 && map[y + i][x + i] == NONE)
 		{
-			if (i == 1)
+			if (i == 2)
 			{
 				if (color == WHITE)
 					nbWhiteTwoRow +=1;
 				else
 					nbBlackTwoRow +=1;
 			}
-			else if (i == 2)
+			else if (i == 3)
 			{
 				if (color == WHITE)
 				{
@@ -592,7 +595,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackThreeRow +=1;
 				}
 			}
-			else if (i == 3)
+			else if (i == 4)
 			{
 				if (color == WHITE)
 				{
@@ -606,7 +609,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 				}
 			}
 		}
-		if (i >= 4)
+		if (i >= 5)
 			{
 				if (color == WHITE)
 				{
@@ -624,19 +627,22 @@ void GameState::checkVoisin(int x, int y, eState color)
 		coups.insert(Point(x - 1, y + 1, 0));
 	else if (y + 1 < 19 && x - 1 >= 0 && map[y + 1][x - 1] == color)
 	{
-		int i = 1;
+		int i = 2;
 		while (y + i < 19 && x - i >= 0 && map[y + i][x - i] == color)
+		{
+			std::cout << "(" << x - i << ", " << y + i << ")" <<std::endl;
 			i++;
+		}
 		if (y + i < 19 && x - i >= 0 && map[y + i][x - i] == NONE)
 		{
-			if (i == 1)
+			if (i == 2)
 			{
 				if (color == WHITE)
 					nbWhiteTwoRow +=1;
 				else
 					nbBlackTwoRow +=1;
 			}
-			else if (i == 2)
+			else if (i == 3)
 			{
 				if (color == WHITE)
 				{
@@ -649,7 +655,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackThreeRow +=1;
 				}
 			}
-			else if (i == 3)
+			else if (i == 4)
 			{
 				if (color == WHITE)
 				{
@@ -663,7 +669,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 				}
 			}
 		}
-		if (y + i < 19 && x - i >= 0 && i >= 4)
+		if (i >= 5)
 			{
 				if (color == WHITE)
 				{
@@ -681,19 +687,19 @@ void GameState::checkVoisin(int x, int y, eState color)
 		coups.insert(Point(x + 1, y, 0));
 	else if (x + 1 < 19 && map[y][x + 1] == color)
 	{
-		int i = 1;
+		int i = 2;
 		while (x + i < 19 && map[y][x + i] == color)
 			i++;
 		if (x + i < 19 && (map[y][x + i] == NONE || i >= 4))
 		{
-			if (i == 1)
+			if (i == 2)
 			{
 				if (color == WHITE)
 					nbWhiteTwoRow +=1;
 				else
 					nbBlackTwoRow +=1;
 			}
-			else if (i == 2)
+			else if (i == 3)
 			{
 				if (color == WHITE)
 				{
@@ -706,7 +712,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackThreeRow +=1;
 				}
 			}
-			else if (i == 3)
+			else if (i == 4)
 			{
 				if (color == WHITE)
 				{
@@ -720,7 +726,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 				}
 			}
 		}
-		if (x + i < 19 && i >= 4)
+		if (i >= 5)
 			{
 				if (color == WHITE)
 				{
@@ -738,19 +744,19 @@ void GameState::checkVoisin(int x, int y, eState color)
 		coups.insert(Point(x - 1, y, 0));
 	else if (x - 1 >= 0 && map[y][x - 1] == color)
 	{
-		int i = 1;
+		int i = 2;
 		while (x - i >= 0 && map[y][x - i] == color)
 			i++;
 		if (x - i >= 0 && map[y][x - i] == NONE)
 		{
-			if (i == 1)
+			if (i == 2)
 			{
 				if (color == WHITE)
 					nbWhiteTwoRow +=1;
 				else
 					nbBlackTwoRow +=1;
 			}
-			else if (i == 2)
+			else if (i == 3)
 			{
 				if (color == WHITE)
 				{
@@ -763,7 +769,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 					nbBlackThreeRow +=1;
 				}
 			}
-			else if (i == 3)
+			else if (i == 4)
 			{
 				if (color == WHITE)
 				{
@@ -777,7 +783,7 @@ void GameState::checkVoisin(int x, int y, eState color)
 				}
 			}
 		}
-	if (x - i >= 0 &&  i >= 4)
+	if (i >= 5)
 			{
 				if (color == WHITE)
 				{

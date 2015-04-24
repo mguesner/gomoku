@@ -22,6 +22,7 @@ public:
 	void SetInput(int);
 	void SetGameState(GameState*);
 	void		DrawMainMenu(Input input, bool *noIa, int *choice, bool *menu);
+	void		DrawEndMenu(std::exception *e);
 	~SFMLData();
 
 private:
@@ -34,7 +35,6 @@ private:
 	void		DrawHostMenu();
 	void		DrawJoinMenu();
 	void		DrawPauseMenu();
-	void		DrawEndMenu();
 	void		DrawBestEndMenu();
 
 	int			x0;
