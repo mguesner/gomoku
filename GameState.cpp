@@ -824,6 +824,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 		{
 			capt++;
 		}
+		else
+			break;
 		i++;
 	}
 	if (win == 5)
@@ -854,6 +856,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 		{
 			capt++;
 		}
+		else
+			break;
 		i++;
 	}
 	if (win == 5)
@@ -884,6 +888,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 		{
 			capt++;
 		}
+		else
+			break;
 		i++;
 	}
 	if (win == 5)
@@ -914,6 +920,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 		{
 			capt++;
 		}
+		else
+			break;
 		i++;
 	}
 	if (win == 5)
@@ -944,6 +952,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 		{
 			capt++;
 		}
+		else
+			break;
 		i++;
 	}
 	if (win == 5)
@@ -974,6 +984,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 		{
 			capt++;
 		}
+		else
+			break;
 		i++;
 	}
 	if (win == 5)
@@ -1004,6 +1016,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 		{
 			capt++;
 		}
+		else
+			break;
 		i++;
 	}
 	if (win == 5)
@@ -1034,6 +1048,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 		{
 			capt++;
 		}
+		else
+			break;
 		i++;
 	}
 	if (win == 5)
