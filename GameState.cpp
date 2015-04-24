@@ -183,7 +183,7 @@ int		GameState::BrainDead()
 		if (allign[WHITE][5])
 		{
 			return LOOSE;
-			IsFinalState = true;
+			Finalstate = true;
 		}
 		if (capt[WHITE] == 1)
 			ret += CAPTUREONE;
@@ -196,7 +196,7 @@ int		GameState::BrainDead()
 		else if (capt[WHITE] >= 5)
 		{
 			return WIN;
-			IsFinalState = true;
+			Finalstate = true;
 		}
 
 		if (capt[BLACK] == 1)
@@ -210,7 +210,7 @@ int		GameState::BrainDead()
 		else if (capt[BLACK] >= 5)
 		{
 			ret = LOOSE;
-			IsFinalState = true;
+			Finalstate = true;
 			// std::cout << ret << std::endl;
 		}
 	//}
@@ -681,97 +681,8 @@ void GameState::checkVoisin(int x, int y, eState color)
 	// j = 0;
 	if (x + 1 < 19 && map[y][x + 1] == NONE)
 		coups.insert(Point(x + 1, y, 0));
-	// if (x + 1 < 19 && (map[y][x + 1] == color || map[y][x + 1] == NONE))
-	// {
-	// 	int i = 1;
-	// 	int k = 1;
-	// 	while (i <= 5 && x + i < 19 && (map[y][x + i] == color || map[y][x + i] == NONE))
-	// 	{
-	// 		if (map[y][x + i] == color)
-	// 			k++;
-	// 		i++;
-	// 	}
-	// 	if (x + i < 19 && map[y][x + i] == NONE)
-	// 	{
-	// 		j = k;
-	// 	}
-	// 	if (j >= 5)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteFourRow -=1;
-	// 				nbWhiteFiveRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackFourRow -=1;
-	// 				nbBlackFiveRow +=1;
-	// 			}
-	// 		}
-	// }
 	if (x - 1 >= 0 && map[y][x - 1] == NONE)
 		coups.insert(Point(x - 1, y, 0));
-	// if (x - 1 >= 0 && (map[y][x - 1] == color || map[y][x - 1] == NONE))
-	// {
-	// 	int i = 1;
-	// 	int k = 0;
-	// 	while (i <= 5 && x - i >= 0 && (map[y][x - i] == color || map[y][x - i] == NONE))
-	// 	{
-	// 		if (map[y][x - i] == color)
-	// 			k++;
-	// 		i++;
-	// 	}
-	// 	if (x - i >= 0 && map[y][x - i] == NONE)
-	// 	{
-	// 		j += k;
-	// 		if (j == 2)
-	// 		{
-	// 			if (color == WHITE)
-	// 				nbWhiteTwoRow +=1;
-	// 			else
-	// 				nbBlackTwoRow +=1;
-	// 		}
-	// 		else if (j == 3)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteTwoRow -= 1;
-	// 				nbWhiteThreeRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackTwoRow -= 1;
-	// 				nbBlackThreeRow +=1;
-	// 			}
-	// 		}
-	// 		else if (j == 4)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteThreeRow -=1;
-	// 				nbWhiteFourRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackThreeRow -=1;
-	// 				nbBlackFourRow +=1;
-	// 			}
-	// 		}
-	// 	}
-	// if (j >= 5)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteFourRow -=1;
-	// 				nbWhiteFiveRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackFourRow -=1;
-	// 				nbBlackFiveRow +=1;
-	// 			}
-	// 		}
-	// }
 }
 
 eState *GameState::GetMap()
@@ -1275,6 +1186,11 @@ bool GameState::Play(int x, int y, eState color)
 		checkVictoire(x, y, color);
 		coups.erase(Point(x, y, 0));
 		checkVoisin(x, y, color);
+		for (auto i = coups.begin(); i != coups.end(); ++i)
+		{
+			if (!checkThree((*i).getX(), (*i).getY(), color))
+				coups.erase(*i);
+		}
 		return true;
 	}
 	return false;

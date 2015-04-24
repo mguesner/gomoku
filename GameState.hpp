@@ -12,7 +12,7 @@
 #define FIVEROW 100000
 #define ENEMYTWO -10
 #define ENEMYTHREE -50
-#define ENEMYFOUR -100
+#define ENEMYFOUR -1000
 #define ENEMYFIVE -100000
 #define CAPTUREONE 70
 #define CAPTURETWO 90
