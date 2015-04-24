@@ -122,8 +122,8 @@ int		GameState::BrainDead()
 	// }
 	// else
 	// {
-		printf("nbBlackTwoRow->%d nbBlackthreeRow->%d nbBlackfourRow->%d nbwhiteTwoRow->%d nbwhitethreeRow->%d nbwhitefourRow->%d\n"
-			,nbBlackTwoRow, nbBlackThreeRow, nbBlackFourRow, nbWhiteTwoRow, nbWhiteThreeRow, nbWhiteFourRow);
+		// printf("nbBlackTwoRow->%d nbBlackthreeRow->%d nbBlackfourRow->%d nbBlackfiveRow->%d nbwhiteTwoRow->%d nbwhitethreeRow->%d nbwhitefourRow->%d nbwhitefiverow->%d\n"
+		// 	,nbBlackTwoRow, nbBlackThreeRow, nbBlackFourRow, nbBlackFiveRow, nbWhiteTwoRow, nbWhiteThreeRow, nbWhiteFourRow, nbWhiteFiveRow);
 		ret += nbBlackTwoRow * TWOROW;
 		ret += nbBlackThreeRow * THREEROW;
 		ret += nbBlackFourRow * FOURROW;
@@ -131,6 +131,7 @@ int		GameState::BrainDead()
 		ret += nbWhiteTwoRow * ENEMYTWO;
 		ret += nbWhiteThreeRow * ENEMYTHREE;
 		ret += nbWhiteFourRow * ENEMYFOUR;
+		std::cout << "ret align : " << ret << std::endl;
 		if (nbWhiteFiveRow)
 		{
 			return LOOSE;
@@ -336,466 +337,388 @@ bool GameState::checkThree(int x, int y, eState color)
 
 void GameState::checkVoisin(int x, int y, eState color)
 {
+	(void)color;
+	//verticale
+	// int j = 0;
 	if (y - 1 >= 0 && map[y - 1][x] == NONE)
 		coups.insert(Point(x, y - 1, 0));
-	else if (y - 1 >= 0 && map[y - 1][x] == color)
-	{
-		int i = 2;
-		while (y - i >= 0 && map[y - i][x] == color)
-			i++;
-		if (y - i >= 0 && map[y - i][x] == NONE)
-		{
-			if (i == 2)
-			{
-				if (color == WHITE)
-					nbWhiteTwoRow +=1;
-				else
-					nbBlackTwoRow +=1;
-			}
-			else if (i == 3)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteTwoRow -= 1;
-					nbWhiteThreeRow += 1;
-				}
-				else
-				{
-					nbBlackTwoRow -= 1;
-					nbBlackThreeRow += 1;
-				}
-			}
-			else if (i == 4)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteThreeRow -=1;
-					nbWhiteFourRow +=1;
-				}
-				else
-				{
-					nbBlackThreeRow -=1;
-					nbBlackFourRow +=1;
-				}
-			}
-		}
-		if (i >= 5)
-		{
-				if (color == WHITE)
-				{
-					nbWhiteFourRow -=1;
-					nbWhiteFiveRow +=1;
-				}
-				else
-				{
-					nbBlackFourRow -=1;
-					nbBlackFiveRow +=1;
-				}
-		}
-		//check le reste de l'alignement compte et incrementer / decrementer ce qu'il faut
-	}
-	if (y - 1 >= 0 && x - 1 >= 0 && map[y - 1][x - 1] == NONE)
-		coups.insert(Point(x - 1, y - 1, 0));
-	else if (y - 1 >= 0 && x - 1 >= 0 && map[y - 1][x - 1] == color)
-	{
-		int i = 2;
-		while (y - i >= 0 && x - i >= 0 && map[y - i][x - i] == color)
-			i++;
-		if (y - i >= 0 && x - i >= 0 && map[y - i][x - i] == NONE)
-		{
-			if (i == 2)
-			{
-				if (color == WHITE)
-					nbWhiteTwoRow +=1;
-				else
-					nbBlackTwoRow +=1;
-			}
-			else if (i == 3)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteTwoRow -= 1;
-					nbWhiteThreeRow +=1;
-				}
-				else
-				{
-					nbBlackTwoRow -= 1;
-					nbBlackThreeRow +=1;
-				}
-			}
-			else if (i == 4)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteThreeRow -=1;
-					nbWhiteFourRow +=1;
-				}
-				else
-				{
-					nbBlackThreeRow -=1;
-					nbBlackFourRow +=1;
-				}
-			}
-		}
-		if (i >= 5)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteFourRow -=1;
-					nbWhiteFiveRow +=1;
-				}
-				else
-				{
-					nbBlackFourRow -=1;
-					nbBlackFiveRow +=1;
-				}
-			}
-	}
-	if (y - 1 >= 0 && x + 1 < 19 && map[y - 1][x + 1] == NONE)
-		coups.insert(Point(x + 1, y - 1, 0));
-	else if (y - 1 >= 0 && x + 1 < 19 && map[y - 1][x + 1] == color)
-	{
-		int i = 2;
-		while (y - i >= 0 && x + i < 19 && map[y - i][x + i] ==color)
-			i++;
-		if (y - i >= 0 && x + i < 19 && map[y - i][x + i] == NONE)
-		{
-			if (i == 2)
-			{
-				if (color == WHITE)
-					nbWhiteTwoRow +=1;
-				else
-					nbBlackTwoRow +=1;
-			}
-			else if (i == 3)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteTwoRow -= 1;
-					nbWhiteThreeRow +=1;
-				}
-				else
-				{
-					nbBlackTwoRow -= 1;
-					nbBlackThreeRow +=1;
-				}
-			}
-			else if (i == 4)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteThreeRow -=1;
-					nbWhiteFourRow +=1;
-				}
-				else
-				{
-					nbBlackThreeRow -=1;
-					nbBlackFourRow +=1;
-				}
-			}
-		}
-		if (i >= 5)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteFourRow -=1;
-					nbWhiteFiveRow +=1;
-				}
-				else
-				{
-					nbBlackFourRow -=1;
-					nbBlackFiveRow +=1;
-				}
-			}
-	}
+	// if (y - 1 >= 0 && (map[y - 1][x] == color || map[y - 1][x] == NONE))
+	// {
+	// 	int i = 1;
+	// 	int k = 1;
+	// 	while (i <= 5 && y - i >= 0 && (map[y - i][x] == color || map[y - i][x] == NONE))
+	// 	{
+	// 		if (map[y - i][x] == color)
+	// 			k++;
+	// 		i++;
+	// 	}
+	// 	// std::cout << "haut : " << k << std::endl;
+	// 	if (y - i >= 0 && map[y - i][x] == NONE)
+	// 		j = k;
+	// 	if (k >= 5)
+	// 	{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteFourRow -=1;
+	// 				nbWhiteFiveRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackFourRow -=1;
+	// 				nbBlackFiveRow +=1;
+	// 			}
+	// 	}
+	// }
 	if (y + 1 < 19 && map[y + 1][x] == NONE)
 		coups.insert(Point(x, y + 1, 0));
-	else if (y + 1 < 19 && map[y + 1][x] == color)
-	{
-		int i = 2;
-		while (y + i < 19 && map[y + i][x] == color)
-			i++;
-		if (y + i < 19 && map[y + i][x] == NONE)
-		{
-			if (i == 2)
-			{
-				if (color == WHITE)
-					nbWhiteTwoRow +=1;
-				else
-					nbBlackTwoRow +=1;
-			}
-			else if (i == 3)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteTwoRow -= 1;
-					nbWhiteThreeRow +=1;
-				}
-				else
-				{
-					nbBlackTwoRow -= 1;
-					nbBlackThreeRow +=1;
-				}
-			}
-			else if (i == 4)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteThreeRow -=1;
-					nbWhiteFourRow +=1;
-				}
-				else
-				{
-					nbBlackThreeRow -=1;
-					nbBlackFourRow +=1;
-				}
-			}
-		}
-		if (i >= 5)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteFourRow -=1;
-					nbWhiteFiveRow +=1;
-				}
-				else
-				{
-					nbBlackFourRow -=1;
-					nbBlackFiveRow +=1;
-				}
-			}
-	}
+	// if (y + 1 < 19 && (map[y + 1][x] == color || map[y + 1][x] == NONE))
+	// {
+	// 	int k = 0;
+	// 	int i = 1;
+	// 	while (i <= 5 && y + i < 19 && (map[y + i][x] == color || map[y + i][x] == NONE))
+	// 	{
+	// 		if (map[y + i][x] == color)
+	// 			k++;
+	// 		i++;
+	// 	}
+	// 	if (y + i < 19 && map[y + i][x] == NONE)
+	// 	{
+	// 	// std::cout << "bas : " << k << std::endl;
+	// 		j += k;
+	// 		if (j == 2)
+	// 		{
+	// 			if (color == WHITE)
+	// 				nbWhiteTwoRow +=1;
+	// 			else
+	// 				nbBlackTwoRow +=1;
+	// 		}
+	// 		else if (j == 3)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteTwoRow -= 1;
+	// 				nbWhiteThreeRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackTwoRow -= 1;
+	// 				nbBlackThreeRow +=1;
+	// 			}
+	// 		}
+	// 		else if (j == 4)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteThreeRow -=1;
+	// 				nbWhiteFourRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackThreeRow -=1;
+	// 				nbBlackFourRow +=1;
+	// 			}
+	// 		}
+	// 	}
+	// 	if (k >= 5)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteFourRow -=1;
+	// 				nbWhiteFiveRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackFourRow -=1;
+	// 				nbBlackFiveRow +=1;
+	// 			}
+	// 		}
+	// }
+
+	//back slash
+	// j = 0;
+	if (y - 1 >= 0 && x - 1 >= 0 && map[y - 1][x - 1] == NONE)
+		coups.insert(Point(x - 1, y - 1, 0));
+	// if (y - 1 >= 0 && x - 1 >= 0 && (map[y - 1][x - 1] == color || map[y - 1][x - 1] == NONE))
+	// {
+	// 	int k = 1;
+	// 	int i = 1;
+	// 	while (i <= 5 && y - i >= 0 && x - i >= 0 && (map[y - i][x - i] == color || map[y - i][x - i] == NONE))
+	// 	{
+	// 		if (map[y - i][x - i] == color)
+	// 			k++;
+	// 		i++;
+	// 	}
+	// 	if (y - i >= 0 && x - i >= 0 && map[y - i][x - i] == NONE)
+	// 		j = k;
+	// 	if (j >= 5)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteFourRow -=1;
+	// 				nbWhiteFiveRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackFourRow -=1;
+	// 				nbBlackFiveRow +=1;
+	// 			}
+	// 		}
+	// }
 	if (y + 1 < 19 && x + 1 < 19 && map[y + 1][x + 1] == NONE)
 		coups.insert(Point(x + 1, y + 1, 0));
-	else if (y + 1 < 19 && x + 1 < 19 && map[y + 1][x + 1] == color)
-	{
-		int i = 2;
-		while (y + i < 19 && x + i < 19 && map[y + i][x + i] == color)
-			i++;
-		if (y + i < 19 && x + i < 19 && map[y + i][x + i] == NONE)
-		{
-			if (i == 2)
-			{
-				if (color == WHITE)
-					nbWhiteTwoRow +=1;
-				else
-					nbBlackTwoRow +=1;
-			}
-			else if (i == 3)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteTwoRow -= 1;
-					nbWhiteThreeRow +=1;
-				}
-				else
-				{
-					nbBlackTwoRow -= 1;
-					nbBlackThreeRow +=1;
-				}
-			}
-			else if (i == 4)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteThreeRow -=1;
-					nbWhiteFourRow +=1;
-				}
-				else
-				{
-					nbBlackThreeRow -=1;
-					nbBlackFourRow +=1;
-				}
-			}
-		}
-		if (i >= 5)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteFourRow -=1;
-					nbWhiteFiveRow +=1;
-				}
-				else
-				{
-					nbBlackFourRow -=1;
-					nbBlackFiveRow +=1;
-				}
-			}
-	}
+	// if (y + 1 < 19 && x + 1 < 19 && (map[y + 1][x + 1] == color || map[y + 1][x + 1] == NONE))
+	// {
+	// 	int k = 0;
+	// 	int i = 1;
+	// 	while (i <= 5 && y + i < 19 && x + i < 19 && (map[y + i][x + i] == color || map[y + i][x + i] == NONE))
+	// 	{
+	// 		if (map[y + i][x + i] == color)
+	// 			k++;
+	// 		i++;
+	// 	}
+	// 	if (y + i < 19 && x + i < 19 && map[y + i][x + i] == NONE)
+	// 	{
+	// 		j += k;
+	// 		if (j == 2)
+	// 		{
+	// 			if (color == WHITE)
+	// 				nbWhiteTwoRow +=1;
+	// 			else
+	// 				nbBlackTwoRow +=1;
+	// 		}
+	// 		else if (j == 3)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteTwoRow -= 1;
+	// 				nbWhiteThreeRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackTwoRow -= 1;
+	// 				nbBlackThreeRow +=1;
+	// 			}
+	// 		}
+	// 		else if (j == 4)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteThreeRow -=1;
+	// 				nbWhiteFourRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackThreeRow -=1;
+	// 				nbBlackFourRow +=1;
+	// 			}
+	// 		}
+	// 	}
+	// 	if (j >= 5)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteFourRow -=1;
+	// 				nbWhiteFiveRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackFourRow -=1;
+	// 				nbBlackFiveRow +=1;
+	// 			}
+	// 		}
+	// }
+
+	//slash
+	// j = 0;
+	if (y - 1 >= 0 && x + 1 < 19 && map[y - 1][x + 1] == NONE)
+		coups.insert(Point(x + 1, y - 1, 0));
+	// if (y - 1 >= 0 && x + 1 < 19 && (map[y - 1][x + 1] == color || map[y - 1][x + 1] == NONE))
+	// {
+	// 	int i = 1;
+	// 	int k = 1;
+	// 	while (i <= 5 && y - i >= 0 && x + i < 19 && (map[y - i][x + i] ==color || map[y - i][x + i] == NONE))
+	// 	{
+	// 		if (map[y - i][x + i] ==color)
+	// 			k++;
+	// 		i++;
+	// 	}
+	// 	if (y - i >= 0 && x + i < 19 && map[y - i][x + i] == NONE)
+	// 	{
+	// 		j = k;
+	// 	}
+	// 	if (j >= 5)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteFourRow -=1;
+	// 				nbWhiteFiveRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackFourRow -=1;
+	// 				nbBlackFiveRow +=1;
+	// 			}
+	// 		}
+	// }
 	if (y + 1 < 19 && x - 1 >= 0 && map[y + 1][x - 1] == NONE)
 		coups.insert(Point(x - 1, y + 1, 0));
-	else if (y + 1 < 19 && x - 1 >= 0 && map[y + 1][x - 1] == color)
-	{
-		int i = 2;
-		while (y + i < 19 && x - i >= 0 && map[y + i][x - i] == color)
-		{
-			std::cout << "(" << x - i << ", " << y + i << ")" <<std::endl;
-			i++;
-		}
-		if (y + i < 19 && x - i >= 0 && map[y + i][x - i] == NONE)
-		{
-			if (i == 2)
-			{
-				if (color == WHITE)
-					nbWhiteTwoRow +=1;
-				else
-					nbBlackTwoRow +=1;
-			}
-			else if (i == 3)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteTwoRow -= 1;
-					nbWhiteThreeRow +=1;
-				}
-				else
-				{
-					nbBlackTwoRow -= 1;
-					nbBlackThreeRow +=1;
-				}
-			}
-			else if (i == 4)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteThreeRow -=1;
-					nbWhiteFourRow +=1;
-				}
-				else
-				{
-					nbBlackThreeRow -=1;
-					nbBlackFourRow +=1;
-				}
-			}
-		}
-		if (i >= 5)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteFourRow -=1;
-					nbWhiteFiveRow +=1;
-				}
-				else
-				{
-					nbBlackFourRow -=1;
-					nbBlackFiveRow +=1;
-				}
-			}
-	}
+	// if (y + 1 < 19 && x - 1 >= 0 && (map[y + 1][x - 1] == color || map[y + 1][x - 1] == NONE))
+	// {
+	// 	int k = 0;
+	// 	int i = 1;
+	// 	while (i <= 5 && y + i < 19 && x - i >= 0 && (map[y + i][x - i] == color || map[y + i][x - i] == NONE))
+	// 	{
+	// 		if (map[y + i][x - i] == color)
+	// 			k++;
+	// 		i++;
+	// 	}
+	// 	if (y + i < 19 && x - i >= 0 && map[y + i][x - i] == NONE)
+	// 	{
+	// 		j += k;
+	// 		if (j == 2)
+	// 		{
+	// 			if (color == WHITE)
+	// 				nbWhiteTwoRow +=1;
+	// 			else
+	// 				nbBlackTwoRow +=1;
+	// 		}
+	// 		else if (j == 3)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteTwoRow -= 1;
+	// 				nbWhiteThreeRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackTwoRow -= 1;
+	// 				nbBlackThreeRow +=1;
+	// 			}
+	// 		}
+	// 		else if (j == 4)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteThreeRow -=1;
+	// 				nbWhiteFourRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackThreeRow -=1;
+	// 				nbBlackFourRow +=1;
+	// 			}
+	// 		}
+	// 	}
+	// 	if (j >= 5)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteFourRow -=1;
+	// 				nbWhiteFiveRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackFourRow -=1;
+	// 				nbBlackFiveRow +=1;
+	// 			}
+	// 		}
+	// }
+
+	//horizontal
+	// j = 0;
 	if (x + 1 < 19 && map[y][x + 1] == NONE)
 		coups.insert(Point(x + 1, y, 0));
-	else if (x + 1 < 19 && map[y][x + 1] == color)
-	{
-		int i = 2;
-		while (x + i < 19 && map[y][x + i] == color)
-			i++;
-		if (x + i < 19 && (map[y][x + i] == NONE || i >= 4))
-		{
-			if (i == 2)
-			{
-				if (color == WHITE)
-					nbWhiteTwoRow +=1;
-				else
-					nbBlackTwoRow +=1;
-			}
-			else if (i == 3)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteTwoRow -= 1;
-					nbWhiteThreeRow +=1;
-				}
-				else
-				{
-					nbBlackTwoRow -= 1;
-					nbBlackThreeRow +=1;
-				}
-			}
-			else if (i == 4)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteThreeRow -=1;
-					nbWhiteFourRow +=1;
-				}
-				else
-				{
-					nbBlackThreeRow -=1;
-					nbBlackFourRow +=1;
-				}
-			}
-		}
-		if (i >= 5)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteFourRow -=1;
-					nbWhiteFiveRow +=1;
-				}
-				else
-				{
-					nbBlackFourRow -=1;
-					nbBlackFiveRow +=1;
-				}
-			}
-	}
+	// if (x + 1 < 19 && (map[y][x + 1] == color || map[y][x + 1] == NONE))
+	// {
+	// 	int i = 1;
+	// 	int k = 1;
+	// 	while (i <= 5 && x + i < 19 && (map[y][x + i] == color || map[y][x + i] == NONE))
+	// 	{
+	// 		if (map[y][x + i] == color)
+	// 			k++;
+	// 		i++;
+	// 	}
+	// 	if (x + i < 19 && map[y][x + i] == NONE)
+	// 	{
+	// 		j = k;
+	// 	}
+	// 	if (j >= 5)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteFourRow -=1;
+	// 				nbWhiteFiveRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackFourRow -=1;
+	// 				nbBlackFiveRow +=1;
+	// 			}
+	// 		}
+	// }
 	if (x - 1 >= 0 && map[y][x - 1] == NONE)
 		coups.insert(Point(x - 1, y, 0));
-	else if (x - 1 >= 0 && map[y][x - 1] == color)
-	{
-		int i = 2;
-		while (x - i >= 0 && map[y][x - i] == color)
-			i++;
-		if (x - i >= 0 && map[y][x - i] == NONE)
-		{
-			if (i == 2)
-			{
-				if (color == WHITE)
-					nbWhiteTwoRow +=1;
-				else
-					nbBlackTwoRow +=1;
-			}
-			else if (i == 3)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteTwoRow -= 1;
-					nbWhiteThreeRow +=1;
-				}
-				else
-				{
-					nbBlackTwoRow -= 1;
-					nbBlackThreeRow +=1;
-				}
-			}
-			else if (i == 4)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteThreeRow -=1;
-					nbWhiteFourRow +=1;
-				}
-				else
-				{
-					nbBlackThreeRow -=1;
-					nbBlackFourRow +=1;
-				}
-			}
-		}
-	if (i >= 5)
-			{
-				if (color == WHITE)
-				{
-					nbWhiteFourRow -=1;
-					nbWhiteFiveRow +=1;
-				}
-				else
-				{
-					nbBlackFourRow -=1;
-					nbBlackFiveRow +=1;
-				}
-			}
-	}
+	// if (x - 1 >= 0 && (map[y][x - 1] == color || map[y][x - 1] == NONE))
+	// {
+	// 	int i = 1;
+	// 	int k = 0;
+	// 	while (i <= 5 && x - i >= 0 && (map[y][x - i] == color || map[y][x - i] == NONE))
+	// 	{
+	// 		if (map[y][x - i] == color)
+	// 			k++;
+	// 		i++;
+	// 	}
+	// 	if (x - i >= 0 && map[y][x - i] == NONE)
+	// 	{
+	// 		j += k;
+	// 		if (j == 2)
+	// 		{
+	// 			if (color == WHITE)
+	// 				nbWhiteTwoRow +=1;
+	// 			else
+	// 				nbBlackTwoRow +=1;
+	// 		}
+	// 		else if (j == 3)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteTwoRow -= 1;
+	// 				nbWhiteThreeRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackTwoRow -= 1;
+	// 				nbBlackThreeRow +=1;
+	// 			}
+	// 		}
+	// 		else if (j == 4)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteThreeRow -=1;
+	// 				nbWhiteFourRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackThreeRow -=1;
+	// 				nbBlackFourRow +=1;
+	// 			}
+	// 		}
+	// 	}
+	// if (j >= 5)
+	// 		{
+	// 			if (color == WHITE)
+	// 			{
+	// 				nbWhiteFourRow -=1;
+	// 				nbWhiteFiveRow +=1;
+	// 			}
+	// 			else
+	// 			{
+	// 				nbBlackFourRow -=1;
+	// 				nbBlackFiveRow +=1;
+	// 			}
+	// 		}
+	// }
 }
 
 eState *GameState::GetMap()
