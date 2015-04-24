@@ -1180,7 +1180,7 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 
 bool GameState::Play(int x, int y, eState color)
 {
-	if (coups.count(Point(x, y, 0)) > 0 && checkThree(x, y, color))
+	if (coups.count(Point(x, y, 0)) > 0)
 	{
 		map[y][x] = color;
 		checkVictoire(x, y, color);
@@ -1198,7 +1198,7 @@ bool GameState::Play(int x, int y, eState color)
 
 bool GameState::TheoricPlay(int x, int y, eState color)
 {
-	if (coups.count(Point(x, y, 0)) > 0 && checkThree(x, y, color))
+	if (coups.count(Point(x, y, 0)) > 0)
 	{
 		map[y][x] = color;
 		coups.erase(Point(x, y, 0));
