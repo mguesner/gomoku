@@ -53,7 +53,7 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 		cur++;
 		i++;
 	}
-		std::cout <<"depth :" << depth << " nb move : " << i << std::endl;
+		// std::cout <<"depth :" << depth << " nb move : " << i << std::endl;
 	return bestValue;
 
 }

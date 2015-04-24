@@ -6,13 +6,13 @@
 #include "VictoryException.hpp"
 #include "Input.hpp"
 
-#define TWOROW 10
-#define THREEROW 50
-#define FOURROW 250
+#define TWOROW 11
+#define THREEROW 51
+#define FOURROW 101
 #define FIVEROW 100000
-#define ENEMYTWO -11
-#define ENEMYTHREE -51
-#define ENEMYFOUR -251
+#define ENEMYTWO -10
+#define ENEMYTHREE -50
+#define ENEMYFOUR -100
 #define ENEMYFIVE -100000
 #define CAPTUREONE 70
 #define CAPTURETWO 90

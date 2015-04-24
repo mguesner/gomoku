@@ -103,6 +103,7 @@ int		GameState::BrainDead()
 	int ret = 0;
 	//auto opponentColor = (currentColor == WHITE ? BLACK : WHITE);
 	int allign[3][6] = {{0}};
+	int capt[3] = {0};
 	for (int i = 0; i < 19; ++i)
 	{
 		for (int j = 0; j < 19; ++j)
@@ -116,6 +117,8 @@ int		GameState::BrainDead()
 					while (i + k < 19 && current == map[i + k][j])
 						k++;
 					allign[current][k > 5 ? 5 : k]++;
+					if (k == 2 && map[i - 1][j] != NONE && map[i + k][j] == NONE)
+						capt[current]++;
 				}
 				if (j - 1 >= 0 && current != map[i][j - 1])
 				{
@@ -123,6 +126,8 @@ int		GameState::BrainDead()
 					while (j + k < 19 && current == map[i][j + k])
 						k++;
 					allign[current][k > 5 ? 5 : k]++;
+					if (k == 2 && map[i][j - 1] != NONE && map[i][j + k] == NONE)
+						capt[current]++;
 				}
 				if (i - 1 >= 0 && j - 1 >= 0 && current != map[i - 1][j - 1])
 				{
@@ -130,6 +135,8 @@ int		GameState::BrainDead()
 					while (i + k < 19 && j + k < 19 && current == map[i + k][j + k])
 						k++;
 					allign[current][k > 5 ? 5 : k]++;
+					if (k == 2 && map[i - 1][j - 1] != NONE && map[i + k][j + k] == NONE)
+						capt[current]++;
 				}
 				if (i - 1 >= 0 && j + 1 < 19 && current != map[i - 1][j + 1])
 				{
@@ -137,6 +144,8 @@ int		GameState::BrainDead()
 					while (i + k < 19 && j - k >= 0 && current == map[i + k][j - k])
 						k++;
 					allign[current][k > 5 ? 5 : k]++;
+					if (k == 2 && map[i - 1][j + 1] != NONE && map[i + k][j - k] == NONE)
+						capt[current]++;
 				}
 			}
 		}
@@ -170,34 +179,39 @@ int		GameState::BrainDead()
 		ret += allign[WHITE][2] * ENEMYTWO;
 		ret += allign[WHITE][3] * ENEMYTHREE;
 		ret += allign[WHITE][4] * ENEMYFOUR;
-		std::cout << "ret align : " << ret << std::endl;
+		// std::cout << "ret align : " << ret << std::endl;
 		if (allign[WHITE][5])
 		{
 			return LOOSE;
+			IsFinalState = true;
 		}
-		if (nbCaptBlack == 1)
+		if (capt[WHITE] == 1)
 			ret += CAPTUREONE;
-		else if (nbCaptBlack == 2)
+		else if (capt[WHITE] == 2)
 			ret += CAPTURETWO;
-		else if (nbCaptBlack == 3)
+		else if (capt[WHITE] == 3)
 			ret += CAPTURETHREE;
-		else if (nbCaptBlack == 4)
+		else if (capt[WHITE] == 4)
 			ret += CAPTUREFOUR;
-		else if (nbCaptBlack >= 5)
+		else if (capt[WHITE] >= 5)
+		{
 			return WIN;
+			IsFinalState = true;
+		}
 
-		if (nbCaptWhite == 1)
+		if (capt[BLACK] == 1)
 			ret -= CAPTUREONE * 10;
-		else if (nbCaptWhite == 2)
+		else if (capt[BLACK] == 2)
 			ret -= CAPTURETWO * 10;
-		else if (nbCaptWhite == 3)
+		else if (capt[BLACK] == 3)
 			ret -= CAPTURETHREE * 10;
-		else if (nbCaptWhite == 4)
+		else if (capt[BLACK] == 4)
 			ret -= CAPTUREFOUR * 10;
-		else if (nbCaptWhite >= 5)
+		else if (capt[BLACK] >= 5)
 		{
 			ret = LOOSE;
-			std::cout << ret << std::endl;
+			IsFinalState = true;
+			// std::cout << ret << std::endl;
 		}
 	//}
 		heuristic = ret;
