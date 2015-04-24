@@ -131,8 +131,7 @@ int		GameState::BrainDead() const
 		ret += nbWhiteFourRow * ENEMYFOUR;
 		if (nbWhiteFiveRow)
 		{
-			std::cout << "GOT U MTF " << std::endl;
-			return ret = nbWhiteFiveRow * ENEMYFIVE;
+			return LOOSE;
 		}
 		if (nbCaptBlack == 1)
 			ret += CAPTUREONE;
@@ -143,19 +142,19 @@ int		GameState::BrainDead() const
 		else if (nbCaptBlack == 4)
 			ret += CAPTUREFOUR;
 		else if (nbCaptBlack >= 5)
-			ret += CAPTUREFIVE;
+			return WIN;
 
 		if (nbCaptWhite == 1)
 			ret -= CAPTUREONE * 10;
 		else if (nbCaptWhite == 2)
-			ret -= CAPTURETWO;
+			ret -= CAPTURETWO * 10;
 		else if (nbCaptWhite == 3)
-			ret -= CAPTURETHREE;
+			ret -= CAPTURETHREE * 10;
 		else if (nbCaptWhite == 4)
-			ret -= CAPTUREFOUR;
+			ret -= CAPTUREFOUR * 10;
 		else if (nbCaptWhite >= 5)
 		{
-			ret = CAPTUREFIVE * -2;
+			ret = LOOSE;
 			std::cout << ret << std::endl;
 		}
 	//}
