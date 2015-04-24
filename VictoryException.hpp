@@ -11,7 +11,7 @@ public:
 	VictoryException(eState);
 	virtual const char* what() const noexcept;
 private:
-	bool color;
+	eState color;
 };
 
 #endif

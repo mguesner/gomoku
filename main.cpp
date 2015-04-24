@@ -19,21 +19,21 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 		int i = 0;
 		while (cur != tmp.end())
 		{
-			(*cur).Display();
+			// (*cur).Display();
 			int value = MinMax(*cur, depth - 1, alpha, beta, false, ret, false);
-			std::cout << "value : " << value << std::endl;
+				// std::cout << "value : " << value << std::endl;
 			if (first && value > bestValue)
 			{
 				*ret = (*cur).GetMove();
 			}
 			bestValue = fmax(bestValue, value);
 			alpha = fmax(alpha, bestValue);
-			// if (beta <= alpha)
-			// 	break;
+			if (beta <= alpha)
+				break;
 			i++;
 			cur++;
 		}
-		std::cout <<"depth :" << depth << " nb move : " << i << std::endl;
+		// std::cout <<"depth :" << depth << " nb move : " << i << std::endl;
 		return bestValue;
 	}
 	auto tmp = node.GenerateSons();
@@ -48,8 +48,8 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 				lol = cur;
 		bestValue = fmin(bestValue, value);
 		beta = fmin(beta, bestValue);
-		// if (beta <= alpha)
-		// 	break;
+		if (beta <= alpha)
+			break;
 		cur++;
 		i++;
 	}
@@ -63,12 +63,12 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 
 Input do_MinMax(GameState *root, Timer timeout)
 {
-	int depth = 1;
+	int depth = 2;
 	int best = 0;
 	int ALPHA = ALPHA_START;
 	int BETA = BETA_START;
 	Input ret;
-	while (timeout > std::chrono::system_clock::now() && depth < 2)
+	while (timeout > std::chrono::system_clock::now())
 	{
 		best = MinMax(*root, depth, ALPHA, BETA, true, &ret, true);
 		depth++;
@@ -125,7 +125,10 @@ int main()
 			try
 			{
 				if (!game.Play(input.GetX(), input.GetY(), color))
-					std::cout << "wrong move" << std::endl;
+				{
+					std::cout << "wrong move : " << input.GetX() <<", " << input.GetY() << std::endl;
+					while (1);
+				}
 				else
 				{
 					game.BrainDead();

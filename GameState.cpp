@@ -102,6 +102,45 @@ int		GameState::BrainDead()
 {
 	int ret = 0;
 	//auto opponentColor = (currentColor == WHITE ? BLACK : WHITE);
+	int allign[3][6] = {{0}};
+	for (int i = 0; i < 19; ++i)
+	{
+		for (int j = 0; j < 19; ++j)
+		{
+			auto current = map[i][j];
+			if (current != NONE)
+			{
+				if (i - 1 >= 0 && current != map[i - 1][j])
+				{
+					int k = 0;
+					while (i + k < 19 && current == map[i + k][j])
+						k++;
+					allign[current][k > 5 ? 5 : k]++;
+				}
+				if (j - 1 >= 0 && current != map[i][j - 1])
+				{
+					int k = 0;
+					while (j + k < 19 && current == map[i][j + k])
+						k++;
+					allign[current][k > 5 ? 5 : k]++;
+				}
+				if (i - 1 >= 0 && j - 1 >= 0 && current != map[i - 1][j - 1])
+				{
+					int k = 0;
+					while (i + k < 19 && j + k < 19 && current == map[i + k][j + k])
+						k++;
+					allign[current][k > 5 ? 5 : k]++;
+				}
+				if (i - 1 >= 0 && j + 1 < 19 && current != map[i - 1][j + 1])
+				{
+					int k = 0;
+					while (i + k < 19 && j - k >= 0 && current == map[i + k][j - k])
+						k++;
+					allign[current][k > 5 ? 5 : k]++;
+				}
+			}
+		}
+	}
 
 	//count my columns lines and diagonal
 	//add my capture
@@ -124,15 +163,15 @@ int		GameState::BrainDead()
 	// {
 		// printf("nbBlackTwoRow->%d nbBlackthreeRow->%d nbBlackfourRow->%d nbBlackfiveRow->%d nbwhiteTwoRow->%d nbwhitethreeRow->%d nbwhitefourRow->%d nbwhitefiverow->%d\n"
 		// 	,nbBlackTwoRow, nbBlackThreeRow, nbBlackFourRow, nbBlackFiveRow, nbWhiteTwoRow, nbWhiteThreeRow, nbWhiteFourRow, nbWhiteFiveRow);
-		ret += nbBlackTwoRow * TWOROW;
-		ret += nbBlackThreeRow * THREEROW;
-		ret += nbBlackFourRow * FOURROW;
-		ret += nbBlackFiveRow * FIVEROW;
-		ret += nbWhiteTwoRow * ENEMYTWO;
-		ret += nbWhiteThreeRow * ENEMYTHREE;
-		ret += nbWhiteFourRow * ENEMYFOUR;
+		ret += allign[BLACK][2] * TWOROW;
+		ret += allign[BLACK][3] * THREEROW;
+		ret += allign[BLACK][4] * FOURROW;
+		ret += allign[BLACK][5] * FIVEROW;
+		ret += allign[WHITE][2] * ENEMYTWO;
+		ret += allign[WHITE][3] * ENEMYTHREE;
+		ret += allign[WHITE][4] * ENEMYFOUR;
 		std::cout << "ret align : " << ret << std::endl;
-		if (nbWhiteFiveRow)
+		if (allign[WHITE][5])
 		{
 			return LOOSE;
 		}
@@ -1232,7 +1271,6 @@ bool GameState::TheoricPlay(int x, int y, eState color)
 	if (coups.count(Point(x, y, 0)) > 0 && checkThree(x, y, color))
 	{
 		map[y][x] = color;
-		checkVictoireCrazy(x, y, color);
 		coups.erase(Point(x, y, 0));
 		checkVoisin(x, y, color);
 		return true;
