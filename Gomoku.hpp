@@ -6,7 +6,7 @@
 #include <iostream>
 
 #define TIMEOUT 1
-#define DEFAULT_MY_BEST -100000
+#define DEFAULT_MY_BEST -1000000000
 #define DEFAULT_ENEMY_BEST 100000
 #define ALPHA_START -300000
 #define BETA_START 300000

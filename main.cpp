@@ -20,7 +20,10 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 		{
 			int value = MinMax(*cur, depth - 1, alpha, beta, false, ret, false);
 			if (first && value > bestValue)
+			{
 				*ret = (*cur).GetMove();
+				(*cur).Display();
+			}
 			bestValue = fmax(bestValue, value);
 			alpha = fmax(alpha, bestValue);
 			if (beta <= alpha)

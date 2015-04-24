@@ -144,8 +144,9 @@ int		GameState::BrainDead() const
 			ret += CAPTUREFOUR;
 		else if (nbCaptBlack >= 5)
 			ret += CAPTUREFIVE;
+
 		if (nbCaptWhite == 1)
-			ret -= CAPTUREONE;
+			ret -= CAPTUREONE * 10;
 		else if (nbCaptWhite == 2)
 			ret -= CAPTURETWO;
 		else if (nbCaptWhite == 3)
@@ -153,8 +154,10 @@ int		GameState::BrainDead() const
 		else if (nbCaptWhite == 4)
 			ret -= CAPTUREFOUR;
 		else if (nbCaptWhite >= 5)
+		{
 			ret = CAPTUREFIVE * -2;
-		std::cout << ret << std::endl;
+			std::cout << ret << std::endl;
+		}
 	//}
 	return ret;
 }
