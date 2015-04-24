@@ -5,6 +5,14 @@
 #include <chrono>
 #include <iostream>
 
+
+enum eState
+{
+	NONE = 0,
+	BLACK,
+	WHITE
+};
+
 #define TIMEOUT 1
 #define DEFAULT_MY_BEST -1000000000
 #define DEFAULT_ENEMY_BEST 100000

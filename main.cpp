@@ -121,14 +121,19 @@ int main()
 					std::cout << "wrong move" << std::endl;
 				else
 				{
+					game.BrainDead();
+					game.Info();
 					color = (color == WHITE ? BLACK : WHITE);
 					HumanTurn = !HumanTurn;
 				}
 			}
 			catch (std::exception *e)
 			{
-				game.Display();
-				std::cout << e->what() << std::endl;
+				// game.Display();
+				// std::cout << e->what() << std::endl;
+				// exit(0);
+				win->DrawEndMenu(e);
+				while (win->GetInput().GetType() == NOINPUT);
 				exit(0);
 			}
 			win->Draw();

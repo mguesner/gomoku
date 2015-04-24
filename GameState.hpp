@@ -22,12 +22,6 @@
 #define LOOSE -1000000000
 #define WIN 1000000000
 
-enum eState
-{
-	NONE = 0,
-	BLACK,
-	WHITE
-};
 
 class GameState
 {
@@ -49,7 +43,7 @@ public:
 	std::vector<GameState> GenerateSons();
 	int GetHeuristic();
 	Input GetMove();
-	int BrainDead() const;
+	int BrainDead();
 	void SetColor(eState color);
 
 	eState *GetMap();

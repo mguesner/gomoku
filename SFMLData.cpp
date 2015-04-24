@@ -172,8 +172,9 @@ void SFMLData::DrawPauseMenu()
        // }
 }
 
-void SFMLData::DrawEndMenu()
+void SFMLData::DrawEndMenu(std::exception *e)
 {
+	win->clear(sf::Color::Black);
 	sf::Text menuEntry;
 
        menuEntry.setFont(*font);
@@ -186,10 +187,11 @@ void SFMLData::DrawEndMenu()
        // 		if (i == choice)
        // 			menuEntry.setColor(sf::Color::Red);
        // 		else
-       // 			menuEntry.setColor(sf::Color::White);
-       // 		menuEntry.setString(endMenu[i]);
-       // 		menuEntry.setPosition(950, 500 + i * 100);
-       // 		win->draw(menuEntry);
+       			menuEntry.setColor(sf::Color::White);
+       		menuEntry.setString(e->what());
+       		menuEntry.setPosition(500 - 100, 500);
+       		win->draw(menuEntry);
+	win->display();
        // 		i++;
        // }
 }
