@@ -110,6 +110,8 @@ int main()
 	bool noIA = false;
 	bool menu = true;
 	int choice = 0;
+	//Sound music;
+	//music.Play()
 		Input input;
 	win->DrawMainMenu(input, &noIA, &choice, &menu);
 		// auto coups = game.GetCoups();
@@ -119,15 +121,18 @@ int main()
 		// }
 	while (1)
 	{
-		// std::cin >> x;
-		// std::cin >> y;
+		auto lastNow = std::chrono::system_clock::now();
+		auto calcTime = std::chrono::system_clock::now() - lastNow;
 		if (HumanTurn || noIA || menu)
 			input = win->GetInput();
 		else
 		{
 			game.SetColor(WHITE);
-		 	auto runUntil = std::chrono::system_clock::now() + std::chrono::milliseconds(200);
-		 	input = do_MinMax(&game, runUntil);
+			lastNow = std::chrono::system_clock::now();
+			auto runUntil =  lastNow + std::chrono::milliseconds(200);
+			input = do_MinMax(&game, runUntil);
+			calcTime = std::chrono::system_clock::now() - lastNow;
+			std::cout << calcTime.count() / 1000 << " ms elapsed"<< std::endl;
 		}
 		if (menu)
 		{
@@ -165,6 +170,7 @@ int main()
 				// exit(0);
 				win->DrawEndMenu(e);
 				while (win->GetInput().GetType() == NOINPUT);
+				//music.Stop();
 				exit(0);
 			}
 			win->Draw(color);
@@ -172,6 +178,7 @@ int main()
 		else if (type == ESC)
 		{
 			delete win;
+			//music.Stop();
 			exit(0);
 		}
 	}
