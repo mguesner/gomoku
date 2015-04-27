@@ -45,6 +45,8 @@ public:
 	Input GetMove();
 	int BrainDead();
 	void SetColor(eState color);
+	
+	std::vector<GameState> successors;
 
 	eState *GetMap();
 	std::set<Point> GetCoups();

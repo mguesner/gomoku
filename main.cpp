@@ -74,23 +74,30 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 
 Input do_MinMax(GameState *root, Timer timeout)
 {
-	int depth = 4;
+	int depth = 2;
 	int best = 0;
 
 	Input ret;
-	while (timeout > std::chrono::system_clock::now()/*&& depth < 3*/)
+	while (1 && depth < MAXDEPTH)
 	{
+		auto value = std::chrono::system_clock::now();
 		int ALPHA = ALPHA_START;
 		int BETA = BETA_START;
 		best = MinMax(*root, depth, ALPHA, BETA, true, &ret, true);
-		depth += 2;
+		depth += 1;
+		if (best == WIN)
+			break;
+		auto turnValue = std::chrono::system_clock::now() - value;
+		if (turnValue * 20 + std::chrono::system_clock::now() > timeout)
+			break;
 		//auto john = root->GenerateSons();
 		//auto lol = std::max_element(john.begin(), john.end());
 		//(*lol).Info();
 		//ret = (*lol).GetMove();
 
 	}
-	std::cout << "nombre coup : " << depth - 2 << std::endl;
+	std::cout << timeout.time_since_epoch().count()  << " > " << std::chrono::system_clock::now().time_since_epoch().count() << std::endl;
+	std::cout << "nombre coup : " << depth << std::endl;
 	ret.SetType(MOUSE);
 	return ret;
 }
@@ -129,7 +136,7 @@ int main()
 		{
 			game.SetColor(WHITE);
 			lastNow = std::chrono::system_clock::now();
-			auto runUntil =  lastNow + std::chrono::milliseconds(200);
+			auto runUntil =  lastNow + std::chrono::milliseconds(450);
 			input = do_MinMax(&game, runUntil);
 			calcTime = std::chrono::system_clock::now() - lastNow;
 			std::cout << calcTime.count() / 1000 << " ms elapsed"<< std::endl;

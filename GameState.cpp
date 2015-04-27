@@ -980,6 +980,7 @@ std::vector<GameState> GameState::GenerateSons()
 {
 	std::vector<GameState> sons;
 
+	sons.reserve(coups.size());
 	auto reverse = (currentColor == WHITE ? BLACK : WHITE);
 	for (auto i = coups.begin(); i != coups.end(); ++i)
 	{
