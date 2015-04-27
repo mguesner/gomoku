@@ -7,18 +7,29 @@ Point::Point(double x, double y, double z) {
 	this->x = x;
 	this->y = y;
 	this->z = z;
+	forbiden[0] = false;
+	forbiden[1] = false;
+	forbiden[2] = false;
 }
 
 Point::Point(Point const & src) {
 	x = src.x;
 	y = src.y;
 	z = src.z;
+	forbiden[0] = src.forbiden[0];
+	forbiden[1] = src.forbiden[1];
+	forbiden[2] = src.forbiden[2];
+	// if (forbiden[1] || forbiden[2])
+	// 	std::cout << "FORBIDEN" <<std::endl;
 }
 
 Point& Point::operator=(Point const & src) {
 	x = src.x;
 	y = src.y;
 	z = src.z;
+	forbiden[0] = src.forbiden[0];
+	forbiden[1] = src.forbiden[1];
+	forbiden[2] = src.forbiden[2];
 	return *this;
 }
 
@@ -176,3 +187,13 @@ std::ostream& operator<<(std::ostream& os, Point& pt)
 	return os;
 }
 
+bool	Point::IsForbiden(eState color) const
+{
+	return forbiden[color];
+}
+
+void	Point::Forbiden(eState color, bool state)
+{
+	forbiden[color] = state;
+	// std::cout << (color == WHITE ? "WHITE" : "BLACK") << " state = " << state << std::endl;
+}

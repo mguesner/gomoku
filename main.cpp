@@ -112,6 +112,11 @@ int main()
 	int choice = 0;
 		Input input;
 	win->DrawMainMenu(input, &noIA, &choice, &menu);
+		// auto coups = game.GetCoups();
+		// for (auto i = coups.begin(); i != coups.end(); ++i)
+		// {
+		// 	std::cout << "coup -> (" << (*i).getX() << ", " << (*i).getY() << ")" <<std::endl;
+		// }
 	while (1)
 	{
 		// std::cin >> x;
@@ -147,6 +152,11 @@ int main()
 					color = (color == WHITE ? BLACK : WHITE);
 					HumanTurn = !HumanTurn;
 				}
+		// auto coups = game.GetCoups();
+		// for (auto i = coups.begin(); i != coups.end(); ++i)
+		// {
+		// 	std::cout << "coup -> (" << (*i).getX() << ", " << (*i).getY() << ")" <<std::endl;
+		// }
 			}
 			catch (std::exception *e)
 			{
@@ -157,7 +167,7 @@ int main()
 				while (win->GetInput().GetType() == NOINPUT);
 				exit(0);
 			}
-			win->Draw();
+			win->Draw(color);
 		}
 		else if (type == ESC)
 		{

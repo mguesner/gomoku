@@ -30,11 +30,11 @@ SFMLData::SFMLData()
 
 }
 
-void SFMLData::Draw()
+void SFMLData::Draw(eState color)
 {
 	win->clear(sf::Color::Black);
 	win->draw(*background);
-	DrawNormalMode();
+	DrawNormalMode(color);
 	win->display();
 }
 
@@ -55,7 +55,7 @@ void SFMLData::DrawMainMenu(Input input, bool *noIa, int *choice, bool *menu)
 	{
 		*menu = false;
 		std::cout << "draw" << std::endl;
-		Draw();
+		Draw(WHITE);
 		return ;
 	}
 	else if (input.GetType() == VALIDATE && *choice == 1)
@@ -89,7 +89,7 @@ void SFMLData::DrawHiScoreMenu()
 
 }
 
-void SFMLData::DrawNormalMode()
+void SFMLData::DrawNormalMode(eState color)
 {
 	if (game == NULL)
 		return;
@@ -98,43 +98,43 @@ void SFMLData::DrawNormalMode()
 	for (int i = 0; i < 19 * 19; i++)
 	{
 		bool prout = true;
-			if (truc[i] == BLACK)
-			{
-				sf::CircleShape shape(10);
-				shape.setFillColor(sf::Color(0, 0, 0));
+		if (truc[i] == BLACK)
+		{
+			sf::CircleShape shape(10);
+			shape.setFillColor(sf::Color(0, 0, 0));
 
 // set a 10-pixel wide orange outline
-				shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
-				win->draw(shape);
-			}
-			else if (truc[i] == WHITE)
-			{
-				sf::CircleShape shape(10);
-				shape.setFillColor(sf::Color(250, 250, 250));
+			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
+			win->draw(shape);
+		}
+		else if (truc[i] == WHITE)
+		{
+			sf::CircleShape shape(10);
+			shape.setFillColor(sf::Color(250, 250, 250));
 
 // set a 10-pixel wide orange outline
-				shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
-				win->draw(shape);
-			}
-			else if (machin.count(Point(i % 19, i / 19, 0)))
-				{
-					prout = false;
-				sf::CircleShape shape(10);
-				shape.setFillColor(sf::Color(250, 0, 0));
+			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
+			win->draw(shape);
+		}
+		else if (machin.count(Point(i % 19, i / 19, 0)) && !machin.find(Point(i % 19, i / 19, 0))->IsForbiden(color))
+		{
+			prout = false;
+			sf::CircleShape shape(10);
+			shape.setFillColor(sf::Color(250, 0, 0));
 
 // set a 10-pixel wide orange outline
-				shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
-				win->draw(shape);
-			}
-			if (prout && machin.count(Point(i % 19, i / 19, 0)))
-			{
-				sf::CircleShape shape(10);
-				shape.setFillColor(sf::Color(0, 250, 0));
+			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
+			win->draw(shape);
+		}
+		if (prout && machin.count(Point(i % 19, i / 19, 0)))
+		{
+			sf::CircleShape shape(10);
+			shape.setFillColor(sf::Color(0, 250, 0));
 
 // set a 10-pixel wide orange outline
-				shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
-				win->draw(shape);
-			}
+			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
+			win->draw(shape);
+		}
 	}
 }
 

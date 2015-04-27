@@ -226,6 +226,7 @@ bool GameState::checkThree(int x, int y, eState color)
 {
 	eState opponent = (color == BLACK ? WHITE : BLACK);
 	int nbThrees = 0;
+
 	int j = 0;
 	int i = 1;
 	int none = 0;
@@ -374,6 +375,7 @@ bool GameState::checkThree(int x, int y, eState color)
 	if (j == 2)
 		nbThrees++;
 
+	// std::cout << "(" << x<< ", " << y<< ") -> " << nbThrees << "  color : " << (color == BLACK ? "black" : "white") << std::endl;
 	if (nbThrees > 1)
 		return false;
 	return true;
@@ -386,290 +388,16 @@ void GameState::checkVoisin(int x, int y, eState color)
 	// int j = 0;
 	if (y - 1 >= 0 && map[y - 1][x] == NONE)
 		coups.insert(Point(x, y - 1, 0));
-	// if (y - 1 >= 0 && (map[y - 1][x] == color || map[y - 1][x] == NONE))
-	// {
-	// 	int i = 1;
-	// 	int k = 1;
-	// 	while (i <= 5 && y - i >= 0 && (map[y - i][x] == color || map[y - i][x] == NONE))
-	// 	{
-	// 		if (map[y - i][x] == color)
-	// 			k++;
-	// 		i++;
-	// 	}
-	// 	// std::cout << "haut : " << k << std::endl;
-	// 	if (y - i >= 0 && map[y - i][x] == NONE)
-	// 		j = k;
-	// 	if (k >= 5)
-	// 	{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteFourRow -=1;
-	// 				nbWhiteFiveRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackFourRow -=1;
-	// 				nbBlackFiveRow +=1;
-	// 			}
-	// 	}
-	// }
 	if (y + 1 < 19 && map[y + 1][x] == NONE)
 		coups.insert(Point(x, y + 1, 0));
-	// if (y + 1 < 19 && (map[y + 1][x] == color || map[y + 1][x] == NONE))
-	// {
-	// 	int k = 0;
-	// 	int i = 1;
-	// 	while (i <= 5 && y + i < 19 && (map[y + i][x] == color || map[y + i][x] == NONE))
-	// 	{
-	// 		if (map[y + i][x] == color)
-	// 			k++;
-	// 		i++;
-	// 	}
-	// 	if (y + i < 19 && map[y + i][x] == NONE)
-	// 	{
-	// 	// std::cout << "bas : " << k << std::endl;
-	// 		j += k;
-	// 		if (j == 2)
-	// 		{
-	// 			if (color == WHITE)
-	// 				nbWhiteTwoRow +=1;
-	// 			else
-	// 				nbBlackTwoRow +=1;
-	// 		}
-	// 		else if (j == 3)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteTwoRow -= 1;
-	// 				nbWhiteThreeRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackTwoRow -= 1;
-	// 				nbBlackThreeRow +=1;
-	// 			}
-	// 		}
-	// 		else if (j == 4)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteThreeRow -=1;
-	// 				nbWhiteFourRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackThreeRow -=1;
-	// 				nbBlackFourRow +=1;
-	// 			}
-	// 		}
-	// 	}
-	// 	if (k >= 5)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteFourRow -=1;
-	// 				nbWhiteFiveRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackFourRow -=1;
-	// 				nbBlackFiveRow +=1;
-	// 			}
-	// 		}
-	// }
-
-	//back slash
-	// j = 0;
 	if (y - 1 >= 0 && x - 1 >= 0 && map[y - 1][x - 1] == NONE)
 		coups.insert(Point(x - 1, y - 1, 0));
-	// if (y - 1 >= 0 && x - 1 >= 0 && (map[y - 1][x - 1] == color || map[y - 1][x - 1] == NONE))
-	// {
-	// 	int k = 1;
-	// 	int i = 1;
-	// 	while (i <= 5 && y - i >= 0 && x - i >= 0 && (map[y - i][x - i] == color || map[y - i][x - i] == NONE))
-	// 	{
-	// 		if (map[y - i][x - i] == color)
-	// 			k++;
-	// 		i++;
-	// 	}
-	// 	if (y - i >= 0 && x - i >= 0 && map[y - i][x - i] == NONE)
-	// 		j = k;
-	// 	if (j >= 5)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteFourRow -=1;
-	// 				nbWhiteFiveRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackFourRow -=1;
-	// 				nbBlackFiveRow +=1;
-	// 			}
-	// 		}
-	// }
 	if (y + 1 < 19 && x + 1 < 19 && map[y + 1][x + 1] == NONE)
 		coups.insert(Point(x + 1, y + 1, 0));
-	// if (y + 1 < 19 && x + 1 < 19 && (map[y + 1][x + 1] == color || map[y + 1][x + 1] == NONE))
-	// {
-	// 	int k = 0;
-	// 	int i = 1;
-	// 	while (i <= 5 && y + i < 19 && x + i < 19 && (map[y + i][x + i] == color || map[y + i][x + i] == NONE))
-	// 	{
-	// 		if (map[y + i][x + i] == color)
-	// 			k++;
-	// 		i++;
-	// 	}
-	// 	if (y + i < 19 && x + i < 19 && map[y + i][x + i] == NONE)
-	// 	{
-	// 		j += k;
-	// 		if (j == 2)
-	// 		{
-	// 			if (color == WHITE)
-	// 				nbWhiteTwoRow +=1;
-	// 			else
-	// 				nbBlackTwoRow +=1;
-	// 		}
-	// 		else if (j == 3)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteTwoRow -= 1;
-	// 				nbWhiteThreeRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackTwoRow -= 1;
-	// 				nbBlackThreeRow +=1;
-	// 			}
-	// 		}
-	// 		else if (j == 4)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteThreeRow -=1;
-	// 				nbWhiteFourRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackThreeRow -=1;
-	// 				nbBlackFourRow +=1;
-	// 			}
-	// 		}
-	// 	}
-	// 	if (j >= 5)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteFourRow -=1;
-	// 				nbWhiteFiveRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackFourRow -=1;
-	// 				nbBlackFiveRow +=1;
-	// 			}
-	// 		}
-	// }
-
-	//slash
-	// j = 0;
 	if (y - 1 >= 0 && x + 1 < 19 && map[y - 1][x + 1] == NONE)
 		coups.insert(Point(x + 1, y - 1, 0));
-	// if (y - 1 >= 0 && x + 1 < 19 && (map[y - 1][x + 1] == color || map[y - 1][x + 1] == NONE))
-	// {
-	// 	int i = 1;
-	// 	int k = 1;
-	// 	while (i <= 5 && y - i >= 0 && x + i < 19 && (map[y - i][x + i] ==color || map[y - i][x + i] == NONE))
-	// 	{
-	// 		if (map[y - i][x + i] ==color)
-	// 			k++;
-	// 		i++;
-	// 	}
-	// 	if (y - i >= 0 && x + i < 19 && map[y - i][x + i] == NONE)
-	// 	{
-	// 		j = k;
-	// 	}
-	// 	if (j >= 5)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteFourRow -=1;
-	// 				nbWhiteFiveRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackFourRow -=1;
-	// 				nbBlackFiveRow +=1;
-	// 			}
-	// 		}
-	// }
 	if (y + 1 < 19 && x - 1 >= 0 && map[y + 1][x - 1] == NONE)
 		coups.insert(Point(x - 1, y + 1, 0));
-	// if (y + 1 < 19 && x - 1 >= 0 && (map[y + 1][x - 1] == color || map[y + 1][x - 1] == NONE))
-	// {
-	// 	int k = 0;
-	// 	int i = 1;
-	// 	while (i <= 5 && y + i < 19 && x - i >= 0 && (map[y + i][x - i] == color || map[y + i][x - i] == NONE))
-	// 	{
-	// 		if (map[y + i][x - i] == color)
-	// 			k++;
-	// 		i++;
-	// 	}
-	// 	if (y + i < 19 && x - i >= 0 && map[y + i][x - i] == NONE)
-	// 	{
-	// 		j += k;
-	// 		if (j == 2)
-	// 		{
-	// 			if (color == WHITE)
-	// 				nbWhiteTwoRow +=1;
-	// 			else
-	// 				nbBlackTwoRow +=1;
-	// 		}
-	// 		else if (j == 3)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteTwoRow -= 1;
-	// 				nbWhiteThreeRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackTwoRow -= 1;
-	// 				nbBlackThreeRow +=1;
-	// 			}
-	// 		}
-	// 		else if (j == 4)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteThreeRow -=1;
-	// 				nbWhiteFourRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackThreeRow -=1;
-	// 				nbBlackFourRow +=1;
-	// 			}
-	// 		}
-	// 	}
-	// 	if (j >= 5)
-	// 		{
-	// 			if (color == WHITE)
-	// 			{
-	// 				nbWhiteFourRow -=1;
-	// 				nbWhiteFiveRow +=1;
-	// 			}
-	// 			else
-	// 			{
-	// 				nbBlackFourRow -=1;
-	// 				nbBlackFiveRow +=1;
-	// 			}
-	// 		}
-	// }
-
-	//horizontal
-	// j = 0;
 	if (x + 1 < 19 && map[y][x + 1] == NONE)
 		coups.insert(Point(x + 1, y, 0));
 	if (x - 1 >= 0 && map[y][x - 1] == NONE)
@@ -1171,17 +899,28 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 
 bool GameState::Play(int x, int y, eState color)
 {
-	if (coups.count(Point(x, y, 0)) > 0)
+	if (coups.count(Point(x, y, 0)) > 0 && !coups.find(Point(x, y, 0))->IsForbiden(color))
 	{
 		map[y][x] = color;
 		checkVictoire(x, y, color);
 		coups.erase(Point(x, y, 0));
 		checkVoisin(x, y, color);
+		std::set<Point> patate;
 		for (auto i = coups.begin(); i != coups.end(); ++i)
 		{
+			// if ((*i).IsForbiden(color == WHITE ? BLACK : WHITE))
+			// 	std::cout << "FORBIDDEN" << std::endl;
+			Point tmp(*i);
+			// std::cout << "copie -> (" << tmp.getX() << ", " << tmp.getY() << ")" << std::endl;
 			if (!checkThree((*i).getX(), (*i).getY(), color))
-				coups.erase(*i);
+				tmp.Forbiden(color, true);
+			else
+				tmp.Forbiden(color, false);
+			//coups.erase(*i);
+			patate.insert(tmp);
 		}
+		coups.clear();
+		coups.insert(patate.begin(), patate.end());
 		return true;
 	}
 	return false;
@@ -1189,7 +928,7 @@ bool GameState::Play(int x, int y, eState color)
 
 bool GameState::TheoricPlay(int x, int y, eState color)
 {
-	if (coups.count(Point(x, y, 0)) > 0)
+	if (coups.count(Point(x, y, 0)) > 0 && !coups.find(Point(x, y, 0))->IsForbiden(color))
 	{
 		map[y][x] = color;
 		try
@@ -1244,7 +983,7 @@ std::vector<GameState> GameState::GenerateSons()
 	auto reverse = (currentColor == WHITE ? BLACK : WHITE);
 	for (auto i = coups.begin(); i != coups.end(); ++i)
 	{
-		if(checkThree((*i).getX(), (*i).getY(), reverse))
+		if(!coups.find(Point((*i).getX(), (*i).getY(), 0))->IsForbiden(currentColor))
 		{
 			Input test(NOINPUT, (*i).getX(), (*i).getY());
 			GameState son(*this);

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <math.h>
 #include <set>
+#include "Gomoku.hpp"
 
 class Point
 {
@@ -28,6 +29,9 @@ class Point
 		void	UpdateY(double coef);
 		void	UpdateZ(double coef);
 
+		void	Forbiden(eState, bool);
+		bool	IsForbiden(eState) const;
+
 		Point& operator+=(Point const & ref);
 		Point& operator-=(Point const & ref);
 		bool operator<(Point const & ref) const;
@@ -38,6 +42,7 @@ class Point
 	protected:
 		bool		black;
 		bool		white;
+		bool		forbiden[3];
 		double		x;
 		double		y;
 		double		z;
