@@ -212,9 +212,9 @@ int		GameState::BrainDead()
 		return LOOSE;
 	}
 	if (nbCaptBlack == 1)
-		ret += CAPTUREONE;
+		ret += CAPTUREONE + 10;
 	else if (nbCaptBlack == 2)
-		ret += CAPTURETWO;
+		ret += CAPTURETWO + 10;
 	else if (nbCaptBlack == 3)
 		ret += CAPTURETHREE;
 	else if (nbCaptBlack == 4)
