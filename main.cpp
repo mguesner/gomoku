@@ -22,12 +22,14 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 		auto cur = tmp.begin();
 		int bestValue = DEFAULT_MY_BEST;
 		int i = 0;
+		if (first)
+			*ret = (*cur).GetMove();
 		while (cur != tmp.end())
 		{
-			// (*cur).Display();
 			int value = MinMax(*cur, depth - 1, alpha, beta, false, ret, false);
 			// if (first)
-			// 	std::cout << "value : " << value << std::endl;
+			// (*cur).Display();
+			// std::cout << "value : " << value << std::endl;
 			if (first && value > bestValue)
 			{
 				// std::cout << "new best move : " << value << std::endl;
@@ -84,11 +86,11 @@ Input do_MinMax(GameState *root, Timer timeout)
 		int ALPHA = ALPHA_START;
 		int BETA = BETA_START;
 		best = MinMax(*root, depth, ALPHA, BETA, true, &ret, true);
-		depth += 1;
+		depth += 2;
 		if (best == WIN)
 			break;
 		auto turnValue = std::chrono::system_clock::now() - value;
-		if (turnValue * 20 + std::chrono::system_clock::now() > timeout)
+		if (turnValue * root->GetCoups().size() * root->GetCoups().size() + std::chrono::system_clock::now() > timeout)
 			break;
 		//auto john = root->GenerateSons();
 		//auto lol = std::max_element(john.begin(), john.end());
@@ -96,7 +98,7 @@ Input do_MinMax(GameState *root, Timer timeout)
 		//ret = (*lol).GetMove();
 
 	}
-	std::cout << timeout.time_since_epoch().count()  << " > " << std::chrono::system_clock::now().time_since_epoch().count() << std::endl;
+	// std::cout << timeout.time_since_epoch().count()  << " > " << std::chrono::system_clock::now().time_since_epoch().count() << std::endl;
 	std::cout << "nombre coup : " << depth << std::endl;
 	ret.SetType(MOUSE);
 	return ret;
@@ -172,7 +174,7 @@ int main()
 			}
 			catch (std::exception *e)
 			{
-				// game.Display();
+				game.Display();
 				// std::cout << e->what() << std::endl;
 				// exit(0);
 				win->DrawEndMenu(e);

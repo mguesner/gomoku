@@ -6,18 +6,23 @@
 #include "VictoryException.hpp"
 #include "Input.hpp"
 
-#define TWOROW 11
-#define THREEROW 51
-#define FOURROW 201
+#define TWOROWONEWAY 11
+#define TWOROWTWOWAY 21
+#define THREEROWONEWAY 51
+#define THREEROWTWOWAY 101
+#define FOURROWONEWAY 201
+#define FOURROWTWOWAY 100000
 #define FIVEROW 100000
-#define ENEMYTWO -10
-#define ENEMYTHREE -50
+#define ENEMYTWOONEWAY -10
+#define ENEMYTWOTWOWAY -20
+#define ENEMYTHREEONEWAY -50
+#define ENEMYTHREETWOWAY -100
 #define ENEMYFOUR -200
 #define ENEMYFIVE -100000
-#define CAPTUREONE 70
-#define CAPTURETWO 90
-#define CAPTURETHREE 150
-#define CAPTUREFOUR 200
+#define CAPTUREONE 300
+#define CAPTURETWO 600
+#define CAPTURETHREE 10000
+#define CAPTUREFOUR 50000
 #define CAPTUREFIVE 10000
 #define LOOSE -1000000000
 #define WIN 1000000000
@@ -44,8 +49,9 @@ public:
 	int GetHeuristic();
 	Input GetMove();
 	int BrainDead();
+	int GetCapture(eState);
 	void SetColor(eState color);
-	
+
 	std::vector<GameState> successors;
 
 	eState *GetMap();
@@ -60,6 +66,7 @@ private:
 	void checkVictoire(int, int, eState);
 	void checkVictoireCrazy(int x, int y, eState color);
 	bool checkThree(int, int, eState);
+	bool isCapturable(bool *check, int x, int y, eState color);
 	std::set<Point> coups;
 	eState map[19][19];
 	int nbWhiteTwoRow;

@@ -95,6 +95,16 @@ void SFMLData::DrawNormalMode(eState color)
 		return;
 	auto truc = game->GetMap();
 	auto machin = game->GetCoups();
+	std::string str("NOIR : ");
+	str.append(std::to_string(game->GetCapture(BLACK)));
+	str.append(" - BLANC : ");
+	str.append(std::to_string(game->GetCapture(WHITE)));
+	sf::Text score;
+	score.setFont(*font);
+	score.setCharacterSize(35);
+	score.setPosition(20, 20);
+	score.setString(str.c_str());
+	win->draw(score);
 	for (int i = 0; i < 19 * 19; i++)
 	{
 		bool prout = true;
@@ -165,8 +175,8 @@ void SFMLData::DrawPauseMenu()
 {
 	sf::Text menuEntry;
 
-       menuEntry.setFont(*font);
-       menuEntry.setCharacterSize(35);
+	menuEntry.setFont(*font);
+	menuEntry.setCharacterSize(35);
 
 
        // int i = 0;
@@ -186,11 +196,44 @@ void SFMLData::DrawPauseMenu()
 void SFMLData::DrawEndMenu(std::exception *e)
 {
 	win->clear(sf::Color::Black);
+	win->draw(*background);
 	sf::Text menuEntry;
+	std::string str("NOIR : ");
+	str.append(std::to_string(game->GetCapture(BLACK)));
+	str.append(" - BLANC : ");
+	str.append(std::to_string(game->GetCapture(WHITE)));
+	sf::Text score;
+	score.setFont(*font);
+	score.setCharacterSize(35);
+	score.setPosition(20, 20);
+	score.setString(str.c_str());
+	win->draw(score);
 
-       menuEntry.setFont(*font);
-       menuEntry.setCharacterSize(35);
 
+	menuEntry.setFont(*font);
+	menuEntry.setCharacterSize(35);
+	auto truc = game->GetMap();
+	for (int i = 0; i < 19 * 19; i++)
+	{
+		if (truc[i] == BLACK)
+		{
+			sf::CircleShape shape(10);
+			shape.setFillColor(sf::Color(0, 0, 0));
+
+// set a 10-pixel wide orange outline
+			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
+			win->draw(shape);
+		}
+		else if (truc[i] == WHITE)
+		{
+			sf::CircleShape shape(10);
+			shape.setFillColor(sf::Color(250, 250, 250));
+
+// set a 10-pixel wide orange outline
+			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
+			win->draw(shape);
+		}
+	}
 
        // int i = 0;
        // while (i < NBACTIONEND)
@@ -198,10 +241,10 @@ void SFMLData::DrawEndMenu(std::exception *e)
        // 		if (i == choice)
        // 			menuEntry.setColor(sf::Color::Red);
        // 		else
-       			menuEntry.setColor(sf::Color::White);
-       		menuEntry.setString(e->what());
-       		menuEntry.setPosition(500 - 100, 500);
-       		win->draw(menuEntry);
+	menuEntry.setColor(sf::Color::White);
+	menuEntry.setString(e->what());
+	menuEntry.setPosition(20, 900);
+	win->draw(menuEntry);
 	win->display();
        // 		i++;
        // }
@@ -221,33 +264,33 @@ void SFMLData::SetInput(int keycode)
 Input SFMLData::GetInput()
 {
 	sf::Event event;
-    while (win->pollEvent(event))
-    {
-            if (event.type == sf::Event::Closed)
-            {
+	while (win->pollEvent(event))
+	{
+		if (event.type == sf::Event::Closed)
+		{
             	//emergency close
-            	win->close();
-            	exit(0);
-            }
-            else if (event.type == sf::Event::KeyPressed)
-            {
-            	if (event.key.code == sf::Keyboard::Escape)
-            		return Input(ESC);
-            	else if (event.key.code == sf::Keyboard::Up)
-            		return Input(UP);
-            	else if (event.key.code == sf::Keyboard::Down)
-            		return Input(DOWN);
-            	else if (event.key.code == sf::Keyboard::Return)
-            		return Input(VALIDATE);
-            	return Input(NOINPUT);
-            }
-            if (event.type == sf::Event::MouseButtonPressed)
+			win->close();
+			exit(0);
+		}
+		else if (event.type == sf::Event::KeyPressed)
+		{
+			if (event.key.code == sf::Keyboard::Escape)
+				return Input(ESC);
+			else if (event.key.code == sf::Keyboard::Up)
+				return Input(UP);
+			else if (event.key.code == sf::Keyboard::Down)
+				return Input(DOWN);
+			else if (event.key.code == sf::Keyboard::Return)
+				return Input(VALIDATE);
+			return Input(NOINPUT);
+		}
+		if (event.type == sf::Event::MouseButtonPressed)
+		{
+			if (event.mouseButton.button == sf::Mouse::Left)
 			{
-				if (event.mouseButton.button == sf::Mouse::Left)
-				{
-					return Input(MOUSE, (event.mouseButton.x - 100) / CASESIZE, (event.mouseButton.y - 100) / CASESIZE);
-				}
+				return Input(MOUSE, (event.mouseButton.x - 100) / CASESIZE, (event.mouseButton.y - 100) / CASESIZE);
 			}
+		}
 
 	}
 	return Input(NOINPUT);
