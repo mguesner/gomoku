@@ -91,7 +91,7 @@ Input do_MinMax(GameState *root, Timer timeout)
 		auto turnValue = std::chrono::system_clock::now() - value;
 		if (turnValue * root->GetCoups().size() * root->GetCoups().size() + std::chrono::system_clock::now() > timeout)
 			break;
-		// depth += 2;
+		depth += 2;
 		//auto john = root->GenerateSons();
 		//auto lol = std::max_element(john.begin(), john.end());
 		//(*lol).Info();
@@ -108,6 +108,7 @@ Input do_MinMax(GameState *root, Timer timeout)
 int main()
 {
 	SFMLData *win = new SFMLData();
+	srand(time(NULL));
 	GameState game;
 	game.GameStart();
 	win->SetGameState(&game);

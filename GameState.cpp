@@ -242,7 +242,7 @@ int		GameState::BrainDead()
 			// std::cout << ret << std::endl;
 	}
 	//}
-	// std::cout << "heuristic : " << ret << std::endl;
+	// int alea = rand() % 5;
 	heuristic = ret;
 	return ret;
 }
@@ -525,7 +525,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				break;
 			}
 			capt = -1;
-			if (isCapturable(&check, x - i, y, color))
+			if (isCapturable(&check, x + i, y, color))
 				win++;
 			else
 				break;
@@ -539,7 +539,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 			break;
 		i++;
 	}
-	if (win == 5)
+	if (win >= 5)
 		throw new VictoryException(color);
 
 	capt = 0;
@@ -563,7 +563,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				break;
 			}
 			capt = -1;
-			if (isCapturable(&check, x - i, y, color))
+			if (isCapturable(&check, x, y - i, color))
 				win++;
 			else
 				break;
@@ -597,7 +597,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				break;
 			}
 			capt = -1;
-			if (isCapturable(&check, x - i, y, color))
+			if (isCapturable(&check, x, y + i, color))
 				win++;
 			else
 				break;
@@ -611,7 +611,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 			break;
 		i++;
 	}
-	if (win == 5)
+	if (win >= 5)
 		throw new VictoryException(color);
 
 	capt = 0;
@@ -635,7 +635,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				break;
 			}
 			capt = -1;
-			if (isCapturable(&check, x - i, y, color))
+			if (isCapturable(&check, x - i, y - i, color))
 				win++;
 			else
 				break;
@@ -669,7 +669,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				break;
 			}
 			capt = -1;
-			if (isCapturable(&check, x - i, y, color))
+			if (isCapturable(&check, x + i, y + i, color))
 				win++;
 			else
 				break;
@@ -683,7 +683,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 			break;
 		i++;
 	}
-	if (win == 5)
+	if (win >= 5)
 		throw new VictoryException(color);
 
 	check = true;
@@ -707,7 +707,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				break;
 			}
 			capt = -1;
-			if (isCapturable(&check, x - i, y, color))
+			if (isCapturable(&check, x - i, y + i, color))
 				win++;
 			else
 				break;
@@ -741,7 +741,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				break;
 			}
 			capt = -1;
-			if (isCapturable(&check, x - i, y, color))
+			if (isCapturable(&check, x + i, y - i, color))
 				win++;
 			else
 				break;
@@ -755,7 +755,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 			break;
 		i++;
 	}
-	if (win == 5)
+	if (win >= 5)
 		throw new VictoryException(color);
 }
 
@@ -818,7 +818,7 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 		}
 		i++;
 	}
-	if (win == 5)
+	if (win >= 5)
 		Finalstate = true;
 
 	capt = 0;
@@ -878,7 +878,7 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 		}
 		i++;
 	}
-	if (win == 5)
+	if (win >= 5)
 		Finalstate = true;
 
 	capt = 0;
@@ -938,7 +938,7 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 		}
 		i++;
 	}
-	if (win == 5)
+	if (win >= 5)
 		Finalstate = true;
 
 	capt = 0;
@@ -998,6 +998,8 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 		}
 		i++;
 	}
+	if (win >= 5)
+		Finalstate = true;
 }
 
 bool GameState::Play(int x, int y, eState color)
