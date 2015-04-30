@@ -206,7 +206,9 @@ int		GameState::BrainDead()
 	ret += allign[WHITE][2][2] * ENEMYTWOTWOWAY;
 	ret += allign[WHITE][3][2] * ENEMYTHREETWOWAY;
 		// std::cout << "ret align : " << ret << std::endl;
-	if (allign[WHITE][5][1] || allign[WHITE][4][2] || allign[WHITE][5][2])
+	if (allign[WHITE][4][2])
+		return LOOSE - 10;
+	if (allign[WHITE][5][1] || allign[WHITE][5][2])
 	{
 		Finalstate = true;
 		return LOOSE;

@@ -86,12 +86,12 @@ Input do_MinMax(GameState *root, Timer timeout)
 		int ALPHA = ALPHA_START;
 		int BETA = BETA_START;
 		best = MinMax(*root, depth, ALPHA, BETA, true, &ret, true);
-		depth += 2;
 		if (best == WIN)
 			break;
 		auto turnValue = std::chrono::system_clock::now() - value;
 		if (turnValue * root->GetCoups().size() * root->GetCoups().size() + std::chrono::system_clock::now() > timeout)
 			break;
+		// depth += 2;
 		//auto john = root->GenerateSons();
 		//auto lol = std::max_element(john.begin(), john.end());
 		//(*lol).Info();
