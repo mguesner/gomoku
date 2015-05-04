@@ -51,11 +51,7 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 		i++;
 	}
 	return bestValue;
-
 }
-
-
-
 
 Input do_MinMax(GameState *root, Timer timeout)
 {

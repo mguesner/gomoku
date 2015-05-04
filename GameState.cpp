@@ -27,7 +27,6 @@ GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt
 	move = test;
 	std::memcpy(&map, &real, sizeof(eState) * 19 * 19);
 	TheoricPlay(test.GetX(), test.GetY(), turnColor);
-	// heuristic = BrainDead();
 	nbCaptBlack = blackcpt;
 	nbCaptWhite = whitecpt;
 	currentColor = turnColor;
@@ -93,7 +92,6 @@ void	GameState::Update(Input test, eState turnColor)
 	move = test;
 	currentColor = turnColor;
 	TheoricPlay(test.GetX(), test.GetY(), turnColor);
-	// heuristic = BrainDead();
 }
 
 //HEURISTIC FUNCTION RETURN MAX VALUE EVALUATING CURRENT PLAYER POSITION
@@ -101,7 +99,6 @@ void	GameState::Update(Input test, eState turnColor)
 int		GameState::BrainDead()
 {
 	int ret = 0;
-	//auto opponentColor = (currentColor == WHITE ? BLACK : WHITE);
 	int allign[3][6][3] = {{{0}}};
 	for (int i = 0; i < 19; ++i)
 	{
@@ -165,47 +162,22 @@ int		GameState::BrainDead()
 			}
 		}
 	}
-	//count my columns lines and diagonal
-	//add my capture
-	//substract opponents lines columns and diagonals
-	//substract opponents captures
-	// if (currentColor == WHITE)
-	// {
-	// 	ret += nbWhiteTwoRow * TWOROW;
-	// 	ret += nbWhiteThreeRow * THREEROW;
-	// 	ret += nbWhiteFourRow * FOURROW;
-	// 	ret += nbWhiteFiveRow * FIVEROW;
-	// 	ret += nbBlackTwoRow * ENEMYTWO;
-	// 	ret += nbBlackThreeRow * ENEMYTHREE;
-	// 	ret += nbBlackFourRow * ENEMYFOUR;
-	// 	ret += nbBlackFiveRow * ENEMYFIVE;
-	// 	ret += nbCaptWhite * 50;
-	// 	ret -= nbCaptBlack * 30;
-	// }
-	// else
-	// {
-		// printf("nbBlackTwoRow->%d nbBlackthreeRow->%d nbBlackfourRow->%d nbBlackfiveRow->%d nbwhiteTwoRow->%d nbwhitethreeRow->%d nbwhitefourRow->%d nbwhitefiverow->%d\n"
-		// 	,nbBlackTwoRow, nbBlackThreeRow, nbBlackFourRow, nbBlackFiveRow, nbWhiteTwoRow, nbWhiteThreeRow, nbWhiteFourRow, nbWhiteFiveRow);
 	ret += allign[BLACK][2][1] * TWOROWONEWAY;
 	ret += allign[BLACK][3][1] * THREEROWONEWAY;
 	ret += allign[BLACK][4][1] * FOURROWONEWAY;
 	ret += allign[BLACK][2][2] * TWOROWONEWAY;
 	ret += allign[BLACK][3][2] * THREEROWONEWAY;
 	ret += allign[BLACK][4][2] * FOURROWTWOWAY;
-	// ret += allign[BLACK][5][1] * FIVEROWONEWAY;
 	if (allign[BLACK][5][1] || allign[BLACK][5][2])
 	{
 		Finalstate = true;
 		return WIN;
 	}
-	// ret += allign[BLACK][4][2] * FOURROWONEWAY;
-	// ret += allign[BLACK][5][2] * FIVEROWONEWAY;
 	ret += allign[WHITE][2][1] * ENEMYTWOONEWAY;
 	ret += allign[WHITE][3][1] * ENEMYTHREEONEWAY;
 	ret += allign[WHITE][4][1] * ENEMYFOUR;
 	ret += allign[WHITE][2][2] * ENEMYTWOTWOWAY;
 	ret += allign[WHITE][3][2] * ENEMYTHREETWOWAY;
-		// std::cout << "ret align : " << ret << std::endl;
 	if (allign[WHITE][4][2])
 		return LOOSE - 10;
 	if (allign[WHITE][5][1] || allign[WHITE][5][2])
@@ -239,11 +211,9 @@ int		GameState::BrainDead()
 	{
 		Finalstate = true;
 		return LOOSE;
-			// std::cout << ret << std::endl;
 	}
-	//}
-	// int alea = rand() % 5;
-	heuristic = ret;
+	int alea = rand() % 5;
+	heuristic = ret + alea;
 	return ret;
 }
 
@@ -422,8 +392,6 @@ bool GameState::checkThree(int x, int y, eState color)
 void GameState::checkVoisin(int x, int y, eState color)
 {
 	(void)color;
-	//verticale
-	// int j = 0;
 	if (y - 1 >= 0 && map[y - 1][x] == NONE)
 		coups.insert(Point(x, y - 1, 0));
 	if (y + 1 < 19 && map[y + 1][x] == NONE)
