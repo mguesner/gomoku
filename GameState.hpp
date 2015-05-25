@@ -28,8 +28,8 @@
 class GameState
 {
 public:
-	GameState(); //empty constructor == root map
-	GameState(eState real[19][19], Input test, int blackcpt, int whitecpt, eState); //constructeur pour generer les fils
+	GameState(eState **firstTrue); //empty constructor == root map
+	GameState(eState **real, Input test, int blackcpt, int whitecpt, eState); //constructeur pour generer les fils
 	GameState(GameState const & src);
 	GameState& operator=(GameState const & rhs);
 	bool	operator<(GameState const & src) const;
@@ -41,6 +41,7 @@ public:
 	void Display() const;
 	void GameStart();
 	void Info();
+	void Undo();
 
 	std::vector<GameState> GenerateSons();
 	int GetHeuristic();
@@ -59,13 +60,14 @@ public:
 	bool IsFinalState() const;
 	~GameState();
 private:
+	GameState();
 	void checkVoisin(int, int, eState);
 	void checkVictoire(int, int, eState);
 	void checkVictoireCrazy(int x, int y, eState color);
 	bool checkThree(int, int, eState);
 	bool isCapturable(bool *check, int x, int y, eState color);
 	std::set<Point> coups;
-	eState map[19][19];
+	eState **map;
 	int nbWhiteTwoRow;
 	int nbWhiteThreeRow;
 	int nbWhiteFourRow;

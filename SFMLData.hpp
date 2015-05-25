@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Gamestate.hpp"
+#include "Sound.hpp"
 #include "Input.hpp"
 
 #define WIDTH		1920
@@ -23,6 +24,7 @@ public:
 	void SetGameState(GameState*);
 	void		DrawMainMenu(Input input, bool *noIa, int *choice, bool *menu);
 	void		DrawEndMenu(std::exception *e);
+	void		Parameters(Sound *music);
 	~SFMLData();
 
 private:
@@ -39,6 +41,7 @@ private:
 
 	int			x0;
 	int			y0;
+	Sound	*actualSound;
 	sf::RenderWindow	*win;
 	sf::Font 			*font;
 	sf::Texture			*texture;

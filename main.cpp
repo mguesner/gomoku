@@ -3,15 +3,17 @@
 #include "Gomoku.hpp"
 #include "Sound.hpp"
 
-
+int g_node_opens = 0;
 
 int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret, bool first)
 {
 	if (depth == 0 || node.IsFinalState())
 	{
 		auto tmp = node.GetHeuristic();
+		node.Undo();
 		return tmp;
 	}
+	g_node_opens++;
 	if (Me)
 	{
 		auto tmp = node.GenerateSons();
@@ -34,6 +36,7 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 			i++;
 			cur++;
 		}
+		node.Undo();
 		return bestValue;
 	}
 	auto tmp = node.GenerateSons();
@@ -50,6 +53,7 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 		cur++;
 		i++;
 	}
+	node.Undo();
 	return bestValue;
 }
 
@@ -62,6 +66,7 @@ Input do_MinMax(GameState *root, Timer timeout)
 	while (1 && depth < MAXDEPTH)
 	{
 		auto value = std::chrono::system_clock::now();
+		g_node_opens = 0;
 		int ALPHA = ALPHA_START;
 		int BETA = BETA_START;
 		best = MinMax(*root, depth, ALPHA, BETA, true, &ret, true);
@@ -73,7 +78,7 @@ Input do_MinMax(GameState *root, Timer timeout)
 		depth += 2;
 
 	}
-	std::cout << "nombre coup : " << depth << std::endl;
+	std::cout << "nombre coup : " << depth  << " opens node : " << g_node_opens << std::endl;
 	ret.SetType(MOUSE);
 	return ret;
 }
@@ -83,7 +88,15 @@ int main()
 {
 	SFMLData *win = new SFMLData();
 	srand(time(NULL));
-	GameState game;
+	eState **baord =(eState**) malloc(sizeof(eState*) * 19);
+
+	for (int j = 0; j < 19; ++j)
+		{
+			baord[j] = (eState*) malloc(sizeof(eState) * 19);
+		}
+
+
+	GameState game((eState**)baord);
 	game.GameStart();
 	win->SetGameState(&game);
 	auto color = WHITE;
@@ -93,6 +106,7 @@ int main()
 	int choice = 0;
 	Sound music(5);
 	music.Play();
+	win->Parameters(&music);
 		Input input;
 	win->DrawMainMenu(input, &noIA, &choice, &menu);
 	while (1)

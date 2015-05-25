@@ -61,7 +61,11 @@ void SFMLData::DrawMainMenu(Input input, bool *noIa, int *choice, bool *menu)
 	else if (input.GetType() == VALIDATE && *choice == 1)
 		*noIa = !*noIa;
 	else if (input.GetType() == VALIDATE && *choice == 2)
+	{
+		actualSound->Stop();
+		win->close();
 		exit(0);
+	}
 
 	int i = 0;
 	while (i < 3)
@@ -261,6 +265,12 @@ void SFMLData::SetInput(int keycode)
 	(void)keycode;
 }
 
+void	SFMLData::Parameters(Sound *music)
+{
+	actualSound = music;
+}
+
+
 Input SFMLData::GetInput()
 {
 	sf::Event event;
@@ -269,6 +279,7 @@ Input SFMLData::GetInput()
 		if (event.type == sf::Event::Closed)
 		{
             	//emergency close
+			actualSound->Stop();
 			win->close();
 			exit(0);
 		}
