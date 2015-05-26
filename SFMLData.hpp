@@ -16,7 +16,7 @@ class SFMLData
 {
 public:
 	SFMLData();
-	void Draw(eState);
+	void Draw(char);
 	void Close();
 	void Lock();
 	Input GetInput();
@@ -30,7 +30,7 @@ public:
 private:
 
 	void		DrawHiScoreMenu();
-	void		DrawNormalMode(eState);
+	void		DrawNormalMode(char);
 	void		DrawMultiMode();
 	void		DrawMulti();
 	void		DrawMultiMenu();

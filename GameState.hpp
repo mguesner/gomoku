@@ -29,7 +29,7 @@ class GameState
 {
 public:
 	GameState(); //empty constructor == root map
-	GameState(eState **real, Input test, int blackcpt, int whitecpt, eState); //constructeur pour generer les fils
+	GameState(Input test, int blackcpt, int whitecpt, char); //constructeur pour generer les fils
 	GameState(GameState const & src);
 	GameState& operator=(GameState const & rhs);
 	bool	operator<(GameState const & src) const;
@@ -37,36 +37,35 @@ public:
 	bool	operator<=(GameState const & src) const;
 	bool	operator>(GameState const & src) const;
 	bool	operator>=(GameState const & src) const;
-	void	Update(Input test, eState turnColor);
+	void	Update(Input test, char turnColor);
 	void Display() const;
+	void DoMove();
 	void GameStart();
 	void Info();
 	void Undo();
 
-	std::vector<GameState> GenerateSons();
+	void GenerateSons(std::vector<GameState>&);
 	int GetHeuristic();
 	Input GetMove();
-	int BrainDead();
-	int GetCapture(eState);
-	void SetColor(eState color);
+
+	int GetCapture(char);
+	void SetColor(char color);
 
 	std::vector<GameState> successors;
 
-	eState *GetMap();
-	std::set<Point> GetCoups();
-	bool TheoricPlay(int, int, eState color);
-	bool Play(int, int, eState color);
-	bool CheckMove(int, int, eState color);
+	char *GetMap();
+	bool TheoricPlay(int, int, char color);
+	bool Play(int, int, char color);
+	bool CheckMove(int, int, char color);
 	bool IsFinalState() const;
 	~GameState();
-	static eState map[19][19];
+	static char map[19][19];
 private:
-	void checkVoisin(int, int, eState);
-	void checkVictoire(int, int, eState);
-	void checkVictoireCrazy(int x, int y, eState color);
-	bool checkThree(int, int, eState);
-	bool isCapturable(bool *check, int x, int y, eState color);
-	std::set<Point> coups;
+	void checkVoisin(int, int, char);
+	void checkVictoire(int, int, char);
+	void checkVictoireCrazy(int x, int y, char color);
+	bool checkThree(int, int, char);
+	bool isCapturable(bool *check, int x, int y, char color);
 	int nbWhiteTwoRow;
 	int nbWhiteThreeRow;
 	int nbWhiteFourRow;
@@ -78,7 +77,7 @@ private:
 	int nbCaptBlack;
 	int nbCaptWhite;
 	bool Finalstate;
-	eState currentColor;
+	char currentColor;
 	int heuristic;
 	Input move;
 };

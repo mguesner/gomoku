@@ -8,10 +8,10 @@ class VictoryException : public std::exception
 {
 public:
 	VictoryException();
-	VictoryException(eState);
+	VictoryException(char);
 	virtual const char* what() const noexcept;
 private:
-	eState color;
+	char color;
 };
 
 #endif

@@ -10,13 +10,16 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 	g_node_opens++;
 	if (depth == 0 || node.IsFinalState())
 	{
+		//std::cout << "WTF IS THAT " << depth << "LOL CASSOS " << node.IsFinalState() << std::endl;
 		auto tmp = node.GetHeuristic();
 		node.Undo();
 		return tmp;
 	}
 	if (Me)
 	{
-		auto tmp = node.GenerateSons();
+		std::vector<GameState> tmp;
+		node.GenerateSons(tmp);
+		std::sort(tmp.begin(), tmp.end(), std::greater<GameState>());
 		auto cur = tmp.begin();
 		int bestValue = DEFAULT_MY_BEST;
 		int i = 0;
@@ -24,6 +27,7 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 			*ret = (*cur).GetMove();
 		while (cur != tmp.end())
 		{
+			(*cur).DoMove();
 			int value = MinMax(*cur, depth - 1, alpha, beta, false, ret, false);
 			if (first && value > bestValue)
 			{
@@ -40,12 +44,15 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 			node.Undo();
 		return bestValue;
 	}
-	auto tmp = node.GenerateSons();
+	std::vector<GameState> tmp;
+	node.GenerateSons(tmp);
+	std::sort(tmp.begin(), tmp.end());
 	auto cur = tmp.begin();
 	int bestValue = DEFAULT_ENEMY_BEST;
 	int i = 0;
 	while (cur != tmp.end())
 	{
+		(*cur).DoMove();
 		int value = MinMax(*cur, depth - 1, alpha, beta, true, ret, false);
 		bestValue = fmin(bestValue, value);
 		beta = fmin(beta, bestValue);
@@ -60,22 +67,22 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 
 Input do_MinMax(GameState *root, Timer timeout)
 {
-	int depth = 1;
+	int depth = 2;
 	int best = 0;
 
 	Input ret;
-	while (1 && depth < 2)
+	while (depth < 10)
 	{
 		auto value = std::chrono::system_clock::now();
 		g_node_opens = 0;
 		int ALPHA = ALPHA_START;
 		int BETA = BETA_START;
 		best = MinMax(*root, depth, ALPHA, BETA, true, &ret, true);
-		if (best == WIN)
-			break;
+		// if (best == WIN)
+		// 	break;
 		auto turnValue = std::chrono::system_clock::now() - value;
 		if (turnValue * root->GetCoups().size() * root->GetCoups().size() + std::chrono::system_clock::now() > timeout)
-			break;
+			std::cout << " BReak call after : " << turnValue.count()  << std::endl;
 		depth += 2;
 
 	}
@@ -114,7 +121,7 @@ int main()
 		{
 			game.SetColor(WHITE);
 			lastNow = std::chrono::system_clock::now();
-			auto runUntil =  lastNow + std::chrono::milliseconds(450);
+			auto runUntil =  lastNow + std::chrono::milliseconds(1000);
 			input = do_MinMax(&game, runUntil);
 			calcTime = std::chrono::system_clock::now() - lastNow;
 			std::cout << calcTime.count() / 1000 << " ms elapsed"<< std::endl;

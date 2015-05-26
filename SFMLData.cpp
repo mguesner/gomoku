@@ -30,7 +30,7 @@ SFMLData::SFMLData()
 
 }
 
-void SFMLData::Draw(eState color)
+void SFMLData::Draw(char color)
 {
 	win->clear(sf::Color::Black);
 	win->draw(*background);
@@ -93,7 +93,7 @@ void SFMLData::DrawHiScoreMenu()
 
 }
 
-void SFMLData::DrawNormalMode(eState color)
+void SFMLData::DrawNormalMode(char color)
 {
 	if (game == NULL)
 		return;
