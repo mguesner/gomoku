@@ -7,13 +7,13 @@ int g_node_opens = 0;
 
 int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret, bool first)
 {
+	g_node_opens++;
 	if (depth == 0 || node.IsFinalState())
 	{
 		auto tmp = node.GetHeuristic();
 		node.Undo();
 		return tmp;
 	}
-	g_node_opens++;
 	if (Me)
 	{
 		auto tmp = node.GenerateSons();
@@ -36,7 +36,8 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 			i++;
 			cur++;
 		}
-		node.Undo();
+		if (!first)
+			node.Undo();
 		return bestValue;
 	}
 	auto tmp = node.GenerateSons();
@@ -59,11 +60,11 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 
 Input do_MinMax(GameState *root, Timer timeout)
 {
-	int depth = 2;
+	int depth = 1;
 	int best = 0;
 
 	Input ret;
-	while (1 && depth < MAXDEPTH)
+	while (1 && depth < 2)
 	{
 		auto value = std::chrono::system_clock::now();
 		g_node_opens = 0;
@@ -78,7 +79,7 @@ Input do_MinMax(GameState *root, Timer timeout)
 		depth += 2;
 
 	}
-	std::cout << "nombre coup : " << depth  << " opens node : " << g_node_opens << std::endl;
+	std::cout << "nombre coup : " << depth << " best value: " << best << " opens node : " << g_node_opens << std::endl;
 	ret.SetType(MOUSE);
 	return ret;
 }
@@ -88,15 +89,9 @@ int main()
 {
 	SFMLData *win = new SFMLData();
 	srand(time(NULL));
-	eState **baord =(eState**) malloc(sizeof(eState*) * 19);
 
-	for (int j = 0; j < 19; ++j)
-		{
-			baord[j] = (eState*) malloc(sizeof(eState) * 19);
-		}
+	GameState game;
 
-
-	GameState game((eState**)baord);
 	game.GameStart();
 	win->SetGameState(&game);
 	auto color = WHITE;
