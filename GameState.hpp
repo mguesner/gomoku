@@ -1,6 +1,7 @@
 #ifndef GAMESTATE_HPP
 #define GAMESTATE_HPP
 
+#include <queue>
 #include "Gomoku.hpp"
 #include "Point.hpp"
 #include "VictoryException.hpp"
@@ -57,6 +58,8 @@ public:
 	bool IsFinalState() const;
 	~GameState();
 	static char map[19][19];
+	static int	playableMove[19][19];
+	static std::priority_queue<Point> coups;
 private:
 	int nbWhiteTwoRow;
 	int nbWhiteThreeRow;

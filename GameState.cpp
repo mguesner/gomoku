@@ -1,6 +1,7 @@
 #include "GameState.hpp"
 
 char GameState::map[19][19] = {{NONE}};
+int GameState::playableMove[19][19] = {{0}};
 
 GameState::GameState()
 {
@@ -17,11 +18,9 @@ GameState::GameState()
 	Finalstate = false;
 }
 
-GameState::GameState(Input test, int blackcpt, int whitecpt, char turnColor)
+GameState::GameState(Input test, char turnColor)
 {
 	move = test;
-	nbCaptBlack = blackcpt;
-	nbCaptWhite = whitecpt;
 	currentColor = turnColor;
 }
 
@@ -145,6 +144,11 @@ void GameState::GenerateSons(std::vector<GameState>& ret)
 	// Update method does it
 	// add this son to ret vector
 
+	Input test(MOUSE, x, y);
+	GameState son(*son);
+	char opposite = (currentColor ? BLACK) ? WHITE : BLACK;
+	son.Update(test, opposite);
+	ret.push_back(son);
 	(void)ret;
 	(void)maximizerColor;
 }
