@@ -20,8 +20,6 @@ GameState::GameState()
 GameState::GameState(Input test, int blackcpt, int whitecpt, char turnColor)
 {
 	move = test;
-	TheoricPlay(test.GetX(), test.GetY(), turnColor);
-	Undo();
 	nbCaptBlack = blackcpt;
 	nbCaptWhite = whitecpt;
 	currentColor = turnColor;
@@ -98,14 +96,14 @@ void	GameState::DoMove()
 void GameState::Undo()
 {
 	//remove move and clear possible moves
-	
+
 }
 
 //HEURISTIC FUNCTION RETURN MAX VALUE EVALUATING CURRENT PLAYER POSITION
 
 int		GameState::Heuristic()
 {
-	
+	return std::rand();
 }
 
 void GameState::GameStart()
@@ -113,60 +111,15 @@ void GameState::GameStart()
 	map[9][9] = BLACK;
 }
 
-bool GameState::checkThree(int x, int y, char color)
-{
-	
-}
 
-void GameState::checkVoisin(int x, int y, char color)
-{
-	(void)color;
-	
-}
 
 char *GameState::GetMap()
 {
 	return (char *)(map);
 }
 
-bool GameState::isCapturable(bool *check, int x, int y, char color)
-{
-	
-}
-
-void GameState::checkVictoire(int x, int y, char color)
-{
-	
-}
-
-void GameState::checkVictoireCrazy(int x, int y, char color)
-{
-	
-}
-
-bool GameState::Play(int x, int y, char color)
-{
-	
-	return false;
-}
-
-bool GameState::TheoricPlay(int x, int y, char color)
-{
-	
-	return false;
-}
-
-bool GameState::CheckMove(int x, int y, char color)
-{
-	
-	return false;
-}
-
 GameState& GameState::operator=(GameState const & src)
 {
-	//coups = src.coups;
-	//std::memcpy(&map, &(src.map), sizeof(eState) * 19 * 19);
-	//map = src.map;
 	nbCaptBlack = src.nbCaptBlack;
 	nbCaptWhite = src.nbCaptWhite;
 	currentColor = src.currentColor;
@@ -185,19 +138,39 @@ GameState& GameState::operator=(GameState const & src)
 
 void GameState::GenerateSons(std::vector<GameState>& ret)
 {
-	//for each possible move 
-	//play evaluate undo
-	
+	//for each possible move
+	//copy actual state
+	// add color and move
+	// DoMove evaluate undo
+	// Update method does it
+	// add this son to ret vector
+
+	(void)ret;
+	(void)maximizerColor;
+}
+
+bool GameState::Play(int x, int y, char color)
+{
+	//try to play at x, y using color
+	//return false if forbidden
+
+
+
+	// check if move is valide using list of possible
+	// DoMove
+	// Update heuristic
+	move = Input(MOUSE ,x, y);
+	DoMove();
+	heuristic = Heuristic();
+	(void)x;
+	(void)y;
+	(void)color;
+	return true;
 }
 
 int GameState::GetHeuristic()
 {
 	return heuristic;
-}
-
-std::set<Point> GameState::GetCoups()
-{
-	return coups;
 }
 
 Input GameState::GetMove()

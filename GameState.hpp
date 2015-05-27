@@ -43,29 +43,21 @@ public:
 	void GameStart();
 	void Info();
 	void Undo();
-
+	int Heuristic();
 	void GenerateSons(std::vector<GameState>&);
 	int GetHeuristic();
 	Input GetMove();
-
+	bool Play(int x, int y, char color);
 	int GetCapture(char);
 	void SetColor(char color);
 
 	std::vector<GameState> successors;
 
 	char *GetMap();
-	bool TheoricPlay(int, int, char color);
-	bool Play(int, int, char color);
-	bool CheckMove(int, int, char color);
 	bool IsFinalState() const;
 	~GameState();
 	static char map[19][19];
 private:
-	void checkVoisin(int, int, char);
-	void checkVictoire(int, int, char);
-	void checkVictoireCrazy(int x, int y, char color);
-	bool checkThree(int, int, char);
-	bool isCapturable(bool *check, int x, int y, char color);
 	int nbWhiteTwoRow;
 	int nbWhiteThreeRow;
 	int nbWhiteFourRow;
@@ -77,6 +69,7 @@ private:
 	int nbCaptBlack;
 	int nbCaptWhite;
 	bool Finalstate;
+	char maximizerColor;
 	char currentColor;
 	int heuristic;
 	Input move;

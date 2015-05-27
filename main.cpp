@@ -81,7 +81,7 @@ Input do_MinMax(GameState *root, Timer timeout)
 		// if (best == WIN)
 		// 	break;
 		auto turnValue = std::chrono::system_clock::now() - value;
-		if (turnValue * root->GetCoups().size() * root->GetCoups().size() + std::chrono::system_clock::now() > timeout)
+		if (turnValue * 200 + std::chrono::system_clock::now() > timeout)
 			std::cout << " BReak call after : " << turnValue.count()  << std::endl;
 		depth += 2;
 
