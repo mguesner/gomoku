@@ -41,6 +41,7 @@ public:
 	void	Update(Input test, char turnColor);
 	void Display() const;
 	void DoMove();
+	void DoMove(char);
 	void GameStart();
 	void Info();
 	void Undo();

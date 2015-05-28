@@ -95,11 +95,13 @@ void	GameState::Update(Input test, char turnColor)
 
 void	GameState::DoMove()
 {
-	//update table and list of possible move
+	//update table
 	//
 	int y = move.GetY();
 	int x = move.GetX();
 	map[y][x] = currentColor;
+
+	// list of possible move update
 	if (y - 1 >= 0 && x - 1 >= 0)
 		(playableMove[y - 1][x -1])++;
 	if (y + 1 < 19 && x + 1 < 19)
@@ -119,16 +121,54 @@ void	GameState::DoMove()
 		(playableMove[y - 1][x])++;
 	if (x - 1 >= 0)
 		(playableMove[y][x - 1])++;
+
+	//capture and update alignment
+
 }
+
+void	GameState::DoMove(char color)
+{
+	//update table
+	//
+	int y = move.GetY();
+	int x = move.GetX();
+	map[y][x] = color;
+
+
+	//list of possible move update
+	if (y - 1 >= 0 && x - 1 >= 0)
+		(playableMove[y - 1][x -1])++;
+	if (y + 1 < 19 && x + 1 < 19)
+		(playableMove[y + 1][x + 1])++;
+
+
+	if (y - 1 >= 0 && x + 1 < 19)
+		(playableMove[y - 1][x + 1])++;
+	if (y + 1 < 19 && x - 1 >= 0)
+		(playableMove[y + 1][x - 1])++;
+
+	if (y + 1 < 19)
+		(playableMove[y + 1][x])++;
+	if (x + 1 < 19)
+		(playableMove[y][x + 1])++;
+	if (y - 1 >= 0)
+		(playableMove[y - 1][x])++;
+	if (x - 1 >= 0)
+		(playableMove[y][x - 1])++;
+
+	//capture and update alignment
+}
+
 
 void GameState::Undo()
 {
-	//remove move and clear possible moves
+	//remove move
 	int y = move.GetY();
 	int x = move.GetX();
 
 	map[y][x] = NONE;
 
+	//clear possible moves update
 	if (y - 1 >= 0 && x - 1 >= 0)
 		(playableMove[y - 1][x -1])--;
 	if (y + 1 < 19 && x + 1 < 19)
@@ -148,6 +188,7 @@ void GameState::Undo()
 		(playableMove[y - 1][x])--;
 	if (x - 1 >= 0)
 		(playableMove[y][x - 1])--;
+	// repop les captures
 
 }
 
@@ -155,6 +196,7 @@ void GameState::Undo()
 
 int		GameState::Heuristic()
 {
+	// maj des variables alignement capture
 	return std::rand();
 }
 
@@ -233,14 +275,11 @@ bool GameState::Play(int x, int y, char color)
 	// check if move is valide using list of possible
 	// DoMove
 	// Update heuristic
-	Display();
-	std::cout <<"y: "<< y << "x: " << x << map[y][x] << " <--- value      playableMove ----->" << playableMove[y][x] << std::endl;
-	(void)color;
 	if (x >= 0 && y >= 0 && y < 19 && x < 19
 		&& map[y][x] == NONE && playableMove[y][x])
 	{
 		move = Input(MOUSE ,x, y);
-		DoMove();
+		DoMove(color);
 		heuristic = Heuristic();
 		return true;
 	}
