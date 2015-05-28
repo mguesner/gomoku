@@ -15,6 +15,13 @@ GameState::GameState()
 	nbBlackThreeRow = 0;
 	nbBlackFourRow = 0;
 	nbBlackFiveRow = 0;
+	for (int i = 0; i < 19; i++)
+	{
+		for (int j = 0; j < 19; j++)
+		{
+			map[j][i] = NONE;
+		}
+	}
 	Finalstate = false;
 }
 
@@ -89,12 +96,58 @@ void	GameState::Update(Input test, char turnColor)
 void	GameState::DoMove()
 {
 	//update table and list of possible move
+	//
+	int y = move.GetY();
+	int x = move.GetX();
+	map[y][x] = currentColor;
+	if (y - 1 >= 0 && x - 1 >= 0)
+		(playableMove[y - 1][x -1])++;
+	if (y + 1 < 19 && x + 1 < 19)
+		(playableMove[y + 1][x + 1])++;
 
+
+	if (y - 1 >= 0 && x + 1 < 19)
+		(playableMove[y - 1][x + 1])++;
+	if (y + 1 < 19 && x - 1 >= 0)
+		(playableMove[y + 1][x - 1])++;
+
+	if (y + 1 < 19)
+		(playableMove[y + 1][x])++;
+	if (x + 1 < 19)
+		(playableMove[y][x + 1])++;
+	if (y - 1 >= 0)
+		(playableMove[y - 1][x])++;
+	if (x - 1 >= 0)
+		(playableMove[y][x - 1])++;
 }
 
 void GameState::Undo()
 {
 	//remove move and clear possible moves
+	int y = move.GetY();
+	int x = move.GetX();
+
+	map[y][x] = NONE;
+
+	if (y - 1 >= 0 && x - 1 >= 0)
+		(playableMove[y - 1][x -1])--;
+	if (y + 1 < 19 && x + 1 < 19)
+		(playableMove[y + 1][x + 1])--;
+
+
+	if (y - 1 >= 0 && x + 1 < 19)
+		(playableMove[y - 1][x + 1])--;
+	if (y + 1 < 19 && x - 1 >= 0)
+		(playableMove[y + 1][x - 1])--;
+
+	if (y + 1 < 19)
+		(playableMove[y + 1][x])--;
+	if (x + 1 < 19)
+		(playableMove[y][x + 1])--;
+	if (y - 1 >= 0)
+		(playableMove[y - 1][x])--;
+	if (x - 1 >= 0)
+		(playableMove[y][x - 1])--;
 
 }
 
@@ -108,6 +161,16 @@ int		GameState::Heuristic()
 void GameState::GameStart()
 {
 	map[9][9] = BLACK;
+	int x = 9;
+	int y = 9;
+	(playableMove[y - 1][x -1])++;
+	(playableMove[y + 1][x + 1])++;
+	(playableMove[y - 1][x + 1])++;
+	(playableMove[y + 1][x - 1])++;
+	(playableMove[y + 1][x])++;
+	(playableMove[y][x + 1])++;
+	(playableMove[y - 1][x])++;
+	(playableMove[y][x - 1])++;
 }
 
 
@@ -143,13 +206,20 @@ void GameState::GenerateSons(std::vector<GameState>& ret)
 	// DoMove evaluate undo
 	// Update method does it
 	// add this son to ret vector
-
-	Input test(MOUSE, x, y);
-	GameState son(*son);
-	char opposite = (currentColor ? BLACK) ? WHITE : BLACK;
-	son.Update(test, opposite);
-	ret.push_back(son);
-	(void)ret;
+	for (int x = 0; x < 19; x++)
+	{
+		for (int y = 0; y < 19; y++)
+		{
+			if (map[y][x] == NONE && playableMove[y][x])
+			{
+				Input test(MOUSE, x, y);
+				GameState son(*this);
+				char opposite = (currentColor == BLACK) ? WHITE : BLACK;
+				son.Update(test, opposite);
+				ret.push_back(son);
+			}
+		}
+	}
 	(void)maximizerColor;
 }
 
@@ -163,13 +233,18 @@ bool GameState::Play(int x, int y, char color)
 	// check if move is valide using list of possible
 	// DoMove
 	// Update heuristic
-	move = Input(MOUSE ,x, y);
-	DoMove();
-	heuristic = Heuristic();
-	(void)x;
-	(void)y;
+	Display();
+	std::cout <<"y: "<< y << "x: " << x << map[y][x] << " <--- value      playableMove ----->" << playableMove[y][x] << std::endl;
 	(void)color;
-	return true;
+	if (x >= 0 && y >= 0 && y < 19 && x < 19
+		&& map[y][x] == NONE && playableMove[y][x])
+	{
+		move = Input(MOUSE ,x, y);
+		DoMove();
+		heuristic = Heuristic();
+		return true;
+	}
+	return false;
 }
 
 int GameState::GetHeuristic()
@@ -214,7 +289,7 @@ void GameState::Display() const
 	{
 		for (int j = 0; j < 19; ++j)
 		{
-			std::cout << (map[i][j] == NONE ? "+" : (map[i][j] == BLACK ? "N" : "B"));
+			std::cout << map[i][j];
 		}
 		std::cout << std::endl;
 	}

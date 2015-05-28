@@ -30,7 +30,7 @@ class GameState
 {
 public:
 	GameState(); //empty constructor == root map
-	GameState(Input test, int blackcpt, int whitecpt, char); //constructeur pour generer les fils
+	GameState(Input test, char); //constructeur pour generer les fils
 	GameState(GameState const & src);
 	GameState& operator=(GameState const & rhs);
 	bool	operator<(GameState const & src) const;
