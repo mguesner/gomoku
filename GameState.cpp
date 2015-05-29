@@ -84,16 +84,20 @@ bool	GameState::operator>(GameState const & src) const
 	return false;
 }
 
-void	GameState::Update(Input test, char turnColor)
+
+//change to bool return
+bool	GameState::Update(Input test, char turnColor)
 {
 	move = test;
 	currentColor = turnColor;
-	DoMove();
+	bool ret = DoMove();
 	heuristic = Heuristic();
 	Undo();
+	return ret;
 }
 
-void	GameState::DoMove()
+//change to bool return
+bool	GameState::DoMove()
 {
 	//update table
 	//
@@ -123,10 +127,13 @@ void	GameState::DoMove()
 		(playableMove[y][x - 1])++;
 
 	//capture and update alignment
+	return CaptureAndCount(x, y);
+	
 
 }
 
-void	GameState::DoMove(char color)
+//change to bool return
+bool	GameState::DoMove(char color)
 {
 	//update table
 	//
@@ -157,6 +164,47 @@ void	GameState::DoMove(char color)
 		(playableMove[y][x - 1])++;
 
 	//capture and update alignment
+	// if this move add 2 three == forbidden
+	return CaptureAndCount(x, y);
+	
+	
+
+}
+
+bool GameState::CaptureAndCount(int x, int y)
+{
+	int min_x = (x - 5 >= 0) ? x - 5 : 0;
+	int min_y = (y - 5 >= 0) ? y - 5 : 0; 
+	int max_x = (x + 5 < 19) ? x + 5 : 18;
+	int max_y = (y + 5 < 19) ? y + 5 : 18;
+
+	bool iAmBlack = currentColor == BLACK ? true : false;
+	int j = min_x;
+	for (int i = min_y; i <= max_y && j <= max_x; i++)
+	{
+
+		j++;
+	}
+
+	j = max_y;
+	for (int i = min_x; i <= max_x && j >= min_y; i++)
+	{
+
+		j--;
+	}
+
+	for (int i = min_y; i <= max_y; i++)
+	{
+		bool actualIsBlack = map[i][x] == BLACK ? true : false;
+		
+	}
+
+	for(int i = min_x; i <= max_x; i++)
+	{
+		map[y][i]
+	}
+	//return false if 2 trhee are adds
+	return true;
 }
 
 
@@ -189,6 +237,11 @@ void GameState::Undo()
 	if (x - 1 >= 0)
 		(playableMove[y][x - 1])--;
 	// repop les captures
+
+}
+
+void GameState::ManualUndo(int x, int y)
+{
 
 }
 
@@ -257,8 +310,8 @@ void GameState::GenerateSons(std::vector<GameState>& ret)
 				Input test(MOUSE, x, y);
 				GameState son(*this);
 				char opposite = (currentColor == BLACK) ? WHITE : BLACK;
-				son.Update(test, opposite);
-				ret.push_back(son);
+				if (son.Update(test, opposite))
+					ret.push_back(son);
 			}
 		}
 	}
@@ -272,13 +325,11 @@ bool GameState::Play(int x, int y, char color)
 
 
 
-	// check if move is valide using list of possible
-	// DoMove
-	// Update heuristic
 	if (x >= 0 && y >= 0 && y < 19 && x < 19
 		&& map[y][x] == NONE && playableMove[y][x])
 	{
 		move = Input(MOUSE ,x, y);
+		//if domove is true 
 		DoMove(color);
 		heuristic = Heuristic();
 		return true;

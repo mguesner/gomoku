@@ -38,13 +38,15 @@ public:
 	bool	operator<=(GameState const & src) const;
 	bool	operator>(GameState const & src) const;
 	bool	operator>=(GameState const & src) const;
-	void	Update(Input test, char turnColor);
+	bool	Update(Input test, char turnColor);
 	void Display() const;
-	void DoMove();
-	void DoMove(char);
+	bool DoMove();
+	bool DoMove(char);
 	void GameStart();
 	void Info();
 	void Undo();
+	void ManualUndo(int, int);
+	bool CaptureAndCount();
 	int Heuristic();
 	void GenerateSons(std::vector<GameState>&);
 	int GetHeuristic();
@@ -60,7 +62,6 @@ public:
 	~GameState();
 	static char map[19][19];
 	static int	playableMove[19][19];
-	static std::priority_queue<Point> coups;
 private:
 	int nbWhiteTwoRow;
 	int nbWhiteThreeRow;
