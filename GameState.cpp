@@ -128,7 +128,7 @@ bool	GameState::DoMove()
 
 	//capture and update alignment
 	return CaptureAndCount(x, y);
-	
+
 
 }
 
@@ -166,24 +166,26 @@ bool	GameState::DoMove(char color)
 	//capture and update alignment
 	// if this move add 2 three == forbidden
 	return CaptureAndCount(x, y);
-	
-	
+
+
 
 }
 
 bool GameState::CaptureAndCount(int x, int y)
 {
 	int min_x = (x - 5 >= 0) ? x - 5 : 0;
-	int min_y = (y - 5 >= 0) ? y - 5 : 0; 
+	int min_y = (y - 5 >= 0) ? y - 5 : 0;
 	int max_x = (x + 5 < 19) ? x + 5 : 18;
 	int max_y = (y + 5 < 19) ? y + 5 : 18;
 
 	bool iAmBlack = currentColor == BLACK ? true : false;
 	int j = min_x;
-	for (int i = min_y; i <= max_y && j <= max_x; i++)
+	int i = min_y;
+	while (i <= max_y && j <= max_x)
 	{
 
 		j++;
+		i++;
 	}
 
 	j = max_y;
@@ -193,15 +195,26 @@ bool GameState::CaptureAndCount(int x, int y)
 		j--;
 	}
 
+	int openSet = -1;
+	int counter = 0;
 	for (int i = min_y; i <= max_y; i++)
 	{
-		bool actualIsBlack = map[i][x] == BLACK ? true : false;
-		
+		if (map[i][x] == currentColor)
+		{
+			if (openSet == -1)
+				openSet = 1;
+			else
+				openSet++;
+		}
+		else if (map[i][x] != NONE)
+			;
+		counter++;
+
 	}
 
 	for(int i = min_x; i <= max_x; i++)
 	{
-		map[y][i]
+		;
 	}
 	//return false if 2 trhee are adds
 	return true;
@@ -329,7 +342,7 @@ bool GameState::Play(int x, int y, char color)
 		&& map[y][x] == NONE && playableMove[y][x])
 	{
 		move = Input(MOUSE ,x, y);
-		//if domove is true 
+		//if domove is true
 		DoMove(color);
 		heuristic = Heuristic();
 		return true;

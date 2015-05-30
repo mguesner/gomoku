@@ -46,7 +46,7 @@ public:
 	void Info();
 	void Undo();
 	void ManualUndo(int, int);
-	bool CaptureAndCount();
+	bool CaptureAndCount(int, int);
 	int Heuristic();
 	void GenerateSons(std::vector<GameState>&);
 	int GetHeuristic();
