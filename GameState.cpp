@@ -178,15 +178,30 @@ bool GameState::CaptureAndCount(int x, int y)
 	int max_x = (x + 5 < 19) ? x + 5 : 18;
 	int max_y = (y + 5 < 19) ? y + 5 : 18;
 
-	bool iAmBlack = currentColor == BLACK ? true : false;
-	int j = min_x;
-	int i = min_y;
-	while (i <= max_y && j <= max_x)
+	int right_y = y + 1;
+	int right_x = x + 1;
+	int counter = 1;
+	int patternCapt = 0;
+	while (right_y <= max_y && right_x <= max_x)
+	{
+		if (map[right_y][right_x] == currentColor)
+			; //on est en mode alignement
+		else if (map[right_y][right_x] != NONE)
+			;// mode capture ou blocage
+		right_x++;
+		right_y++;
+	}
+	int left_y = y - 1;
+	int left_x = x - 1;
+
+	while (left_y >= min_y && left_x >= min_x)
 	{
 
-		j++;
-		i++;
+		left_x--;
+		left_y--;
 	}
+
+
 
 	j = max_y;
 	for (int i = min_x; i <= max_x && j >= min_y; i++)
@@ -195,20 +210,9 @@ bool GameState::CaptureAndCount(int x, int y)
 		j--;
 	}
 
-	int openSet = -1;
-	int counter = 0;
 	for (int i = min_y; i <= max_y; i++)
 	{
-		if (map[i][x] == currentColor)
-		{
-			if (openSet == -1)
-				openSet = 1;
-			else
-				openSet++;
-		}
-		else if (map[i][x] != NONE)
-			;
-		counter++;
+
 
 	}
 
