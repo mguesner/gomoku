@@ -180,17 +180,50 @@ bool GameState::CaptureAndCount(int x, int y)
 
 	int right_y = y + 1;
 	int right_x = x + 1;
-	int counter = 1;
-	int patternCapt = 0;
+	bool alignement = true;
+	int num = 0;
+
+	if (right_y <= max_y && right_x <= max_x && map[right_y][right_x] == currentColor)
+		; //on est en mode alignement
+	else if (right_y <= max_y && right_x <= max_x && map[right_y][right_x] != NONE)
+		alignement = false;// mode capture ou blocage
+	int ennemy = 0;
+	int total = 0;
+	bool capture = false;
+	bool lock = false;
 	while (right_y <= max_y && right_x <= max_x)
 	{
-		if (map[right_y][right_x] == currentColor)
-			; //on est en mode alignement
-		else if (map[right_y][right_x] != NONE)
-			;// mode capture ou blocage
+		if (alignement)
+		{
+			if (map[right_y][right_x] == currentColor)
+				num++;
+			else if (map[right_y][right_x] != NONE)
+				break;
+			else
+				;
+		}
+		else
+		{
+			if (map[right_y][right_x] == currentColor)
+			{
+				if (ennemy == 2 && total == 2)
+					capture = true;
+					//CAPTURE HERE
+				lock = true;
+				break;
+			}
+			else if (map[right_y][right_x] != NONE)
+				ennemy++;
+			else
+				;
+		}
+		total++;
 		right_x++;
 		right_y++;
 	}
+
+	std::cout << " ENEMy = " << ennemy << " capture = " << capture << " align : " << num <<std::endl;
+
 	int left_y = y - 1;
 	int left_x = x - 1;
 
@@ -200,14 +233,27 @@ bool GameState::CaptureAndCount(int x, int y)
 		left_x--;
 		left_y--;
 	}
+	//first diag analyse
 
 
 
-	j = max_y;
-	for (int i = min_x; i <= max_x && j >= min_y; i++)
+	left_y = y + 1;
+	left_x = x - 1;
+	while (left_y <= max_y && left_x >= min_x)
 	{
 
-		j--;
+		left_x--;
+		left_y++;
+	}
+
+	right_x = x + 1;
+	right_y = y -1;
+
+	while (left_y >= min_y && left_x <= max_x)
+	{
+
+		left_x++;
+		left_y--;
 	}
 
 	for (int i = min_y; i <= max_y; i++)
@@ -259,7 +305,8 @@ void GameState::Undo()
 
 void GameState::ManualUndo(int x, int y)
 {
-
+	(void)x;
+	(void)y;
 }
 
 //HEURISTIC FUNCTION RETURN MAX VALUE EVALUATING CURRENT PLAYER POSITION
@@ -267,7 +314,37 @@ void GameState::ManualUndo(int x, int y)
 int		GameState::Heuristic()
 {
 	// maj des variables alignement capture
-	return std::rand();
+	int ret = rand();
+
+	// if (nbCaptBlack == 1)
+	// 	ret += CAPTUREONE + 10;
+	// else if (nbCaptBlack == 2)
+	// 	ret += CAPTURETWO + 10;
+	// else if (nbCaptBlack == 3)
+	// 	ret += CAPTURETHREE;
+	// else if (nbCaptBlack == 4)
+	// 	ret += CAPTUREFOUR;
+	// else if (nbCaptBlack >= 5)
+	// {
+	// 	Finalstate = true;
+	// 	return WIN;
+	// }
+
+	// if (nbCaptWhite == 1)
+	// 	ret -= CAPTUREONE;
+	// else if (nbCaptWhite == 2)
+	// 	ret -= CAPTURETWO;
+	// else if (nbCaptWhite == 3)
+	// 	ret -= CAPTURETHREE;
+	// else if (nbCaptWhite == 4)
+	// 	ret -= CAPTUREFOUR;
+	// else if (nbCaptWhite >= 5)
+	// {
+	// 	Finalstate = true;
+	// 	return LOOSE;
+	// }
+	//int alea = rand() % 5;
+	return ret;
 }
 
 void GameState::GameStart()
@@ -347,7 +424,8 @@ bool GameState::Play(int x, int y, char color)
 	{
 		move = Input(MOUSE ,x, y);
 		//if domove is true
-		DoMove(color);
+		if (!DoMove(color))
+			return false;
 		heuristic = Heuristic();
 		return true;
 	}

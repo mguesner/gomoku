@@ -143,7 +143,9 @@ int main()
 				}
 				else
 				{
+					//std::cout << game.GetHeuristic() << std::endl;
 					color = (color == WHITE ? BLACK : WHITE);
+					game.SetColor(color);
 					HumanTurn = !HumanTurn;
 				}
 			}
