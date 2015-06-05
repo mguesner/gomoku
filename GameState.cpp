@@ -209,7 +209,7 @@ bool GameState::CaptureAndCount(int x, int y)
 				if (ennemy == 2 && total == 2)
 				{
 					capture = true;
-					Capture(right_x - 1, right_y - 1, right_x - 2, right_y - 2);
+					//Capture(right_x - 1, right_y - 1, right_x - 2, right_y - 2);
 					//CAPTURE HERE
 				}
 				lock = true;

@@ -18,6 +18,7 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 	if (Me)
 	{
 		std::vector<GameState> tmp;
+		tmp.reserve(50);
 		node.GenerateSons(tmp);
 		std::sort(tmp.begin(), tmp.end(), std::greater<GameState>());
 		auto cur = tmp.begin();
@@ -45,6 +46,7 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 		return bestValue;
 	}
 	std::vector<GameState> tmp;
+	tmp.reserve(50);
 	node.GenerateSons(tmp);
 	std::sort(tmp.begin(), tmp.end());
 	auto cur = tmp.begin();
@@ -67,12 +69,13 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 
 Input do_MinMax(GameState *root, Timer timeout)
 {
-	int depth = 2;
+	int depth = 1;
 	int best = 0;
 
 	Input ret;
 	while (depth < 10)
 	{
+		depth++;
 		auto value = std::chrono::system_clock::now();
 		g_node_opens = 0;
 		int ALPHA = ALPHA_START;
@@ -81,9 +84,9 @@ Input do_MinMax(GameState *root, Timer timeout)
 		if (best == WIN)
 			break;
 		auto turnValue = std::chrono::system_clock::now() - value;
-		if (turnValue * 200 + std::chrono::system_clock::now() > timeout)
-			std::cout << " BReak call after : " << turnValue.count()  << std::endl;
-		depth += 2;
+		if (turnValue * 30 + std::chrono::system_clock::now() > timeout)
+			break;
+			//std::cout << " Break call after : " << turnValue.count()  << std::endl;
 
 	}
 	std::cout << "nombre coup : " << depth << " best value: " << best << " opens node : " << g_node_opens << std::endl;
