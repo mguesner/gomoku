@@ -15,6 +15,7 @@ GameState::GameState()
 	nbBlackThreeRow = 0;
 	nbBlackFourRow = 0;
 	nbBlackFiveRow = 0;
+	bzero(align, 20 * sizeof(int));
 	for (int i = 0; i < 19; i++)
 	{
 		for (int j = 0; j < 19; j++)
@@ -39,14 +40,7 @@ GameState::GameState(GameState const & src)
 	heuristic = src.heuristic;
 	move = src.move;
 	Finalstate = src.Finalstate;
-	nbWhiteTwoRow = src.nbWhiteTwoRow;
-	nbWhiteThreeRow = src.nbWhiteThreeRow;
-	nbWhiteFourRow = src.nbWhiteFourRow;
-	nbWhiteFiveRow = src.nbWhiteFiveRow;
-	nbBlackTwoRow = src.nbBlackTwoRow;
-	nbBlackThreeRow = src.nbBlackThreeRow;
-	nbBlackFourRow = src.nbBlackFourRow;
-	nbBlackFiveRow = src.nbBlackFiveRow;
+	memcpy(align, src.align, 20 * sizeof(int));
 }
 
 bool	GameState::operator<(GameState const & src) const
@@ -166,9 +160,14 @@ bool	GameState::DoMove(char color)
 	//capture and update alignment
 	// if this move add 2 three == forbidden
 	return CaptureAndCount(x, y);
+}
 
-
-
+void GameState::Capture(int x1, int y1, int x2, int y2)
+{
+	map[y1][x1] = NONE;
+	map[y2][x2] = NONE;
+	capture[nbCapture] = std::pair<Point, Point>(Point(x1, y1, 0), Point(x2, y2, 0));
+	nbCapture++;
 }
 
 bool GameState::CaptureAndCount(int x, int y)
@@ -198,9 +197,177 @@ bool GameState::CaptureAndCount(int x, int y)
 			if (map[right_y][right_x] == currentColor)
 				num++;
 			else if (map[right_y][right_x] != NONE)
+			{
+				lock = true;
 				break;
-			else
-				;
+			}
+		}
+		else
+		{
+			if (map[right_y][right_x] == currentColor)
+			{
+				if (ennemy == 2 && total == 2)
+				{
+					capture = true;
+					Capture(right_x - 1, right_y - 1, right_x - 2, right_y - 2);
+					//CAPTURE HERE
+				}
+				lock = true;
+				break;
+			}
+			else if (map[right_y][right_x] != NONE)
+				ennemy++;
+		}
+		total++;
+		right_x++;
+		right_y++;
+	}
+	if (!alignement && ennemy > 1)
+	{
+		align[lock][currentColor == WHITE ? 1 : 0][ennemy - 1]--;
+		if (!lock)
+			align[!lock][currentColor == WHITE ? 1 : 0][ennemy - 1]++;
+	}
+
+	#ifdef DEBUG
+		std::cout << "bas droite diag enemy = " << ennemy << " capture = " << capture << " align : " << num <<std::endl;
+	#endif
+
+	int left_y = y - 1;
+	int left_x = x - 1;
+	alignement = true;
+	if (left_y <= max_y && left_x <= max_x && map[left_y][left_x] == currentColor)
+		; //on est en mode alignement
+	else if (left_y >= min_y && left_x >= min_x && map[left_y][left_x] != NONE)
+		alignement = false;// mode capture ou blocage
+	total = 0;
+	ennemy = 0;
+	capture = false;
+	while (left_y >= min_y && left_x >= min_x)
+	{
+		if (alignement)
+		{
+			if (map[left_y][left_x] == currentColor)
+				num++;
+			else if (map[left_y][left_x] != NONE)
+			{
+				lock = true;
+				break;
+			}
+		}
+		else
+		{
+			if (map[left_y][left_x] == currentColor)
+			{
+				if (ennemy == 2 && total == 2)
+					capture = true;
+					//CAPTURE HERE
+				lock = true;
+				break;
+			}
+			else if (map[left_y][left_x] != NONE)
+				ennemy++;
+		}
+		total++;
+		left_x--;
+		left_y--;
+	}
+	if (!alignement && ennemy > 1)
+	{
+		align[lock][currentColor == WHITE ? 1 : 0][ennemy - 1]--;
+		if (!lock)
+			align[!lock][currentColor == WHITE ? 1 : 0][ennemy - 1]++;
+	}
+	if (num >= 0 && num < 5)
+	{
+		align[lock][currentColor == WHITE ? 0 : 1][num]++;
+		if (num > 0)
+			align[lock][currentColor == WHITE ? 0 : 1][num - 1]--;
+	}
+
+	#ifdef DEBUG
+	std::cout << "haut gauche diag enemy = " << ennemy << " capture = " << capture << " align : " << num <<std::endl;
+	#endif
+
+
+
+
+	//first diag analyse
+
+
+
+	left_y = y + 1;
+	left_x = x - 1;
+	alignement = true;
+	if (left_y <= max_y && left_x >= min_x && map[left_y][left_x] == currentColor)
+		; //on est en mode alignement
+	else if (left_y <= max_y && left_x >= min_x && map[left_y][left_x] != NONE)
+		alignement = false;// mode capture ou blocage
+	total = 0;
+	ennemy = 0;
+	capture = false;
+	num = 0;
+	while (left_y <= max_y && left_x >= min_x)
+	{
+		if (alignement)
+		{
+			if (map[left_y][left_x] == currentColor)
+				num++;
+			else if (map[left_y][left_x] != NONE)
+			{
+				lock = true;
+				break;
+			}
+		}
+		else
+		{
+			if (map[left_y][left_x] == currentColor)
+			{
+				if (ennemy == 2 && total == 2)
+					capture = true;
+					//CAPTURE HERE
+				lock = true;
+				break;
+			}
+			else if (map[left_y][left_x] != NONE)
+				ennemy++;
+		}
+		total++;
+		left_x--;
+		left_y++;
+	}
+	if (!alignement && ennemy > 1)
+	{
+		align[lock][currentColor == WHITE ? 1 : 0][ennemy - 1]--;
+		if (!lock)
+			align[!lock][currentColor == WHITE ? 1 : 0][ennemy - 1]++;
+	}
+
+	#ifdef DEBUG
+	std::cout << "bas gauche diag enemy = " << ennemy << " capture = " << capture << " align = " << num <<std::endl;
+	#endif
+
+	right_x = x + 1;
+	right_y = y - 1;
+	alignement = true;
+	if (right_y <= max_y && right_x <= max_x && map[right_y][right_x] == currentColor)
+		; //on est en mode alignement
+	else if (right_y >= min_y && right_x >= min_x && map[right_y][right_x] != NONE)
+		alignement = false;// mode capture ou blocage
+	total = 0;
+	ennemy = 0;
+	capture = false;
+	while (right_y >= min_y && right_x <= max_x)
+	{
+		if (alignement)
+		{
+			if (map[right_y][right_x] == currentColor)
+				num++;
+			else if (map[right_y][right_x] != NONE)
+			{
+				lock = true;
+				break;
+			}
 		}
 		else
 		{
@@ -214,59 +381,240 @@ bool GameState::CaptureAndCount(int x, int y)
 			}
 			else if (map[right_y][right_x] != NONE)
 				ennemy++;
-			else
-				;
 		}
 		total++;
 		right_x++;
-		right_y++;
+		right_y--;
 	}
-
-	std::cout << " ENEMy = " << ennemy << " capture = " << capture << " align : " << num <<std::endl;
-
-	int left_y = y - 1;
-	int left_x = x - 1;
-
-	while (left_y >= min_y && left_x >= min_x)
+	if (!alignement && ennemy > 1)
 	{
-
-		left_x--;
-		left_y--;
+		align[lock][currentColor == WHITE ? 1 : 0][ennemy - 1]--;
+		if (!lock)
+			align[!lock][currentColor == WHITE ? 1 : 0][ennemy - 1]++;
 	}
-	//first diag analyse
-
-
-
-	left_y = y + 1;
-	left_x = x - 1;
-	while (left_y <= max_y && left_x >= min_x)
+	if (num >= 0 && num < 5)
 	{
-
-		left_x--;
-		left_y++;
+		align[lock][currentColor == WHITE ? 0 : 1][num]++;
+		if (num > 0)
+			align[lock][currentColor == WHITE ? 0 : 1][num - 1]--;
 	}
+
+	#ifdef DEBUG
+	std::cout << "haut droite diag enemy = " << ennemy << " capture = " << capture << " align = " << num <<std::endl;
+	#endif
 
 	right_x = x + 1;
-	right_y = y -1;
-
-	while (left_y >= min_y && left_x <= max_x)
+	alignement = true;
+	if (right_x <= max_x && map[y][right_x] == currentColor)
+		; //on est en mode alignement
+	else if (right_x <= max_x && map[y][right_x] != NONE)
+		alignement = false;// mode capture ou blocage
+	num = 0;
+	total = 0;
+	ennemy = 0;
+	capture = false;
+	for (int i = right_x; i <= max_x; i++)
 	{
-
-		left_x++;
-		left_y--;
+		if (alignement)
+		{
+			if (map[y][i] == currentColor)
+				num++;
+			else if (map[y][i] != NONE)
+			{
+				lock = true;
+				break;
+			}
+		}
+		else
+		{
+			if (map[y][i] == currentColor)
+			{
+				if (ennemy == 2 && total == 2)
+					capture = true;
+					//CAPTURE HERE
+				lock = true;
+				break;
+			}
+			else if (map[y][i] != NONE)
+				ennemy++;
+		}
+		total++;
+	}
+	if (!alignement && ennemy > 1)
+	{
+		align[lock][currentColor == WHITE ? 1 : 0][ennemy - 1]--;
+		if (!lock)
+			align[!lock][currentColor == WHITE ? 1 : 0][ennemy - 1]++;
 	}
 
-	for (int i = min_y; i <= max_y; i++)
+	#ifdef DEBUG
+	std::cout << "droite enemy = " << ennemy << " capture = " << capture << " align = " << num <<std::endl;
+	#endif
+
+	right_x = x - 1;
+	alignement = true;
+	if (right_x <= max_x && map[y][right_x] == currentColor)
+		; //on est en mode alignement
+	else if (right_x >= min_x && map[y][right_x] != NONE)
+		alignement = false;// mode capture ou blocage
+	total = 0;
+	ennemy = 0;
+	capture = false;
+	for (int i = x - 1; i >= min_x; i--)
 	{
-
-
+		if (alignement)
+		{
+			if (map[y][i] == currentColor)
+				num++;
+			else if (map[y][i] != NONE)
+			{
+				lock = true;
+				break;
+			}
+		}
+		else
+		{
+			if (map[y][i] == currentColor)
+			{
+				if (ennemy == 2 && total == 2)
+					capture = true;
+					//CAPTURE HERE
+				lock = true;
+				break;
+			}
+			else if (map[y][i] != NONE)
+				ennemy++;
+		}
+		total++;
+	}
+	if (!alignement && ennemy > 1)
+	{
+		align[lock][currentColor == WHITE ? 1 : 0][ennemy - 1]--;
+		if (!lock)
+			align[!lock][currentColor == WHITE ? 1 : 0][ennemy - 1]++;
+	}
+	if (num >= 0 && num < 5)
+	{
+		align[lock][currentColor == WHITE ? 0 : 1][num]++;
+		if (num > 0)
+			align[lock][currentColor == WHITE ? 0 : 1][num - 1]--;
 	}
 
-	for(int i = min_x; i <= max_x; i++)
+	#ifdef DEBUG
+	std::cout << "gauche enemy = " << ennemy << " capture = " << capture << " align = " << num <<std::endl;
+	#endif
+
+	right_y = y + 1;
+	alignement = true;
+	if (right_y <= max_y && map[right_y][x] == currentColor)
+		; //on est en mode alignement
+	else if (right_y <= max_y && map[right_y][x] != NONE)
+		alignement = false;// mode capture ou blocage
+	num = 0;
+	total = 0;
+	ennemy = 0;
+	capture = false;
+	for(int i = right_y; i <= max_y; i++)
 	{
-		;
+		if (alignement)
+		{
+			if (map[i][x] == currentColor)
+				num++;
+			else if (map[i][x] != NONE)
+			{
+				lock = true;
+				break;
+			}
+		}
+		else
+		{
+			if (map[i][x] == currentColor)
+			{
+				if (ennemy == 2 && total == 2)
+					capture = true;
+					//CAPTURE HERE
+				lock = true;
+				break;
+			}
+			else if (map[i][x] != NONE)
+				ennemy++;
+		}
+		total++;
 	}
+	if (!alignement && ennemy > 1)
+	{
+		align[lock][currentColor == WHITE ? 1 : 0][ennemy - 1]--;
+		if (!lock)
+			align[!lock][currentColor == WHITE ? 1 : 0][ennemy - 1]++;
+	}
+
+	#ifdef DEBUG
+	std::cout << "bas enemy = " << ennemy << " capture = " << capture << " align = " << num <<std::endl;
+	#endif
+
+	right_y = y - 1;
+	alignement = true;
+	if (right_y >= min_y && map[right_y][x] == currentColor)
+		; //on est en mode alignement
+	else if (right_y >= min_y && map[right_y][x] != NONE)
+		alignement = false;// mode capture ou blocage
+	total = 0;
+	ennemy = 0;
+	capture = false;
+	for(int i = right_y; i >= min_y; i--)
+	{
+		if (alignement)
+		{
+			if (map[i][x] == currentColor)
+				num++;
+			else if (map[i][x] != NONE)
+			{
+				lock = true;
+				break;
+			}
+		}
+		else
+		{
+			if (map[i][x] == currentColor)
+			{
+				if (ennemy == 2 && total == 2)
+					capture = true;
+					//CAPTURE HERE
+				lock = true;
+				break;
+			}
+			else if (map[i][x] != NONE)
+				ennemy++;
+		}
+		total++;
+	}
+	if (!alignement && ennemy > 1)
+	{
+		align[lock][currentColor == WHITE ? 1 : 0][ennemy - 1]--;
+		if (!lock)
+			align[!lock][currentColor == WHITE ? 1 : 0][ennemy - 1]++;
+	}
+	if (num >= 0 && num < 5)
+	{
+		align[lock][currentColor == WHITE ? 0 : 1][num]++;
+		if (num > 0)
+			align[lock][currentColor == WHITE ? 0 : 1][num - 1]--;
+	}
+
+	#ifdef DEBUG
+	std::cout << "haut enemy = " << ennemy << " capture = " << capture << " align = " << num <<std::endl;
+	#endif
 	//return false if 2 trhee are adds
+	#ifdef DEBUG
+	std::cout << "align :\tblanc :\t2 ->\tone way : " << align[1][0][1] << "\n\t\t\ttwo way : " << align[0][0][1]
+				<< "\n\t\t3 ->\tone way : " << align[1][0][2] << "\n\t\t\ttwo way : " << align[0][0][2]
+				<< "\n\t\t4 ->\tone way : " << align[1][0][3] << "\n\t\t\ttwo way : " << align[0][0][3]
+				<< "\n\t\t5 ->\tone way : " << align[1][0][4] << "\n\t\t\ttwo way : " << align[0][0][4]
+				<< "\n\tblack :\t2 ->\tone way : " << align[1][1][1] << "\n\t\t\ttwo way : " << align[0][1][1]
+				<< "\n\t\t3 ->\tone way : " << align[1][1][2] << "\n\t\t\ttwo way : " << align[0][1][2]
+				<< "\n\t\t4 ->\tone way : " << align[1][1][3] << "\n\t\t\ttwo way : " << align[0][1][3]
+				<< "\n\t\t5 ->\tone way : " << align[1][1][4] << "\n\t\t\ttwo way : " << align[0][1][4] <<std::endl;
+	#endif
 	return true;
 }
 
@@ -313,38 +661,38 @@ void GameState::ManualUndo(int x, int y)
 
 int		GameState::Heuristic()
 {
-	// maj des variables alignement capture
-	int ret = rand();
-
-	// if (nbCaptBlack == 1)
-	// 	ret += CAPTUREONE + 10;
-	// else if (nbCaptBlack == 2)
-	// 	ret += CAPTURETWO + 10;
-	// else if (nbCaptBlack == 3)
-	// 	ret += CAPTURETHREE;
-	// else if (nbCaptBlack == 4)
-	// 	ret += CAPTUREFOUR;
-	// else if (nbCaptBlack >= 5)
-	// {
-	// 	Finalstate = true;
-	// 	return WIN;
-	// }
-
-	// if (nbCaptWhite == 1)
-	// 	ret -= CAPTUREONE;
-	// else if (nbCaptWhite == 2)
-	// 	ret -= CAPTURETWO;
-	// else if (nbCaptWhite == 3)
-	// 	ret -= CAPTURETHREE;
-	// else if (nbCaptWhite == 4)
-	// 	ret -= CAPTUREFOUR;
-	// else if (nbCaptWhite >= 5)
-	// {
-	// 	Finalstate = true;
-	// 	return LOOSE;
-	// }
-	//int alea = rand() % 5;
-	return ret;
+	int ret = 0;
+	ret += align[1][1][1] * TWOROWONEWAY;
+	ret += align[1][1][2] * THREEROWONEWAY;
+	ret += align[1][1][3] * FOURROWONEWAY;
+	ret += align[1][1][4] * WIN;
+	ret += align[0][1][1] * TWOROWTWOWAY;
+	ret += align[0][1][2] * THREEROWTWOWAY;
+	ret += align[0][1][3] * WIN;
+	ret += align[0][1][4] * WIN;
+	if (ret > WIN)
+	{
+		// std::cout << "heuristic : " << ret << std::endl;
+		Finalstate = true;
+		return WIN;
+	}
+	int ret2 = 0;
+	ret2 -= align[1][0][1] * TWOROWONEWAY;
+	ret2 -= align[1][0][2] * THREEROWONEWAY;
+	ret2 -= align[1][0][3] * FOURROWONEWAY;
+	ret2 -= align[1][0][4] * WIN;
+	ret2 -= align[0][0][1] * TWOROWTWOWAY;
+	ret2 -= align[0][0][2] * THREEROWTWOWAY;
+	ret2 -= align[0][0][3] * WIN;
+	ret2 -= align[0][0][4] * WIN;
+	if (ret2 < -WIN)
+	{
+		// std::cout << "heuristic : " << ret << std::endl;
+		Finalstate = true;
+		return -WIN;
+	}
+	// std::cout << "heuristic : " << ret << std::endl;
+	return ret + ret2;
 }
 
 void GameState::GameStart()

@@ -9,6 +9,7 @@
 #define	BLACK 49
 #define	WHITE 50
 
+// #define DEBUG
 
 #define TIMEOUT 1
 #define DEFAULT_MY_BEST -100000000

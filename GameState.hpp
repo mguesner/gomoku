@@ -13,16 +13,10 @@
 #define THREEROWTWOWAY 201
 #define FOURROWONEWAY 101
 #define FOURROWTWOWAY 100000
-#define ENEMYTWOONEWAY -10
-#define ENEMYTWOTWOWAY -30
-#define ENEMYTHREEONEWAY -20
-#define ENEMYTHREETWOWAY -150
-#define ENEMYFOUR -200
 #define CAPTUREONE 300
 #define CAPTURETWO 600
 #define CAPTURETHREE 10000
 #define CAPTUREFOUR 50000
-#define LOOSE -1000000000
 #define WIN 1000000000
 
 
@@ -47,6 +41,7 @@ public:
 	void Undo();
 	void ManualUndo(int, int);
 	bool CaptureAndCount(int, int);
+	void Capture(int, int, int ,int);
 	int Heuristic();
 	void GenerateSons(std::vector<GameState>&);
 	int GetHeuristic();
@@ -63,6 +58,9 @@ public:
 	static char map[19][19];
 	static int	playableMove[19][19];
 private:
+	int	nbCapture;
+	std::pair<Point, Point> capture[8];
+	int		align[2][2][5];
 	int nbWhiteTwoRow;
 	int nbWhiteThreeRow;
 	int nbWhiteFourRow;
