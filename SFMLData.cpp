@@ -294,6 +294,8 @@ Input SFMLData::GetInput()
 				return Input(DOWN);
 			else if (event.key.code == sf::Keyboard::Return)
 				return Input(VALIDATE);
+			else if (event.key.code == sf::Keyboard::B)
+				return Input(B);
 			return Input(NOINPUT);
 		}
 		if (event.type == sf::Event::MouseButtonPressed)

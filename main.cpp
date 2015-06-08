@@ -160,6 +160,13 @@ int main()
 			}
 			win->Draw(color);
 		}
+		else if (noIA && type == B)
+		{
+			color = (color == WHITE ? BLACK : WHITE);
+			game.SetColor(color);
+			game.Undo();
+			win->Draw(color);
+		}
 		else if (type == ESC)
 			break;
 	}

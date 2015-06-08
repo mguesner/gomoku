@@ -7,22 +7,9 @@ GameState::GameState()
 {
 	nbCaptWhite = 0;
 	nbCaptBlack = 0;
-	nbWhiteTwoRow = 0;
-	nbWhiteThreeRow = 0;
-	nbWhiteFourRow = 0;
-	nbWhiteFiveRow = 0;
-	nbBlackTwoRow = 0;
-	nbBlackThreeRow = 0;
-	nbBlackFourRow = 0;
-	nbBlackFiveRow = 0;
-	bzero(align, 20 * sizeof(int));
-	for (int i = 0; i < 19; i++)
-	{
-		for (int j = 0; j < 19; j++)
-		{
-			map[j][i] = NONE;
-		}
-	}
+	nbCapture = 0;
+	std::memset(align, 0, 20);
+	std::memset(map, NONE, 19 * 19);
 	Finalstate = false;
 }
 
@@ -34,13 +21,15 @@ GameState::GameState(Input test, char turnColor)
 
 GameState::GameState(GameState const & src)
 {
+	nbCapture = 0;
+	std::memset(capture, 0, 8 * sizeof(std::pair<Point, Point>));
 	nbCaptBlack = src.nbCaptBlack;
 	nbCaptWhite = src.nbCaptWhite;
 	currentColor = src.currentColor;
 	heuristic = src.heuristic;
 	move = src.move;
 	Finalstate = src.Finalstate;
-	memcpy(align, src.align, 20 * sizeof(int));
+	std::memcpy(align, src.align, 20);
 }
 
 bool	GameState::operator<(GameState const & src) const
@@ -95,6 +84,7 @@ bool	GameState::DoMove()
 {
 	//update table
 	//
+	nbCapture = 0;
 	int y = move.GetY();
 	int x = move.GetX();
 	map[y][x] = currentColor;
@@ -131,6 +121,7 @@ bool	GameState::DoMove(char color)
 {
 	//update table
 	//
+	nbCapture = 0;
 	int y = move.GetY();
 	int x = move.GetX();
 	map[y][x] = color;
@@ -164,8 +155,51 @@ bool	GameState::DoMove(char color)
 
 void GameState::Capture(int x1, int y1, int x2, int y2)
 {
+	// std::cout << "capture" << std::endl;
+	if (currentColor == BLACK)
+		nbCaptBlack++;
+	else
+		nbCaptWhite++;
 	map[y1][x1] = NONE;
+	if (y1 - 1 >= 0 && x1 - 1 >= 0)
+		(playableMove[y1 - 1][x1 -1])--;
+	if (y1 + 1 < 19 && x1 + 1 < 19)
+		(playableMove[y1 + 1][x1 + 1])--;
+
+
+	if (y1 - 1 >= 0 && x1 + 1 < 19)
+		(playableMove[y1 - 1][x1 + 1])--;
+	if (y1 + 1 < 19 && x1 - 1 >= 0)
+		(playableMove[y1 + 1][x1 - 1])--;
+
+	if (y1 + 1 < 19)
+		(playableMove[y1 + 1][x1])--;
+	if (x1 + 1 < 19)
+		(playableMove[y1][x1 + 1])--;
+	if (y1 - 1 >= 0)
+		(playableMove[y1 - 1][x1])--;
+	if (x1 - 1 >= 0)
+		(playableMove[y1][x1 - 1])--;
 	map[y2][x2] = NONE;
+	if (y2 - 1 >= 0 && x2 - 1 >= 0)
+		(playableMove[y2 - 1][x2 -1])--;
+	if (y2 + 1 < 19 && x2 + 1 < 19)
+		(playableMove[y2 + 1][x2 + 1])--;
+
+
+	if (y2 - 1 >= 0 && x2 + 1 < 19)
+		(playableMove[y2 - 1][x2 + 1])--;
+	if (y2 + 1 < 19 && x2 - 1 >= 0)
+		(playableMove[y2 + 1][x2 - 1])--;
+
+	if (y2 + 1 < 19)
+		(playableMove[y2 + 1][x2])--;
+	if (x2 + 1 < 19)
+		(playableMove[y2][x2 + 1])--;
+	if (y2 - 1 >= 0)
+		(playableMove[y2 - 1][x2])--;
+	if (x2 - 1 >= 0)
+		(playableMove[y2][x2 - 1])--;
 	capture[nbCapture] = std::pair<Point, Point>(Point(x1, y1, 0), Point(x2, y2, 0));
 	nbCapture++;
 }
@@ -209,7 +243,7 @@ bool GameState::CaptureAndCount(int x, int y)
 				if (ennemy == 2 && total == 2)
 				{
 					capture = true;
-					//Capture(right_x - 1, right_y - 1, right_x - 2, right_y - 2);
+					Capture(right_x - 1, right_y - 1, right_x - 2, right_y - 2);
 					//CAPTURE HERE
 				}
 				lock = true;
@@ -230,7 +264,7 @@ bool GameState::CaptureAndCount(int x, int y)
 	}
 
 	#ifdef DEBUG
-		std::cout << "bas droite diag enemy = " << ennemy << " capture = " << capture << " align : " << num <<std::endl;
+	std::cout << "bas droite diag enemy = " << ennemy << " capture = " << capture << " align : " << num <<std::endl;
 	#endif
 
 	int left_y = y - 1;
@@ -260,7 +294,10 @@ bool GameState::CaptureAndCount(int x, int y)
 			if (map[left_y][left_x] == currentColor)
 			{
 				if (ennemy == 2 && total == 2)
+				{
 					capture = true;
+					Capture(left_x + 1, left_y + 1, left_x + 2, left_y + 2);
+				}
 					//CAPTURE HERE
 				lock = true;
 				break;
@@ -324,8 +361,10 @@ bool GameState::CaptureAndCount(int x, int y)
 			if (map[left_y][left_x] == currentColor)
 			{
 				if (ennemy == 2 && total == 2)
+				{
+					Capture(left_x + 1, left_y - 1, left_x + 2, left_y - 2);
 					capture = true;
-					//CAPTURE HERE
+				}
 				lock = true;
 				break;
 			}
@@ -374,8 +413,10 @@ bool GameState::CaptureAndCount(int x, int y)
 			if (map[right_y][right_x] == currentColor)
 			{
 				if (ennemy == 2 && total == 2)
+				{
+					Capture(right_x - 1, right_y + 1, right_x - 2, right_y + 2);
 					capture = true;
-					//CAPTURE HERE
+				}
 				lock = true;
 				break;
 			}
@@ -430,8 +471,10 @@ bool GameState::CaptureAndCount(int x, int y)
 			if (map[y][i] == currentColor)
 			{
 				if (ennemy == 2 && total == 2)
+				{
+					Capture(i - 1, y, i - 2, y);
 					capture = true;
-					//CAPTURE HERE
+				}
 				lock = true;
 				break;
 			}
@@ -460,7 +503,7 @@ bool GameState::CaptureAndCount(int x, int y)
 	total = 0;
 	ennemy = 0;
 	capture = false;
-	for (int i = x - 1; i >= min_x; i--)
+	for (int i = right_x; i >= min_x; i--)
 	{
 		if (alignement)
 		{
@@ -477,8 +520,10 @@ bool GameState::CaptureAndCount(int x, int y)
 			if (map[y][i] == currentColor)
 			{
 				if (ennemy == 2 && total == 2)
+				{
+					Capture(i + 1, y, i + 2, y);
 					capture = true;
-					//CAPTURE HERE
+				}
 				lock = true;
 				break;
 			}
@@ -531,8 +576,10 @@ bool GameState::CaptureAndCount(int x, int y)
 			if (map[i][x] == currentColor)
 			{
 				if (ennemy == 2 && total == 2)
+				{
+					Capture(x, i - 1, x, i - 2);
 					capture = true;
-					//CAPTURE HERE
+				}
 				lock = true;
 				break;
 			}
@@ -578,8 +625,10 @@ bool GameState::CaptureAndCount(int x, int y)
 			if (map[i][x] == currentColor)
 			{
 				if (ennemy == 2 && total == 2)
+				{
+					Capture(x, i + 1, x, i + 2);
 					capture = true;
-					//CAPTURE HERE
+				}
 				lock = true;
 				break;
 			}
@@ -607,13 +656,13 @@ bool GameState::CaptureAndCount(int x, int y)
 	//return false if 2 trhee are adds
 	#ifdef DEBUG
 	std::cout << "align :\tblanc :\t2 ->\tone way : " << align[1][0][1] << "\n\t\t\ttwo way : " << align[0][0][1]
-				<< "\n\t\t3 ->\tone way : " << align[1][0][2] << "\n\t\t\ttwo way : " << align[0][0][2]
-				<< "\n\t\t4 ->\tone way : " << align[1][0][3] << "\n\t\t\ttwo way : " << align[0][0][3]
-				<< "\n\t\t5 ->\tone way : " << align[1][0][4] << "\n\t\t\ttwo way : " << align[0][0][4]
-				<< "\n\tblack :\t2 ->\tone way : " << align[1][1][1] << "\n\t\t\ttwo way : " << align[0][1][1]
-				<< "\n\t\t3 ->\tone way : " << align[1][1][2] << "\n\t\t\ttwo way : " << align[0][1][2]
-				<< "\n\t\t4 ->\tone way : " << align[1][1][3] << "\n\t\t\ttwo way : " << align[0][1][3]
-				<< "\n\t\t5 ->\tone way : " << align[1][1][4] << "\n\t\t\ttwo way : " << align[0][1][4] <<std::endl;
+	<< "\n\t\t3 ->\tone way : " << align[1][0][2] << "\n\t\t\ttwo way : " << align[0][0][2]
+	<< "\n\t\t4 ->\tone way : " << align[1][0][3] << "\n\t\t\ttwo way : " << align[0][0][3]
+	<< "\n\t\t5 ->\tone way : " << align[1][0][4] << "\n\t\t\ttwo way : " << align[0][0][4]
+	<< "\n\tblack :\t2 ->\tone way : " << align[1][1][1] << "\n\t\t\ttwo way : " << align[0][1][1]
+	<< "\n\t\t3 ->\tone way : " << align[1][1][2] << "\n\t\t\ttwo way : " << align[0][1][2]
+	<< "\n\t\t4 ->\tone way : " << align[1][1][3] << "\n\t\t\ttwo way : " << align[0][1][3]
+	<< "\n\t\t5 ->\tone way : " << align[1][1][4] << "\n\t\t\ttwo way : " << align[0][1][4] <<std::endl;
 	#endif
 	return true;
 }
@@ -648,6 +697,50 @@ void GameState::Undo()
 	if (x - 1 >= 0)
 		(playableMove[y][x - 1])--;
 	// repop les captures
+	while (nbCapture)
+	{
+		nbCapture--;
+		Point tmp = std::get<0>(capture[nbCapture]);
+		int x = (int)tmp.getX();
+		int y = (int)tmp.getY();
+		map[y][x] = currentColor == WHITE ? BLACK : WHITE;
+		if (y - 1 >= 0 && x - 1 >= 0)
+			(playableMove[y - 1][x -1])++;
+		if (y + 1 < 19 && x + 1 < 19)
+			(playableMove[y + 1][x + 1])++;
+		if (y - 1 >= 0 && x + 1 < 19)
+			(playableMove[y - 1][x + 1])++;
+		if (y + 1 < 19 && x - 1 >= 0)
+			(playableMove[y + 1][x - 1])++;
+		if (y + 1 < 19)
+			(playableMove[y + 1][x])++;
+		if (x + 1 < 19)
+			(playableMove[y][x + 1])++;
+		if (y - 1 >= 0)
+			(playableMove[y - 1][x])++;
+		if (x - 1 >= 0)
+			(playableMove[y][x - 1])++;
+		tmp = std::get<1>(capture[nbCapture]);
+		x = (int)tmp.getX();
+		y = (int)tmp.getY();
+		map[y][x] = currentColor == WHITE ? BLACK : WHITE;
+		if (y - 1 >= 0 && x - 1 >= 0)
+			(playableMove[y - 1][x -1])++;
+		if (y + 1 < 19 && x + 1 < 19)
+			(playableMove[y + 1][x + 1])++;
+		if (y - 1 >= 0 && x + 1 < 19)
+			(playableMove[y - 1][x + 1])++;
+		if (y + 1 < 19 && x - 1 >= 0)
+			(playableMove[y + 1][x - 1])++;
+		if (y + 1 < 19)
+			(playableMove[y + 1][x])++;
+		if (x + 1 < 19)
+			(playableMove[y][x + 1])++;
+		if (y - 1 >= 0)
+			(playableMove[y - 1][x])++;
+		if (x - 1 >= 0)
+			(playableMove[y][x - 1])++;
+	}
 
 }
 
@@ -661,30 +754,20 @@ void GameState::ManualUndo(int x, int y)
 
 int		GameState::Heuristic()
 {
-	int ret = 0;
-	ret += align[1][1][1] * TWOROWONEWAY;
-	ret += align[1][1][2] * THREEROWONEWAY;
-	ret += align[1][1][3] * FOURROWONEWAY;
-	ret += align[1][1][4] * WIN;
-	ret += align[0][1][1] * TWOROWTWOWAY;
-	ret += align[0][1][2] * THREEROWTWOWAY;
-	ret += align[0][1][3] * WIN;
-	ret += align[0][1][4] * WIN;
+	int ret = align[1][1][1] * TWOROWONEWAY + align[1][1][2] * THREEROWONEWAY
+	+ align[1][1][3] * FOURROWONEWAY + align[1][1][4] * WIN + align[0][1][1] * TWOROWTWOWAY
+	+ align[0][1][2] * THREEROWTWOWAY + align[0][1][3] * FOURROWTWOWAY + align[0][1][4] * WIN
+	+ nbCaptBlack * CAPTUREONE + align[1][0][1] * POTENTIALCAPTURE;
 	if (ret > WIN)
 	{
 		// std::cout << "heuristic : " << ret << std::endl;
 		Finalstate = true;
 		return WIN;
 	}
-	int ret2 = 0;
-	ret2 -= align[1][0][1] * TWOROWONEWAY;
-	ret2 -= align[1][0][2] * THREEROWONEWAY;
-	ret2 -= align[1][0][3] * FOURROWONEWAY;
-	ret2 -= align[1][0][4] * WIN;
-	ret2 -= align[0][0][1] * TWOROWTWOWAY;
-	ret2 -= align[0][0][2] * THREEROWTWOWAY;
-	ret2 -= align[0][0][3] * WIN;
-	ret2 -= align[0][0][4] * WIN;
+	int ret2 = -(align[1][0][1] * TWOROWONEWAY + align[1][0][2] * THREEROWONEWAY
+		+ align[1][0][3] * FOURROWONEWAY + align[1][0][4] * WIN + align[0][0][1] * TWOROWTWOWAY
+		+ align[0][0][2] * THREEROWTWOWAY + align[0][0][3] * FOURROWTWOWAY + align[0][0][4] * WIN
+		+ nbCaptWhite * CAPTUREONE + align[1][1][1] * POTENTIALCAPTURE);
 	if (ret2 < -WIN)
 	{
 		// std::cout << "heuristic : " << ret << std::endl;
@@ -724,14 +807,6 @@ GameState& GameState::operator=(GameState const & src)
 	currentColor = src.currentColor;
 	heuristic = src.heuristic;
 	move = src.move;
-	nbWhiteTwoRow = src.nbWhiteTwoRow;
-	nbWhiteThreeRow = src.nbWhiteThreeRow;
-	nbWhiteFourRow = src.nbWhiteFourRow;
-	nbWhiteFiveRow = src.nbWhiteFiveRow;
-	nbBlackTwoRow = src.nbBlackTwoRow;
-	nbBlackThreeRow = src.nbBlackThreeRow;
-	nbBlackFourRow = src.nbBlackFourRow;
-	nbBlackFiveRow = src.nbBlackFiveRow;
 	return *this;
 }
 
@@ -772,9 +847,12 @@ bool GameState::Play(int x, int y, char color)
 	{
 		move = Input(MOUSE ,x, y);
 		//if domove is true
-		if (!DoMove(color))
+		currentColor = color;
+		if (!DoMove())
 			return false;
+		#ifdef DEBUG
 		heuristic = Heuristic();
+		#endif
 		return true;
 	}
 	return false;

@@ -13,6 +13,7 @@
 #define THREEROWTWOWAY 201
 #define FOURROWONEWAY 101
 #define FOURROWTWOWAY 100000
+#define POTENTIALCAPTURE 100
 #define CAPTUREONE 300
 #define CAPTURETWO 600
 #define CAPTURETHREE 10000
@@ -60,15 +61,7 @@ public:
 private:
 	int	nbCapture;
 	std::pair<Point, Point> capture[8];
-	int		align[2][2][5];
-	int nbWhiteTwoRow;
-	int nbWhiteThreeRow;
-	int nbWhiteFourRow;
-	int nbWhiteFiveRow;
-	int nbBlackTwoRow;
-	int nbBlackThreeRow;
-	int nbBlackFourRow;
-	int nbBlackFiveRow;
+	char		align[2][2][5];
 	int nbCaptBlack;
 	int nbCaptWhite;
 	bool Finalstate;
