@@ -69,13 +69,13 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 
 Input do_MinMax(GameState *root, Timer timeout)
 {
-	int depth = 1;
+	int depth = 2;
 	int best = 0;
 
 	Input ret;
 	while (depth < 10)
 	{
-		depth++;
+		depth += 2;
 		auto value = std::chrono::system_clock::now();
 		g_node_opens = 0;
 		int ALPHA = ALPHA_START;

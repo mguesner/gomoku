@@ -87,31 +87,32 @@ bool	GameState::DoMove()
 	nbCapture = 0;
 	int y = move.GetY();
 	int x = move.GetX();
-	map[y][x] = currentColor;
-
-	// list of possible move update
-	if (y - 1 >= 0 && x - 1 >= 0)
-		(playableMove[y - 1][x -1])++;
-	if (y + 1 < 19 && x + 1 < 19)
-		(playableMove[y + 1][x + 1])++;
-
-
-	if (y - 1 >= 0 && x + 1 < 19)
-		(playableMove[y - 1][x + 1])++;
-	if (y + 1 < 19 && x - 1 >= 0)
-		(playableMove[y + 1][x - 1])++;
-
-	if (y + 1 < 19)
-		(playableMove[y + 1][x])++;
-	if (x + 1 < 19)
-		(playableMove[y][x + 1])++;
-	if (y - 1 >= 0)
-		(playableMove[y - 1][x])++;
-	if (x - 1 >= 0)
-		(playableMove[y][x - 1])++;
-
 	//capture and update alignment
-	return CaptureAndCount(x, y);
+	if (CaptureAndCount(x, y))
+	{
+		map[y][x] = currentColor;//list of possible move update
+		if (y - 1 >= 0 && x - 1 >= 0)
+			(playableMove[y - 1][x -1])++;
+		if (y + 1 < 19 && x + 1 < 19)
+			(playableMove[y + 1][x + 1])++;
+
+
+		if (y - 1 >= 0 && x + 1 < 19)
+			(playableMove[y - 1][x + 1])++;
+		if (y + 1 < 19 && x - 1 >= 0)
+			(playableMove[y + 1][x - 1])++;
+
+		if (y + 1 < 19)
+			(playableMove[y + 1][x])++;
+		if (x + 1 < 19)
+			(playableMove[y][x + 1])++;
+		if (y - 1 >= 0)
+			(playableMove[y - 1][x])++;
+		if (x - 1 >= 0)
+			(playableMove[y][x - 1])++;
+		return true;
+	}
+	return false;
 
 
 }
@@ -124,33 +125,38 @@ bool	GameState::DoMove(char color)
 	nbCapture = 0;
 	int y = move.GetY();
 	int x = move.GetX();
-	map[y][x] = color;
 
 
-	//list of possible move update
-	if (y - 1 >= 0 && x - 1 >= 0)
-		(playableMove[y - 1][x -1])++;
-	if (y + 1 < 19 && x + 1 < 19)
-		(playableMove[y + 1][x + 1])++;
-
-
-	if (y - 1 >= 0 && x + 1 < 19)
-		(playableMove[y - 1][x + 1])++;
-	if (y + 1 < 19 && x - 1 >= 0)
-		(playableMove[y + 1][x - 1])++;
-
-	if (y + 1 < 19)
-		(playableMove[y + 1][x])++;
-	if (x + 1 < 19)
-		(playableMove[y][x + 1])++;
-	if (y - 1 >= 0)
-		(playableMove[y - 1][x])++;
-	if (x - 1 >= 0)
-		(playableMove[y][x - 1])++;
 
 	//capture and update alignment
 	// if this move add 2 three == forbidden
-	return CaptureAndCount(x, y);
+	if (CaptureAndCount(x, y))
+	{
+		std::cout << "play" << std::endl;
+		map[y][x] = color;
+	//list of possible move update
+		if (y - 1 >= 0 && x - 1 >= 0)
+			(playableMove[y - 1][x -1])++;
+		if (y + 1 < 19 && x + 1 < 19)
+			(playableMove[y + 1][x + 1])++;
+
+
+		if (y - 1 >= 0 && x + 1 < 19)
+			(playableMove[y - 1][x + 1])++;
+		if (y + 1 < 19 && x - 1 >= 0)
+			(playableMove[y + 1][x - 1])++;
+
+		if (y + 1 < 19)
+			(playableMove[y + 1][x])++;
+		if (x + 1 < 19)
+			(playableMove[y][x + 1])++;
+		if (y - 1 >= 0)
+			(playableMove[y - 1][x])++;
+		if (x - 1 >= 0)
+			(playableMove[y][x - 1])++;
+		return true;
+	}
+	return false;
 }
 
 void GameState::Capture(int x1, int y1, int x2, int y2)
@@ -213,6 +219,7 @@ bool GameState::CaptureAndCount(int x, int y)
 
 	int right_y = y + 1;
 	int right_x = x + 1;
+	int	lastNbThree = align[0][currentColor == WHITE ? 0 : 1][2];
 	bool alignement = true;
 	int num = 0;
 
@@ -664,6 +671,8 @@ bool GameState::CaptureAndCount(int x, int y)
 	<< "\n\t\t4 ->\tone way : " << align[1][1][3] << "\n\t\t\ttwo way : " << align[0][1][3]
 	<< "\n\t\t5 ->\tone way : " << align[1][1][4] << "\n\t\t\ttwo way : " << align[0][1][4] <<std::endl;
 	#endif
+	if (lastNbThree + 2 <= align[0][currentColor == WHITE ? 0 : 1][2])
+		return false;
 	return true;
 }
 
