@@ -19,7 +19,9 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 	{
 		std::vector<GameState> tmp;
 		tmp.reserve(50);
+		// std::cout << "generate son" << std::endl;
 		node.GenerateSons(tmp);
+		// std::cout << "end generate son" << std::endl;
 		std::sort(tmp.begin(), tmp.end(), std::greater<GameState>());
 		auto cur = tmp.begin();
 		int bestValue = DEFAULT_MY_BEST;
@@ -47,7 +49,9 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 	}
 	std::vector<GameState> tmp;
 	tmp.reserve(50);
+		// std::cout << "generate son" << std::endl;
 	node.GenerateSons(tmp);
+		// std::cout << "end generate son" << std::endl;
 	std::sort(tmp.begin(), tmp.end());
 	auto cur = tmp.begin();
 	int bestValue = DEFAULT_ENEMY_BEST;
@@ -159,6 +163,19 @@ int main()
 				break;
 			}
 			win->Draw(color);
+			// for (int i = 0; i < 19; ++i)
+			// {
+			// 	for (int j = 0; j < 19; ++j)
+			// 	{
+			// 		std::cout <<"_" << (int)GameState::playableMove[i][j];
+			// 	}
+			// 	std::cout << "\t->\t";
+			// 	for (int k = 0; k < 19; ++k)
+			// 	{
+			// 		std::cout << GameState::map[i][k];
+			// 	}
+			// 	std::cout << std::endl;
+			// }
 		}
 		else if (noIA && type == B)
 		{

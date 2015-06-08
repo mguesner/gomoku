@@ -18,7 +18,7 @@
 #define CAPTURETWO 600
 #define CAPTURETHREE 10000
 #define CAPTUREFOUR 50000
-#define WIN 1000000000
+#define WIN 100000000
 
 
 class GameState
@@ -36,7 +36,7 @@ public:
 	bool	Update(Input test, char turnColor);
 	void Display() const;
 	bool DoMove();
-	bool DoMove(char);
+	void DoManualMove();
 	void GameStart();
 	void Info();
 	void Undo();

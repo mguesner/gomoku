@@ -79,6 +79,29 @@ bool	GameState::Update(Input test, char turnColor)
 	return ret;
 }
 
+void	GameState::DoManualMove()
+{
+	int y = move.GetY();
+	int x = move.GetX();
+	map[y][x] = currentColor;
+	if (y - 1 >= 0 && x - 1 >= 0)
+		(playableMove[y - 1][x -1])++;
+	if (y + 1 < 19 && x + 1 < 19)
+		(playableMove[y + 1][x + 1])++;
+	if (y - 1 >= 0 && x + 1 < 19)
+		(playableMove[y - 1][x + 1])++;
+	if (y + 1 < 19 && x - 1 >= 0)
+		(playableMove[y + 1][x - 1])++;
+	if (y + 1 < 19)
+		(playableMove[y + 1][x])++;
+	if (x + 1 < 19)
+		(playableMove[y][x + 1])++;
+	if (y - 1 >= 0)
+		(playableMove[y - 1][x])++;
+	if (x - 1 >= 0)
+		(playableMove[y][x - 1])++;
+}
+
 //change to bool return
 bool	GameState::DoMove()
 {
@@ -88,75 +111,31 @@ bool	GameState::DoMove()
 	int y = move.GetY();
 	int x = move.GetX();
 	//capture and update alignment
-	if (CaptureAndCount(x, y))
-	{
-		map[y][x] = currentColor;//list of possible move update
-		if (y - 1 >= 0 && x - 1 >= 0)
-			(playableMove[y - 1][x -1])++;
-		if (y + 1 < 19 && x + 1 < 19)
-			(playableMove[y + 1][x + 1])++;
+	map[y][x] = currentColor;//list of possible move update
+	if (y - 1 >= 0 && x - 1 >= 0)
+		(playableMove[y - 1][x -1])++;
+	if (y + 1 < 19 && x + 1 < 19)
+		(playableMove[y + 1][x + 1])++;
 
-
-		if (y - 1 >= 0 && x + 1 < 19)
-			(playableMove[y - 1][x + 1])++;
-		if (y + 1 < 19 && x - 1 >= 0)
-			(playableMove[y + 1][x - 1])++;
-
-		if (y + 1 < 19)
-			(playableMove[y + 1][x])++;
+	if (y - 1 >= 0 && x + 1 < 19)
+		(playableMove[y - 1][x + 1])++;
+	if (y + 1 < 19 && x - 1 >= 0)
+		(playableMove[y + 1][x - 1])++;
+	if (y + 1 < 19)
+		(playableMove[y + 1][x])++;
 		if (x + 1 < 19)
 			(playableMove[y][x + 1])++;
 		if (y - 1 >= 0)
 			(playableMove[y - 1][x])++;
 		if (x - 1 >= 0)
 			(playableMove[y][x - 1])++;
-		return true;
-	}
-	return false;
-
-
-}
-
-//change to bool return
-bool	GameState::DoMove(char color)
-{
-	//update table
-	//
-	nbCapture = 0;
-	int y = move.GetY();
-	int x = move.GetX();
-
-
-
-	//capture and update alignment
-	// if this move add 2 three == forbidden
 	if (CaptureAndCount(x, y))
 	{
-		std::cout << "play" << std::endl;
-		map[y][x] = color;
-	//list of possible move update
-		if (y - 1 >= 0 && x - 1 >= 0)
-			(playableMove[y - 1][x -1])++;
-		if (y + 1 < 19 && x + 1 < 19)
-			(playableMove[y + 1][x + 1])++;
-
-
-		if (y - 1 >= 0 && x + 1 < 19)
-			(playableMove[y - 1][x + 1])++;
-		if (y + 1 < 19 && x - 1 >= 0)
-			(playableMove[y + 1][x - 1])++;
-
-		if (y + 1 < 19)
-			(playableMove[y + 1][x])++;
-		if (x + 1 < 19)
-			(playableMove[y][x + 1])++;
-		if (y - 1 >= 0)
-			(playableMove[y - 1][x])++;
-		if (x - 1 >= 0)
-			(playableMove[y][x - 1])++;
 		return true;
 	}
 	return false;
+
+
 }
 
 void GameState::Capture(int x1, int y1, int x2, int y2)
@@ -662,14 +641,14 @@ bool GameState::CaptureAndCount(int x, int y)
 	#endif
 	//return false if 2 trhee are adds
 	#ifdef DEBUG
-	std::cout << "align :\tblanc :\t2 ->\tone way : " << align[1][0][1] << "\n\t\t\ttwo way : " << align[0][0][1]
-	<< "\n\t\t3 ->\tone way : " << align[1][0][2] << "\n\t\t\ttwo way : " << align[0][0][2]
-	<< "\n\t\t4 ->\tone way : " << align[1][0][3] << "\n\t\t\ttwo way : " << align[0][0][3]
-	<< "\n\t\t5 ->\tone way : " << align[1][0][4] << "\n\t\t\ttwo way : " << align[0][0][4]
-	<< "\n\tblack :\t2 ->\tone way : " << align[1][1][1] << "\n\t\t\ttwo way : " << align[0][1][1]
-	<< "\n\t\t3 ->\tone way : " << align[1][1][2] << "\n\t\t\ttwo way : " << align[0][1][2]
-	<< "\n\t\t4 ->\tone way : " << align[1][1][3] << "\n\t\t\ttwo way : " << align[0][1][3]
-	<< "\n\t\t5 ->\tone way : " << align[1][1][4] << "\n\t\t\ttwo way : " << align[0][1][4] <<std::endl;
+	std::cout << "align :\tblanc :\t2 ->\tone way : " << (int)align[1][0][1] << "\n\t\t\ttwo way : " << (int)align[0][0][1]
+	<< "\n\t\t3 ->\tone way : " << (int)align[1][0][2] << "\n\t\t\ttwo way : " << (int)align[0][0][2]
+	<< "\n\t\t4 ->\tone way : " << (int)align[1][0][3] << "\n\t\t\ttwo way : " << (int)align[0][0][3]
+	<< "\n\t\t5 ->\tone way : " << (int)align[1][0][4] << "\n\t\t\ttwo way : " << (int)align[0][0][4]
+	<< "\n\tblack :\t2 ->\tone way : " << (int)align[1][1][1] << "\n\t\t\ttwo way : " << (int)align[0][1][1]
+	<< "\n\t\t3 ->\tone way : " << (int)align[1][1][2] << "\n\t\t\ttwo way : " << (int)align[0][1][2]
+	<< "\n\t\t4 ->\tone way : " << (int)align[1][1][3] << "\n\t\t\ttwo way : " << (int)align[0][1][3]
+	<< "\n\t\t5 ->\tone way : " << (int)align[1][1][4] << "\n\t\t\ttwo way : " << (int)align[0][1][4] <<std::endl;
 	#endif
 	if (lastNbThree + 2 <= align[0][currentColor == WHITE ? 0 : 1][2])
 		return false;
@@ -706,6 +685,7 @@ void GameState::Undo()
 	if (x - 1 >= 0)
 		(playableMove[y][x - 1])--;
 	// repop les captures
+	// int i = nbCapture;
 	while (nbCapture)
 	{
 		nbCapture--;
@@ -769,7 +749,6 @@ int		GameState::Heuristic()
 	+ nbCaptBlack * CAPTUREONE + align[1][0][1] * POTENTIALCAPTURE;
 	if (ret > WIN)
 	{
-		// std::cout << "heuristic : " << ret << std::endl;
 		Finalstate = true;
 		return WIN;
 	}
