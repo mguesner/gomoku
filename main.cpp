@@ -3,25 +3,18 @@
 #include "Gomoku.hpp"
 #include "Sound.hpp"
 
-int g_node_opens = 0;
 
 int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret, bool first)
 {
-	g_node_opens++;
 	if (depth == 0 || node.IsFinalState())
 	{
-		//std::cout << "WTF IS THAT " << depth << "LOL CASSOS " << node.IsFinalState() << std::endl;
 		auto tmp = node.GetHeuristic();
-		node.Undo();
 		return tmp;
 	}
 	if (Me)
 	{
 		std::vector<GameState> tmp;
-		tmp.reserve(50);
-		// std::cout << "generate son" << std::endl;
 		node.GenerateSons(tmp);
-		// std::cout << "end generate son" << std::endl;
 		std::sort(tmp.begin(), tmp.end(), std::greater<GameState>());
 		auto cur = tmp.begin();
 		int bestValue = DEFAULT_MY_BEST;
@@ -30,7 +23,6 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 			*ret = (*cur).GetMove();
 		while (cur != tmp.end())
 		{
-			(*cur).DoMove();
 			int value = MinMax(*cur, depth - 1, alpha, beta, false, ret, false);
 			if (first && value > bestValue)
 			{
@@ -43,22 +35,16 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 			i++;
 			cur++;
 		}
-		if (!first)
-			node.Undo();
 		return bestValue;
 	}
 	std::vector<GameState> tmp;
-	tmp.reserve(50);
-		// std::cout << "generate son" << std::endl;
 	node.GenerateSons(tmp);
-		// std::cout << "end generate son" << std::endl;
 	std::sort(tmp.begin(), tmp.end());
 	auto cur = tmp.begin();
 	int bestValue = DEFAULT_ENEMY_BEST;
 	int i = 0;
 	while (cur != tmp.end())
 	{
-		(*cur).DoMove();
 		int value = MinMax(*cur, depth - 1, alpha, beta, true, ret, false);
 		bestValue = fmin(bestValue, value);
 		beta = fmin(beta, bestValue);
@@ -67,33 +53,31 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 		cur++;
 		i++;
 	}
-	node.Undo();
 	return bestValue;
 }
 
 Input do_MinMax(GameState *root, Timer timeout)
 {
-	int depth = 2;
+	int depth = 1;
 	int best = 0;
 
+	(void)timeout;
 	Input ret;
-	while (depth < 10)
+	while (1 && depth < MAXDEPTH)
 	{
-		depth += 2;
-		auto value = std::chrono::system_clock::now();
-		g_node_opens = 0;
+		//auto value = std::chrono::system_clock::now();
 		int ALPHA = ALPHA_START;
 		int BETA = BETA_START;
 		best = MinMax(*root, depth, ALPHA, BETA, true, &ret, true);
-		if (best == WIN)
+		if (best == WIN || best == LOOSE)
 			break;
-		auto turnValue = std::chrono::system_clock::now() - value;
-		if (turnValue * 30 + std::chrono::system_clock::now() > timeout)
-			break;
-			//std::cout << " Break call after : " << turnValue.count()  << std::endl;
+		//auto turnValue = std::chrono::system_clock::now() - value;
+		// if (turnValue * root->GetCoups().size() * root->GetCoups().size() + std::chrono::system_clock::now() > timeout)
+		// 	break;
+		depth += 1;
 
 	}
-	std::cout << "nombre coup : " << depth << " best value: " << best << " opens node : " << g_node_opens << std::endl;
+	std::cout << "depth  : " << depth << " valeur heuristic: "<< best << std::endl;
 	ret.SetType(MOUSE);
 	return ret;
 }
@@ -103,9 +87,7 @@ int main()
 {
 	SFMLData *win = new SFMLData();
 	srand(time(NULL));
-
 	GameState game;
-
 	game.GameStart();
 	win->SetGameState(&game);
 	auto color = WHITE;
@@ -115,10 +97,9 @@ int main()
 	int choice = 0;
 	Sound music(5);
 	music.Play();
-	win->Parameters(&music);
-		Input input;
-	win->DrawMainMenu(input, &noIA, &choice, &menu);
-	while (1)
+	Input input;
+	bool play = win->DrawMainMenu(input, &noIA, &choice, &menu);
+	while (play)
 	{
 		auto lastNow = std::chrono::system_clock::now();
 		auto calcTime = std::chrono::system_clock::now() - lastNow;
@@ -127,8 +108,8 @@ int main()
 		else
 		{
 			game.SetColor(WHITE);
-			lastNow = std::chrono::system_clock::now();
-			auto runUntil =  lastNow + std::chrono::milliseconds(1000);
+			auto lastNow = std::chrono::system_clock::now();
+			auto runUntil =  lastNow + std::chrono::milliseconds(450);
 			input = do_MinMax(&game, runUntil);
 			calcTime = std::chrono::system_clock::now() - lastNow;
 			std::cout << calcTime.count() / 1000 << " ms elapsed"<< std::endl;
@@ -136,7 +117,7 @@ int main()
 		if (menu)
 		{
 			if (input.GetType() != NOINPUT)
-				win->DrawMainMenu(input, &noIA, &choice, &menu);
+				play = win->DrawMainMenu(input, &noIA, &choice, &menu);
 			continue;
 		}
 		auto type = input.GetType();
@@ -150,9 +131,7 @@ int main()
 				}
 				else
 				{
-					//std::cout << game.GetHeuristic() << std::endl;
 					color = (color == WHITE ? BLACK : WHITE);
-					game.SetColor(color);
 					HumanTurn = !HumanTurn;
 				}
 			}
@@ -162,26 +141,6 @@ int main()
 				while (win->GetInput().GetType() == NOINPUT);
 				break;
 			}
-			win->Draw(color);
-			// for (int i = 0; i < 19; ++i)
-			// {
-			// 	for (int j = 0; j < 19; ++j)
-			// 	{
-			// 		std::cout <<"_" << (int)GameState::playableMove[i][j];
-			// 	}
-			// 	std::cout << "\t->\t";
-			// 	for (int k = 0; k < 19; ++k)
-			// 	{
-			// 		std::cout << GameState::map[i][k];
-			// 	}
-			// 	std::cout << std::endl;
-			// }
-		}
-		else if (noIA && type == B)
-		{
-			color = (color == WHITE ? BLACK : WHITE);
-			game.SetColor(color);
-			game.Undo();
 			win->Draw(color);
 		}
 		else if (type == ESC)

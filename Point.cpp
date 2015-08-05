@@ -187,15 +187,13 @@ std::ostream& operator<<(std::ostream& os, Point& pt)
 	return os;
 }
 
-bool	Point::IsForbiden(char color) const
+bool	Point::IsForbiden(eState color) const
 {
-	int key = color - 48;
-	return forbiden[key];
+	return forbiden[color];
 }
 
-void	Point::Forbiden(char color, bool state)
+void	Point::Forbiden(eState color, bool state)
 {
-	int key = color - 48;
-	forbiden[key] = state;
+	forbiden[color] = state;
 	// std::cout << (color == WHITE ? "WHITE" : "BLACK") << " state = " << state << std::endl;
 }

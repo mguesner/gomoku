@@ -5,7 +5,7 @@ VictoryException::VictoryException()
 {
 }
 
-VictoryException::VictoryException(char color) : color(color)
+VictoryException::VictoryException(eState color) : color(color)
 {
 }
 

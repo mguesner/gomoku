@@ -5,11 +5,13 @@
 #include <chrono>
 #include <iostream>
 
-#define NONE 48
-#define	BLACK 49
-#define	WHITE 50
 
-// #define DEBUG
+enum eState
+{
+	NONE = 0,
+	BLACK,
+	WHITE
+};
 
 #define TIMEOUT 1
 #define DEFAULT_MY_BEST -100000000
@@ -17,5 +19,5 @@
 #define ALPHA_START -300000
 #define BETA_START 300000
 #define MAXDEPTH 15
-typedef std::chrono::time_point<std::chrono::system_clock,std::chrono::duration<long long, std::ratio<1, 1000000> >> Timer;
+typedef std::chrono::time_point<std::chrono::system_clock,std::chrono::duration<long long, std::ratio<1, 1000000> > > Timer;
 #endif

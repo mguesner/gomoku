@@ -3,6 +3,7 @@ NAME = gomoku
 SRC = SFMLData.cpp\
 	main.cpp\
 	GameState.cpp\
+	Game.cpp\
 	VictoryException.cpp\
 	Point.cpp\
 	Input.cpp\

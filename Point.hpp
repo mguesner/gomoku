@@ -29,8 +29,8 @@ class Point
 		void	UpdateY(double coef);
 		void	UpdateZ(double coef);
 
-		void	Forbiden(char, bool);
-		bool	IsForbiden(char) const;
+		void	Forbiden(eState, bool);
+		bool	IsForbiden(eState) const;
 
 		Point& operator+=(Point const & ref);
 		Point& operator-=(Point const & ref);

@@ -8,7 +8,6 @@ enum eInput
 	DOWN,
 	RIGHT,
 	LEFT,
-	B,
 	VALIDATE,
 	ESC,
 	NOINPUT,

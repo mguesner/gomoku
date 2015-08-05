@@ -30,7 +30,7 @@ SFMLData::SFMLData()
 
 }
 
-void SFMLData::Draw(char color)
+void SFMLData::Draw(eState color)
 {
 	win->clear(sf::Color::Black);
 	win->draw(*background);
@@ -38,7 +38,7 @@ void SFMLData::Draw(char color)
 	win->display();
 }
 
-void SFMLData::DrawMainMenu(Input input, bool *noIa, int *choice, bool *menu)
+bool SFMLData::DrawMainMenu(Input input, bool *noIa, int *choice, bool *menu)
 {
 	win->clear(sf::Color::Black);
 	sf::Text menuEntry;
@@ -56,16 +56,12 @@ void SFMLData::DrawMainMenu(Input input, bool *noIa, int *choice, bool *menu)
 		*menu = false;
 		std::cout << "draw" << std::endl;
 		Draw(WHITE);
-		return ;
+		return true;
 	}
 	else if (input.GetType() == VALIDATE && *choice == 1)
 		*noIa = !*noIa;
 	else if (input.GetType() == VALIDATE && *choice == 2)
-	{
-		actualSound->Stop();
-		win->close();
-		exit(0);
-	}
+		return false;
 
 	int i = 0;
 	while (i < 3)
@@ -80,6 +76,7 @@ void SFMLData::DrawMainMenu(Input input, bool *noIa, int *choice, bool *menu)
 		i++;
 	}
 	win->display();
+	return true;
 }
 
 void SFMLData::SetGameState(GameState *myEffeilTower)
@@ -93,13 +90,12 @@ void SFMLData::DrawHiScoreMenu()
 
 }
 
-void SFMLData::DrawNormalMode(char color)
+void SFMLData::DrawNormalMode(eState color)
 {
 	if (game == NULL)
 		return;
-	(void)color;
 	auto truc = game->GetMap();
-	//auto machin = game->GetCoups();
+	auto machin = game->GetCoups();
 	std::string str("NOIR : ");
 	str.append(std::to_string(game->GetCapture(BLACK)));
 	str.append(" - BLANC : ");
@@ -112,7 +108,7 @@ void SFMLData::DrawNormalMode(char color)
 	win->draw(score);
 	for (int i = 0; i < 19 * 19; i++)
 	{
-		//bool prout = true;
+		bool prout = true;
 		if (truc[i] == BLACK)
 		{
 			sf::CircleShape shape(10);
@@ -131,24 +127,9 @@ void SFMLData::DrawNormalMode(char color)
 			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
 			win->draw(shape);
 		}
-		else if (GameState::playableMove[i / 19][i % 19] > 0)
-		{
-			sf::CircleShape shape(10);
-			shape.setFillColor(sf::Color(250, 0, 0));
-
-// set a 10-pixel wide orange outline
-			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
-			win->draw(shape);
-		}
-		if (GameState::playableMove[i / 19][i % 19] < 0)
-		{
-			sf::CircleShape shape(10);
-			shape.setFillColor(sf::Color(0, 250, 0));
-
-// set a 10-pixel wide orange outline
-			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
-			win->draw(shape);
-		}
+		(void)color;
+		(void)prout;
+		//HERE _------____  !!!! comment for compile unit test 
 // 		else if (machin.count(Point(i % 19, i / 19, 0)) && !machin.find(Point(i % 19, i / 19, 0))->IsForbiden(color))
 // 		{
 // 			prout = false;
@@ -284,12 +265,6 @@ void SFMLData::SetInput(int keycode)
 	(void)keycode;
 }
 
-void	SFMLData::Parameters(Sound *music)
-{
-	actualSound = music;
-}
-
-
 Input SFMLData::GetInput()
 {
 	sf::Event event;
@@ -298,7 +273,6 @@ Input SFMLData::GetInput()
 		if (event.type == sf::Event::Closed)
 		{
             	//emergency close
-			actualSound->Stop();
 			win->close();
 			exit(0);
 		}
@@ -312,8 +286,6 @@ Input SFMLData::GetInput()
 				return Input(DOWN);
 			else if (event.key.code == sf::Keyboard::Return)
 				return Input(VALIDATE);
-			else if (event.key.code == sf::Keyboard::B)
-				return Input(B);
 			return Input(NOINPUT);
 		}
 		if (event.type == sf::Event::MouseButtonPressed)
