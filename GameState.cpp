@@ -3,7 +3,10 @@
 //TODO       "best path" while saving state add to a fix array (size == MAXDEPTH) vector of map so when going
 //            we first evaluate this path
 /// KICKER les throw exception dans check victoire 20% de perf GG l'artiste :D xoxo <3 
-//
+//  KICKER les std::set  par des vecteurs Specvector par exemple
+//  generate son ==> kicker le son(this) pour chaque coups --> faire un petit son.Undotheoricplay
+
+// test en unittest == 12 en 4sec 10 en 0.5 au premier tour
 
 GameState::GameState()
 {
@@ -1060,12 +1063,13 @@ void GameState::GenerateSons(std::vector<GameState> &sons)
 {
 	sons.reserve(coups.size());
 	auto reverse = (currentColor == WHITE ? BLACK : WHITE);
-	GameState son(*this);
+	
 	for (auto i = coups.begin(); i != coups.end(); ++i)
 	{
 		if(!i->IsForbiden(currentColor))
 		{
 			Input test(NOINPUT, (*i).getX(), (*i).getY());
+			GameState son(*this);
 			son.Update(test, reverse);
 			sons.push_back(son);
 		}

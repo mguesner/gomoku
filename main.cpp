@@ -72,8 +72,8 @@ Input do_MinMax(GameState *root, Timer timeout)
 		if (best == WIN || best == LOOSE)
 			break;
 		//auto turnValue = std::chrono::system_clock::now() - value;
-		// if (turnValue * root->GetCoups().size() * root->GetCoups().size() + std::chrono::system_clock::now() > timeout)
-		// 	break;
+		//if (turnValue * root->GetCoups().size() * root->GetCoups().size() + std::chrono::system_clock::now() > timeout)
+		 //	break;
 		depth += 1;
 
 	}

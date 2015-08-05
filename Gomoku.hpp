@@ -18,6 +18,6 @@ enum eState
 #define DEFAULT_ENEMY_BEST 100000000
 #define ALPHA_START -300000
 #define BETA_START 300000
-#define MAXDEPTH 15
+#define MAXDEPTH 6
 typedef std::chrono::time_point<std::chrono::system_clock,std::chrono::duration<long long, std::ratio<1, 1000000> > > Timer;
 #endif
