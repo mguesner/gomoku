@@ -2,9 +2,9 @@
 
 //TODO       "best path" while saving state add to a fix array (size == MAXDEPTH) vector of map so when going
 //            we first evaluate this path
-/// KICKER les throw exception dans check victoire 20% de perf GG l'artiste :D xoxo <3 
+/// maj  DONE    ---  KICKER les throw exception dans check victoire 20% de perf GG l'artiste :D xoxo <3 
 //  KICKER les std::set  par des vecteurs Specvector par exemple
-//  generate son ==> kicker le son(this) pour chaque coups --> faire un petit son.Undotheoricplay
+// maj DONE ---- generate son ==> kicker le son(this) pour chaque coups --> faire un petit son.Undotheoricplay
 
 // test en unittest == 12 en 4sec 10 en 0.5 au premier tour
 
@@ -446,7 +446,7 @@ bool GameState::isCapturable(bool *check, int x, int y, eState color)
 	return false;
 }
 
-void GameState::checkVictoire(int x, int y, eState color)
+eState GameState::checkVictoire(int x, int y, eState color)
 {
 	eState opponent = (color == BLACK ? WHITE : BLACK);
 	int i = 1;
@@ -465,7 +465,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				coups.insert(Point(x - i + 2, y, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
-					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
+					return nbCaptWhite == 5 ? WHITE : BLACK;
 				break;
 			}
 			capt = -1;
@@ -498,7 +498,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				coups.insert(Point(x + i - 2, y, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
-					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
+					return nbCaptWhite == 5 ? WHITE : BLACK;
 				break;
 			}
 			capt = -1;
@@ -517,7 +517,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 		i++;
 	}
 	if (win >= 5)
-		throw new VictoryException(color);
+		return color;
 
 	capt = 0;
 	win = 1;
@@ -536,7 +536,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
-					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
+					return nbCaptWhite == 5 ? WHITE : BLACK;
 				break;
 			}
 			capt = -1;
@@ -570,7 +570,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
-					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
+					return nbCaptWhite == 5 ? WHITE : BLACK;
 				break;
 			}
 			capt = -1;
@@ -589,7 +589,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 		i++;
 	}
 	if (win >= 5)
-		throw new VictoryException(color);
+		return color;
 
 	capt = 0;
 	win = 1;
@@ -608,7 +608,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
-					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
+					return nbCaptWhite == 5 ? WHITE : BLACK;
 				break;
 			}
 			capt = -1;
@@ -642,7 +642,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
-					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
+					return nbCaptWhite == 5 ? WHITE : BLACK;
 				break;
 			}
 			capt = -1;
@@ -661,7 +661,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 		i++;
 	}
 	if (win >= 5)
-		throw new VictoryException(color);
+		return color;
 
 	check = true;
 	capt = 0;
@@ -680,7 +680,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
-					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
+					return nbCaptWhite == 5 ? WHITE : BLACK;
 				break;
 			}
 			capt = -1;
@@ -714,7 +714,7 @@ void GameState::checkVictoire(int x, int y, eState color)
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
-					throw new VictoryException(nbCaptWhite == 5 ? WHITE : BLACK);
+					return nbCaptWhite == 5 ? WHITE : BLACK;
 				break;
 			}
 			capt = -1;
@@ -733,7 +733,8 @@ void GameState::checkVictoire(int x, int y, eState color)
 		i++;
 	}
 	if (win >= 5)
-		throw new VictoryException(color);
+		return color;
+	return NONE;
 }
 
 void GameState::checkVictoireCrazy(int x, int y, eState color)
@@ -1013,19 +1014,25 @@ bool GameState::TheoricPlay(int x, int y, eState color)
 	if (coups.count(Point(x, y, 0)) > 0 && !coups.find(Point(x, y, 0))->IsForbiden(color))
 	{
 		map[y][x] = color;
-		try
-		{
-			checkVictoire(x, y, color);
-		}
-		catch (std::exception *e)
-		{
+		if (checkVictoire(x, y, color) != NONE)
 			Finalstate = true;
-		}
 		coups.erase(Point(x, y, 0));
 		checkVoisin(x, y, color);
+		theoricPlay = true;
 		return true;
 	}
 	return false;
+}
+
+void GameState::UndoTheoricPlay()
+{
+	if (!theoricPlay)
+		return;
+	int x = move.GetX();
+	int y = move.GetY();
+	map[y][x] = NONE;
+	coups.insert(Point(move.GetX(), move.GetY(), 0));
+	theoricPlay = false;
 }
 
 bool GameState::CheckMove(int x, int y, eState color)
@@ -1063,7 +1070,7 @@ void GameState::GenerateSons(std::vector<GameState> &sons)
 {
 	sons.reserve(coups.size());
 	auto reverse = (currentColor == WHITE ? BLACK : WHITE);
-	
+	//GameState son(*this);
 	for (auto i = coups.begin(); i != coups.end(); ++i)
 	{
 		if(!i->IsForbiden(currentColor))
@@ -1072,6 +1079,7 @@ void GameState::GenerateSons(std::vector<GameState> &sons)
 			GameState son(*this);
 			son.Update(test, reverse);
 			sons.push_back(son);
+			//son.Undo();
 		}
 	}
 }

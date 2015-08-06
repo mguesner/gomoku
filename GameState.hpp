@@ -54,6 +54,7 @@ public:
 
 	eState *GetMap();
 	std::set<Point> GetCoups();
+	void UndoTheoricPlay();
 	bool TheoricPlay(int, int, eState color);
 	bool Play(int, int, eState color);
 	bool CheckMove(int, int, eState color);
@@ -61,12 +62,13 @@ public:
 	~GameState();
 private:
 	void checkVoisin(int, int, eState);
-	void checkVictoire(int, int, eState);
+	eState checkVictoire(int, int, eState);
 	void checkVictoireCrazy(int x, int y, eState color);
 	bool checkThree(int, int, eState);
 	bool isCapturable(bool *check, int x, int y, eState color);
 	std::set<Point> coups;
 	eState map[19][19];
+	bool theoricPlay;
 	int nbWhiteTwoRow;
 	int nbWhiteThreeRow;
 	int nbWhiteFourRow;
