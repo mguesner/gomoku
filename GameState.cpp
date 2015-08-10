@@ -20,6 +20,7 @@ GameState::GameState()
 	nbBlackThreeRow = 0;
 	nbBlackFourRow = 0;
 	nbBlackFiveRow = 0;
+	theoricPlay = false;
 	Finalstate = false;
 	for (int i = 0; i < 19; ++i)
 	{
@@ -37,6 +38,7 @@ GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt
 	TheoricPlay(test.GetX(), test.GetY(), turnColor);
 	nbCaptBlack = blackcpt;
 	nbCaptWhite = whitecpt;
+	theoricPlay = false;
 	currentColor = turnColor;
 }
 
@@ -48,6 +50,7 @@ GameState::GameState(GameState const & src)
 	nbCaptWhite = src.nbCaptWhite;
 	currentColor = src.currentColor;
 	heuristic = src.heuristic;
+	theoricPlay = false;
 	move = src.move;
 	Finalstate = src.Finalstate;
 	nbWhiteTwoRow = src.nbWhiteTwoRow;
@@ -402,22 +405,83 @@ void GameState::checkVoisin(int x, int y, eState color)
 {
 	(void)color;
 	if (y - 1 >= 0 && map[y - 1][x] == NONE)
+	{
 		coups.insert(Point(x, y - 1, 0));
+		test[0] = true;
+	}
+	else
+		test[0] = false;
 	if (y + 1 < 19 && map[y + 1][x] == NONE)
+	{
 		coups.insert(Point(x, y + 1, 0));
+		test[1] = true;
+	}
+	else
+		test[1] = false;
 	if (y - 1 >= 0 && x - 1 >= 0 && map[y - 1][x - 1] == NONE)
+	{
 		coups.insert(Point(x - 1, y - 1, 0));
+		test[2] = true;
+	}
+	else
+		test[2] = false;
 	if (y + 1 < 19 && x + 1 < 19 && map[y + 1][x + 1] == NONE)
+	{
 		coups.insert(Point(x + 1, y + 1, 0));
+		test[3] = true;
+	}
+	else
+		test[3] = false;
 	if (y - 1 >= 0 && x + 1 < 19 && map[y - 1][x + 1] == NONE)
+	{
 		coups.insert(Point(x + 1, y - 1, 0));
+		test[4] = true;
+	}
+	else
+		test[4] = false;
 	if (y + 1 < 19 && x - 1 >= 0 && map[y + 1][x - 1] == NONE)
+	{
 		coups.insert(Point(x - 1, y + 1, 0));
+		test[5] = true;
+	}
+	else
+		test[5] = false;
 	if (x + 1 < 19 && map[y][x + 1] == NONE)
+	{
 		coups.insert(Point(x + 1, y, 0));
+		test[6] = true;
+	}
+	else
+		test[6] = false;
 	if (x - 1 >= 0 && map[y][x - 1] == NONE)
+	{
 		coups.insert(Point(x - 1, y, 0));
+		test[7] = true;
+	}
+	else
+		test[7] = false;
 }
+
+void GameState::UnCheckVoisin(int x, int y)
+{
+	if (test[0])
+		coups.erase(Point(x, y - 1, 0));
+	if (test[1])
+		coups.erase(Point(x, y + 1, 0));
+	if (test[2])
+		coups.erase(Point(x - 1, y - 1, 0));
+	if (test[3])
+		coups.erase(Point(x + 1, y + 1, 0));
+	if(test[4])
+		coups.erase(Point(x + 1, y - 1, 0));
+	if (test[5])
+		coups.erase(Point(x - 1, y + 1, 0));
+	if (test[6])
+		coups.erase(Point(x + 1, y, 0));
+	if (test[7])
+		coups.erase(Point(x - 1, y, 0));
+}
+
 
 eState *GameState::GetMap()
 {
@@ -980,12 +1044,13 @@ void GameState::checkVictoireCrazy(int x, int y, eState color)
 		Finalstate = true;
 }
 
-bool GameState::Play(int x, int y, eState color)
+bool GameState::Play(int x, int y, eState color, bool &win)
 {
 	if (coups.count(Point(x, y, 0)) > 0 && !coups.find(Point(x, y, 0))->IsForbiden(color))
 	{
 		map[y][x] = color;
-		checkVictoire(x, y, color);
+		if (checkVictoire(x, y, color)!= NONE)
+			win = true;
 		coups.erase(Point(x, y, 0));
 		checkVoisin(x, y, color);
 		std::set<Point> patate;
@@ -1031,6 +1096,7 @@ void GameState::UndoTheoricPlay()
 	int x = move.GetX();
 	int y = move.GetY();
 	map[y][x] = NONE;
+	UnCheckVoisin(x, y);
 	coups.insert(Point(move.GetX(), move.GetY(), 0));
 	theoricPlay = false;
 }
@@ -1070,16 +1136,15 @@ void GameState::GenerateSons(std::vector<GameState> &sons)
 {
 	sons.reserve(coups.size());
 	auto reverse = (currentColor == WHITE ? BLACK : WHITE);
-	//GameState son(*this);
+	GameState son(*this);
 	for (auto i = coups.begin(); i != coups.end(); ++i)
 	{
 		if(!i->IsForbiden(currentColor))
 		{
 			Input test(NOINPUT, (*i).getX(), (*i).getY());
-			GameState son(*this);
 			son.Update(test, reverse);
 			sons.push_back(son);
-			//son.Undo();
+			son.UndoTheoricPlay();
 		}
 	}
 }

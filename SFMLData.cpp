@@ -197,7 +197,7 @@ void SFMLData::DrawPauseMenu()
        // }
 }
 
-void SFMLData::DrawEndMenu(std::exception *e)
+void SFMLData::DrawEndMenu()
 {
 	win->clear(sf::Color::Black);
 	win->draw(*background);
@@ -246,7 +246,7 @@ void SFMLData::DrawEndMenu(std::exception *e)
        // 			menuEntry.setColor(sf::Color::Red);
        // 		else
 	menuEntry.setColor(sf::Color::White);
-	menuEntry.setString(e->what());
+	//menuEntry.setString();
 	menuEntry.setPosition(20, 900);
 	win->draw(menuEntry);
 	win->display();

@@ -22,7 +22,7 @@ public:
 	void SetInput(int);
 	void SetGameState(GameState*);
 	bool		DrawMainMenu(Input input, bool *noIa, int *choice, bool *menu);
-	void		DrawEndMenu(std::exception *e);
+	void		DrawEndMenu();
 	~SFMLData();
 
 private:

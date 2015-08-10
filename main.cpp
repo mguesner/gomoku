@@ -123,21 +123,19 @@ int main()
 		auto type = input.GetType();
 		if (type == MOUSE)
 		{
-			try
+			bool victory = false;
+			if (!game.Play(input.GetX(), input.GetY(), color, victory))
 			{
-				if (!game.Play(input.GetX(), input.GetY(), color))
-				{
-					std::cout << "wrong move : " << input.GetX() <<", " << input.GetY() << std::endl;
-				}
-				else
-				{
-					color = (color == WHITE ? BLACK : WHITE);
-					HumanTurn = !HumanTurn;
-				}
+				std::cout << "wrong move : " << input.GetX() <<", " << input.GetY() << std::endl;
 			}
-			catch (std::exception *e)
+			else
 			{
-				win->DrawEndMenu(e);
+				color = (color == WHITE ? BLACK : WHITE);
+				HumanTurn = !HumanTurn;
+			}
+			if (victory)
+			{
+				win->DrawEndMenu();
 				while (win->GetInput().GetType() == NOINPUT);
 				break;
 			}

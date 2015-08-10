@@ -17,7 +17,7 @@ public:
 		hiddenCheck = src.hiddenCheck;
 	}
 
-	void insert(Point add)
+	void insert(Point& add)
 	{
 		if (hiddenCheck[(int)add.getY() * 19 + (int)add.getX()])
 			return;
@@ -25,7 +25,7 @@ public:
 		push_back(add);
 	}
 
-	void insert(std::vector<Point>::iterator cur, std::vector<Point>::iterator end)
+	void insert(std::vector<Point>::iterator& cur, std::vector<Point>::iterator& end)
 	{
 		while (cur != end)
 		{

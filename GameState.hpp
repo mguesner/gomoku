@@ -55,8 +55,9 @@ public:
 	eState *GetMap();
 	std::set<Point> GetCoups();
 	void UndoTheoricPlay();
+	void UnCheckVoisin(int x, int y);
 	bool TheoricPlay(int, int, eState color);
-	bool Play(int, int, eState color);
+	bool Play(int, int, eState color, bool&);
 	bool CheckMove(int, int, eState color);
 	bool IsFinalState() const;
 	~GameState();
@@ -68,6 +69,7 @@ private:
 	bool isCapturable(bool *check, int x, int y, eState color);
 	std::set<Point> coups;
 	eState map[19][19];
+	bool test[8];
 	bool theoricPlay;
 	int nbWhiteTwoRow;
 	int nbWhiteThreeRow;
