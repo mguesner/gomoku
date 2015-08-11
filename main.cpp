@@ -69,11 +69,11 @@ Input do_MinMax(GameState *root, Timer timeout)
 		int ALPHA = ALPHA_START;
 		int BETA = BETA_START;
 		best = MinMax(*root, depth, ALPHA, BETA, true, &ret, true);
-		if (best == WIN || best == LOOSE)
+		if (best == WIN)
 			break;
-		//auto turnValue = std::chrono::system_clock::now() - value;
-		//if (turnValue * root->GetCoups().size() * root->GetCoups().size() + std::chrono::system_clock::now() > timeout)
-		 //	break;
+		// auto turnValue = std::chrono::system_clock::now() - value;
+		if (std::chrono::system_clock::now() > timeout)
+			break;
 		depth += 1;
 
 	}
@@ -89,6 +89,7 @@ int main()
 	srand(time(NULL));
 	GameState game;
 	game.GameStart();
+	game.SetColor(WHITE);
 	win->SetGameState(&game);
 	auto color = WHITE;
 	bool HumanTurn = true;
@@ -107,7 +108,6 @@ int main()
 			input = win->GetInput();
 		else
 		{
-			game.SetColor(WHITE);
 			auto lastNow = std::chrono::system_clock::now();
 			auto runUntil =  lastNow + std::chrono::milliseconds(450);
 			input = do_MinMax(&game, runUntil);

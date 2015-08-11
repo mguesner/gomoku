@@ -126,29 +126,26 @@ void SFMLData::DrawNormalMode(eState color)
 // set a 10-pixel wide orange outline
 			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
 			win->draw(shape);
+		} 
+		else if (machin.count(Point(i % 19, i / 19, 0)) && !machin.find(Point(i % 19, i / 19, 0))->IsForbiden(color))
+		{
+			prout = false;
+			sf::CircleShape shape(10);
+			shape.setFillColor(sf::Color(250, 0, 0));
+
+// set a 10-pixel wide orange outline
+			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
+			win->draw(shape);
 		}
-		(void)color;
-		(void)prout;
-		//HERE _------____  !!!! comment for compile unit test 
-// 		else if (machin.count(Point(i % 19, i / 19, 0)) && !machin.find(Point(i % 19, i / 19, 0))->IsForbiden(color))
-// 		{
-// 			prout = false;
-// 			sf::CircleShape shape(10);
-// 			shape.setFillColor(sf::Color(250, 0, 0));
+		if (prout && machin.count(Point(i % 19, i / 19, 0)))
+		{
+			sf::CircleShape shape(10);
+			shape.setFillColor(sf::Color(0, 250, 0));
 
-// // set a 10-pixel wide orange outline
-// 			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
-// 			win->draw(shape);
-// 		}
-// 		if (prout && machin.count(Point(i % 19, i / 19, 0)))
-// 		{
-// 			sf::CircleShape shape(10);
-// 			shape.setFillColor(sf::Color(0, 250, 0));
-
-// // set a 10-pixel wide orange outline
-// 			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
-// 			win->draw(shape);
-// 		}
+// set a 10-pixel wide orange outline
+			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
+			win->draw(shape);
+		}
 	}
 }
 
