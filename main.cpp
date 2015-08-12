@@ -8,6 +8,11 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 {
 	if (depth == 0 || node.IsFinalState())
 	{
+		if (node.IsFinalState())
+		{
+				node.Display();
+				printf("heuristic -> %d, depth = %d\n", node.GetHeuristic(), depth);	
+		}
 		auto tmp = node.GetHeuristic();
 		return tmp;
 	}

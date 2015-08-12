@@ -22,8 +22,8 @@
 #define CAPTURETWO 600
 #define CAPTURETHREE 10000
 #define CAPTUREFOUR 50000
-#define LOOSE -1000000000
-#define WIN 1000000000
+#define LOOSE -100000000
+#define WIN 100000000
 
 
 class GameState
