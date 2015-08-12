@@ -183,6 +183,7 @@ int		GameState::BrainDead()
 	if (allign[BLACK][5][1] || allign[BLACK][5][2])
 	{
 		Finalstate = true;
+		Display();
 		return WIN;
 	}
 	ret += allign[WHITE][2][1] * ENEMYTWOONEWAY;
@@ -208,6 +209,7 @@ int		GameState::BrainDead()
 	else if (nbCaptBlack >= 5)
 	{
 		Finalstate = true;
+		Display();
 		return WIN;
 	}
 
