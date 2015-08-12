@@ -7,7 +7,10 @@
 // maj DONE ---- generate son ==> kicker le son(this) pour chaque coups --> faire un petit son.Undotheoricplay
 
 // test en unittest == 12 en 4sec 10 en 0.5 au premier tour
-
+// copy des sets  24% destruction des sets 21%
+// insert dans checkvoisin 10%
+// sort 35%
+//
 GameState::GameState()
 {
 	nbCaptWhite = 0;
@@ -183,7 +186,7 @@ int		GameState::BrainDead()
 	if (allign[BLACK][5][1] || allign[BLACK][5][2])
 	{
 		Finalstate = true;
-		Display();
+		//Display();
 		heuristic = WIN;
 		return WIN;
 	}
@@ -211,7 +214,7 @@ int		GameState::BrainDead()
 	else if (nbCaptBlack >= 5)
 	{
 		Finalstate = true;
-		Display();
+		//Display();
 
 		heuristic = WIN;
 		return WIN;

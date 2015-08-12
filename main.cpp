@@ -99,8 +99,8 @@ Input do_MinMax(GameState *root, Timer timeout)
 		if (best == WIN)
 			break;
 		// auto turnValue = std::chrono::system_clock::now() - value;
-		if (std::chrono::system_clock::now() > timeout)
-			break;
+		//if (std::chrono::system_clock::now() > timeout)
+			//break;
 		depth += 1;
 
 	}
