@@ -228,8 +228,8 @@ int		GameState::BrainDead()
 		heuristic = LOOSE;
 		return LOOSE;
 	}
-	int alea = rand() % 5;
-	heuristic = ret + alea;
+	// int alea = rand() % 5;
+	heuristic = ret /*+ alea*/;
 	return ret;
 }
 
@@ -410,57 +410,81 @@ void GameState::checkVoisin(int x, int y, eState color)
 	(void)color;
 	if (y - 1 >= 0 && map[y - 1][x] == NONE)
 	{
-		coups.insert(Point(x, y - 1, 0));
-		test[0] = true;
+		auto check = coups.insert(Point(x, y - 1, 0));
+		if (check.second)
+			test[0] = true;
+		else
+			test[0] = false;
 	}
 	else
 		test[0] = false;
 	if (y + 1 < 19 && map[y + 1][x] == NONE)
 	{
-		coups.insert(Point(x, y + 1, 0));
-		test[1] = true;
+		auto check = coups.insert(Point(x, y + 1, 0));
+		if (check.second)
+			test[1] = true;
+		else
+			test[1] = false;
 	}
 	else
 		test[1] = false;
 	if (y - 1 >= 0 && x - 1 >= 0 && map[y - 1][x - 1] == NONE)
 	{
-		coups.insert(Point(x - 1, y - 1, 0));
-		test[2] = true;
+		auto check = coups.insert(Point(x - 1, y - 1, 0));
+		if (check.second)
+			test[2] = true;
+		else
+			test[2] = false;
 	}
 	else
 		test[2] = false;
 	if (y + 1 < 19 && x + 1 < 19 && map[y + 1][x + 1] == NONE)
 	{
-		coups.insert(Point(x + 1, y + 1, 0));
-		test[3] = true;
+		auto check = coups.insert(Point(x + 1, y + 1, 0));
+		if (check.second)
+			test[3] = true;
+		else
+			test[3] = false;
 	}
 	else
 		test[3] = false;
 	if (y - 1 >= 0 && x + 1 < 19 && map[y - 1][x + 1] == NONE)
 	{
-		coups.insert(Point(x + 1, y - 1, 0));
-		test[4] = true;
+		auto check = coups.insert(Point(x + 1, y - 1, 0));
+		if (check.second)
+			test[4] = true;
+		else
+			test[4] = false;
 	}
 	else
 		test[4] = false;
 	if (y + 1 < 19 && x - 1 >= 0 && map[y + 1][x - 1] == NONE)
 	{
-		coups.insert(Point(x - 1, y + 1, 0));
-		test[5] = true;
+		auto check = coups.insert(Point(x - 1, y + 1, 0));
+		if (check.second)
+			test[5] = true;
+		else
+			test[5] = false;
 	}
 	else
 		test[5] = false;
 	if (x + 1 < 19 && map[y][x + 1] == NONE)
 	{
-		coups.insert(Point(x + 1, y, 0));
-		test[6] = true;
+		auto check = coups.insert(Point(x + 1, y, 0));
+		if (check.second)
+			test[6] = true;
+		else
+			test[6] = false;
 	}
 	else
 		test[6] = false;
 	if (x - 1 >= 0 && map[y][x - 1] == NONE)
 	{
-		coups.insert(Point(x - 1, y, 0));
-		test[7] = true;
+		auto check = coups.insert(Point(x - 1, y, 0));
+		if (check.second)
+			test[7] = true;
+		else
+			test[7] = false;
 	}
 	else
 		test[7] = false;
@@ -531,6 +555,8 @@ eState GameState::checkVictoire(int x, int y, eState color)
 				map[y][x - i + 2] = NONE;
 				coups.insert(Point(x - i + 1, y, 0));
 				coups.insert(Point(x - i + 2, y, 0));
+				theoricCapt.push_back(Point(x - i + 1, y, 0));
+				theoricCapt.push_back(Point(x - i + 2, y, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					return nbCaptWhite == 5 ? WHITE : BLACK;
@@ -564,6 +590,8 @@ eState GameState::checkVictoire(int x, int y, eState color)
 				map[y][x + i - 2] = NONE;
 				coups.insert(Point(x + i - 1, y, 0));
 				coups.insert(Point(x + i - 2, y, 0));
+				theoricCapt.push_back(Point(x + i - 1, y, 0));
+				theoricCapt.push_back(Point(x + i - 2, y, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
 					return nbCaptWhite == 5 ? WHITE : BLACK;
@@ -601,6 +629,8 @@ eState GameState::checkVictoire(int x, int y, eState color)
 				map[y - i + 2][x] = NONE;
 				coups.insert(Point(x, y - i + 1, 0));
 				coups.insert(Point(x, y - i + 2, 0));
+				theoricCapt.push_back(Point(x, y - i + 1, 0));
+				theoricCapt.push_back(Point(x, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
@@ -635,6 +665,8 @@ eState GameState::checkVictoire(int x, int y, eState color)
 				map[y + i - 2][x] = NONE;
 				coups.insert(Point(x, y + i - 1, 0));
 				coups.insert(Point(x, y + i - 2, 0));
+				theoricCapt.push_back(Point(x, y + i - 1, 0));
+				theoricCapt.push_back(Point(x, y + i - 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
@@ -673,6 +705,8 @@ eState GameState::checkVictoire(int x, int y, eState color)
 				map[y - i + 2][x - i + 2] = NONE;
 				coups.insert(Point(x - i + 1, y - i + 1, 0));
 				coups.insert(Point(x - i + 2, y - i + 2, 0));
+				theoricCapt.push_back(Point(x - i + 1, y - i + 1, 0));
+				theoricCapt.push_back(Point(x - i + 2, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
@@ -707,6 +741,8 @@ eState GameState::checkVictoire(int x, int y, eState color)
 				map[y + i - 2][x + i - 2] = NONE;
 				coups.insert(Point(x + i - 1, y + i - 1, 0));
 				coups.insert(Point(x + i - 2, y + i - 2, 0));
+				theoricCapt.push_back(Point(x + i - 1, y + i + 1, 0));
+				theoricCapt.push_back(Point(x + i - 2, y + i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
@@ -745,6 +781,8 @@ eState GameState::checkVictoire(int x, int y, eState color)
 				map[y + i - 2][x - i + 2] = NONE;
 				coups.insert(Point(x - i + 1, y + i - 1, 0));
 				coups.insert(Point(x - i + 2, y + i - 2, 0));
+				theoricCapt.push_back(Point(x - i + 1, y + i - 1, 0));
+				theoricCapt.push_back(Point(x - i + 2, y + i - 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
@@ -779,6 +817,8 @@ eState GameState::checkVictoire(int x, int y, eState color)
 				map[y - i + 2][x + i - 2] = NONE;
 				coups.insert(Point(x + i - 1, y - i + 1, 0));
 				coups.insert(Point(x + i - 2, y - i + 2, 0));
+				theoricCapt.push_back(Point(x + i - 1, y - i + 1, 0));
+				theoricCapt.push_back(Point(x + i - 2, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
 				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
 				if (nbCaptWhite == 5 || nbCaptBlack == 5)
@@ -1058,6 +1098,7 @@ bool GameState::Play(int x, int y, eState color, bool &win)
 		coups.erase(Point(x, y, 0));
 		checkVoisin(x, y, color);
 		std::set<Point> patate;
+		//TODO: a voir si juste le modifier a l'interieur marche
 		for (auto i = coups.begin(); i != coups.end(); ++i)
 		{
 			// if ((*i).IsForbiden(color == WHITE ? BLACK : WHITE))
@@ -1080,17 +1121,17 @@ bool GameState::Play(int x, int y, eState color, bool &win)
 
 bool GameState::TheoricPlay(int x, int y, eState color)
 {
-	if (coups.count(Point(x, y, 0)) > 0 && !coups.find(Point(x, y, 0))->IsForbiden(color))
-	{
+	// if (coups.count(Point(x, y, 0)) > 0 && !coups.find(Point(x, y, 0))->IsForbiden(color))
+	// {
 		map[y][x] = color;
+		checkVictoire(x, y, color);
 		// if (checkVictoire(x, y, color) != NONE)
 		// 	Finalstate = true;
 		coups.erase(Point(x, y, 0));
 		checkVoisin(x, y, color);
 		theoricPlay = true;
 		return true;
-	}
-	return false;
+	// }
 }
 
 void GameState::UndoTheoricPlay()
@@ -1102,6 +1143,21 @@ void GameState::UndoTheoricPlay()
 	map[y][x] = NONE;
 	UnCheckVoisin(x, y);
 	coups.insert(Point(move.GetX(), move.GetY(), 0));
+	int j = 0;
+	for(auto i : theoricCapt)
+	{
+		if (j % 2 && currentColor == BLACK)
+			nbCaptBlack--;
+		else if (j % 2)
+			nbCaptWhite--;
+
+		int x = i.getX();
+		int y = i.getY();
+		map[y][x] = currentColor == BLACK ? WHITE : BLACK;
+		coups.erase(i);
+		j++;
+	}
+	theoricCapt.clear();
 	theoricPlay = false;
 	Finalstate = false;
 }
@@ -1144,12 +1200,18 @@ void GameState::GenerateSons(std::vector<GameState> &sons)
 	GameState son(*this);
 	for (auto i = coups.begin(); i != coups.end(); ++i)
 	{
-		if(!i->IsForbiden(currentColor))
+		if(!i->IsForbiden(reverse))
 		{
 			Input test(NOINPUT, (*i).getX(), (*i).getY());
 			son.Update(test, reverse);
+			// printf("--->before\n");
+			// son.Display();
+			// printf("capture[%d][%d]\n", son.nbCaptBlack, son.nbCaptWhite);
 			sons.push_back(son);
 			son.UndoTheoricPlay();
+			// printf("--->after\n");
+			// son.Display();
+			// printf("capture[%d][%d]\n", son.nbCaptBlack, son.nbCaptWhite);
 		}
 	}
 }

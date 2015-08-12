@@ -114,7 +114,6 @@ void SFMLData::DrawNormalMode(eState color)
 			sf::CircleShape shape(10);
 			shape.setFillColor(sf::Color(0, 0, 0));
 
-// set a 10-pixel wide orange outline
 			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
 			win->draw(shape);
 		}
@@ -123,7 +122,6 @@ void SFMLData::DrawNormalMode(eState color)
 			sf::CircleShape shape(10);
 			shape.setFillColor(sf::Color(250, 250, 250));
 
-// set a 10-pixel wide orange outline
 			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
 			win->draw(shape);
 		} 
@@ -133,7 +131,6 @@ void SFMLData::DrawNormalMode(eState color)
 			sf::CircleShape shape(10);
 			shape.setFillColor(sf::Color(250, 0, 0));
 
-// set a 10-pixel wide orange outline
 			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
 			win->draw(shape);
 		}
@@ -142,7 +139,6 @@ void SFMLData::DrawNormalMode(eState color)
 			sf::CircleShape shape(10);
 			shape.setFillColor(sf::Color(0, 250, 0));
 
-// set a 10-pixel wide orange outline
 			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
 			win->draw(shape);
 		}

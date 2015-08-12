@@ -8,11 +8,11 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 {
 	if (depth == 0 || node.IsFinalState())
 	{
-		if (node.IsFinalState())
-		{
-				node.Display();
-				printf("heuristic -> %d, depth = %d\n", node.GetHeuristic(), depth);	
-		}
+		// if (node.IsFinalState())
+		// {
+		// 		node.Display();
+		// 		printf("heuristic -> %d, depth = %d\n", node.GetHeuristic(), depth);	
+		// }
 		auto tmp = node.GetHeuristic();
 		return tmp;
 	}
@@ -22,16 +22,20 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 		node.GenerateSons(tmp);
 		std::sort(tmp.begin(), tmp.end(), std::greater<GameState>());
 		auto cur = tmp.begin();
+		auto chosen = cur;
+		bool choose = false;
 		int bestValue = DEFAULT_MY_BEST;
 		int i = 0;
 		if (first)
-			*ret = (*cur).GetMove();
+			*ret = cur->GetMove();
 		while (cur != tmp.end())
 		{
 			int value = MinMax(*cur, depth - 1, alpha, beta, false, ret, false);
 			if (first && value > bestValue)
 			{
 				*ret = (*cur).GetMove();
+				chosen = cur;
+				choose = true;
 			}
 			bestValue = fmax(bestValue, value);
 			alpha = fmax(alpha, bestValue);
@@ -40,17 +44,31 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 			i++;
 			cur++;
 		}
+		if (choose)
+		{
+			// chosen->Display();
+			// printf("heuristic -> %d, depth -> %d\n", chosen->GetHeuristic(), depth);
+			// printf("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
+		}
 		return bestValue;
 	}
 	std::vector<GameState> tmp;
+	// printf("__node\n");
+	// node.Display();
+	// printf("endnode__\n");
 	node.GenerateSons(tmp);
 	std::sort(tmp.begin(), tmp.end());
 	auto cur = tmp.begin();
+	auto chosen = cur;
 	int bestValue = DEFAULT_ENEMY_BEST;
 	int i = 0;
 	while (cur != tmp.end())
 	{
 		int value = MinMax(*cur, depth - 1, alpha, beta, true, ret, false);
+		// cur->Display();
+		// 	printf("heuristic -> %d\n", cur->GetHeuristic());
+		if (value < bestValue)
+			chosen = cur;
 		bestValue = fmin(bestValue, value);
 		beta = fmin(beta, bestValue);
 		if (beta <= alpha)
@@ -58,12 +76,16 @@ int MinMax(GameState &node, int depth, int alpha, int beta, bool Me, Input *ret,
 		cur++;
 		i++;
 	}
+	// printf("__chosen\n");
+	// chosen->Display();
+	// printf("heuristic -> %d / %d, capture -> [%d][%d] depth -> %d\n", chosen->GetHeuristic(), bestValue, chosen->nbCaptBlack, chosen->nbCaptWhite, depth);
+	// printf("endchosen__\n");
 	return bestValue;
 }
 
 Input do_MinMax(GameState *root, Timer timeout)
 {
-	int depth = 1;
+	int depth = 2;
 	int best = 0;
 
 	(void)timeout;

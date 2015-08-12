@@ -11,12 +11,12 @@
 #define TWOROWTWOWAY 31
 #define THREEROWONEWAY 21
 #define THREEROWTWOWAY 201
-#define FOURROWONEWAY 101
+#define FOURROWONEWAY 201
 #define FOURROWTWOWAY 100000
 #define ENEMYTWOONEWAY -10
 #define ENEMYTWOTWOWAY -30
 #define ENEMYTHREEONEWAY -20
-#define ENEMYTHREETWOWAY -150
+#define ENEMYTHREETWOWAY -200
 #define ENEMYFOUR -200
 #define CAPTUREONE 300
 #define CAPTURETWO 600
@@ -61,6 +61,8 @@ public:
 	bool CheckMove(int, int, eState color);
 	bool IsFinalState() const;
 	~GameState();
+	int nbCaptBlack;
+	int nbCaptWhite;
 private:
 	void checkVoisin(int, int, eState);
 	eState checkVictoire(int, int, eState);
@@ -68,6 +70,7 @@ private:
 	bool checkThree(int, int, eState);
 	bool isCapturable(bool *check, int x, int y, eState color);
 	std::set<Point> coups;
+	std::vector<Point> theoricCapt;
 	eState map[19][19];
 	bool test[8];
 	bool theoricPlay;
@@ -79,8 +82,6 @@ private:
 	int nbBlackThreeRow;
 	int nbBlackFourRow;
 	int nbBlackFiveRow;
-	int nbCaptBlack;
-	int nbCaptWhite;
 	bool Finalstate;
 	eState currentColor;
 	int heuristic;
