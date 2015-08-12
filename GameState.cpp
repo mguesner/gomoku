@@ -183,6 +183,7 @@ int		GameState::BrainDead()
 	if (allign[BLACK][5][1] || allign[BLACK][5][2])
 	{
 		Finalstate = true;
+		heuristic = WIN;
 		return WIN;
 	}
 	ret += allign[WHITE][2][1] * ENEMYTWOONEWAY;
@@ -195,6 +196,7 @@ int		GameState::BrainDead()
 	if (allign[WHITE][5][1] || allign[WHITE][5][2])
 	{
 		Finalstate = true;
+		heuristic = LOOSE;
 		return LOOSE;
 	}
 	if (nbCaptBlack == 1)
@@ -208,6 +210,7 @@ int		GameState::BrainDead()
 	else if (nbCaptBlack >= 5)
 	{
 		Finalstate = true;
+		heuristic = WIN;
 		return WIN;
 	}
 
@@ -222,6 +225,7 @@ int		GameState::BrainDead()
 	else if (nbCaptWhite >= 5)
 	{
 		Finalstate = true;
+		heuristic = LOOSE;
 		return LOOSE;
 	}
 	int alea = rand() % 5;
@@ -1079,8 +1083,8 @@ bool GameState::TheoricPlay(int x, int y, eState color)
 	if (coups.count(Point(x, y, 0)) > 0 && !coups.find(Point(x, y, 0))->IsForbiden(color))
 	{
 		map[y][x] = color;
-		if (checkVictoire(x, y, color) != NONE)
-			Finalstate = true;
+		// if (checkVictoire(x, y, color) != NONE)
+		// 	Finalstate = true;
 		coups.erase(Point(x, y, 0));
 		checkVoisin(x, y, color);
 		theoricPlay = true;
@@ -1099,6 +1103,7 @@ void GameState::UndoTheoricPlay()
 	UnCheckVoisin(x, y);
 	coups.insert(Point(move.GetX(), move.GetY(), 0));
 	theoricPlay = false;
+	Finalstate = false;
 }
 
 bool GameState::CheckMove(int x, int y, eState color)
@@ -1171,8 +1176,8 @@ void GameState::SetColor(eState color)
 
 bool GameState::IsFinalState() const
 {
-	if (nbCaptWhite == 5 || nbCaptBlack == 5)
-		return true;
+	// if (nbCaptWhite == 5 || nbCaptBlack == 5)
+	// 	return true;
 	return Finalstate;
 }
 
