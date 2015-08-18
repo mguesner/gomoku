@@ -1,16 +1,12 @@
 #include "GameState.hpp"
 
-//TODO       "best path" while saving state add to a fix array (size == MAXDEPTH) vector of map so when going
-//            we first evaluate this path
-/// maj  DONE    ---  KICKER les throw exception dans check victoire 20% de perf GG l'artiste :D xoxo <3 
-//  KICKER les std::set  par des vecteurs Specvector par exemple
-// maj DONE ---- generate son ==> kicker le son(this) pour chaque coups --> faire un petit son.Undotheoricplay
-
-// test en unittest == 12 en 4sec 10 en 0.5 au premier tour
 // copy des sets  24% destruction des sets 21%
 // insert dans checkvoisin 10%
 // sort 35%
 //
+
+std::set<Point> GameState::coups = std::set<Point>();
+
 GameState::GameState()
 {
 	nbCaptWhite = 0;
@@ -47,7 +43,7 @@ GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt
 
 GameState::GameState(GameState const & src)
 {
-	coups = src.coups;
+	// coups = src.coups;
 	std::memcpy(&map, &(src.map), sizeof(eState) * 19 * 19);
 	nbCaptBlack = src.nbCaptBlack;
 	nbCaptWhite = src.nbCaptWhite;
