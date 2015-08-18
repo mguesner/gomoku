@@ -5,8 +5,6 @@
 // sort 35%
 //
 
-std::set<Point> GameState::coups = std::set<Point>();
-
 GameState::GameState()
 {
 	nbCaptWhite = 0;
@@ -43,7 +41,7 @@ GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt
 
 GameState::GameState(GameState const & src)
 {
-	// coups = src.coups;
+	coups = src.coups;
 	std::memcpy(&map, &(src.map), sizeof(eState) * 19 * 19);
 	nbCaptBlack = src.nbCaptBlack;
 	nbCaptWhite = src.nbCaptWhite;

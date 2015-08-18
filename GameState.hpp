@@ -69,7 +69,7 @@ private:
 	void checkVictoireCrazy(int x, int y, eState color);
 	bool checkThree(int, int, eState);
 	bool isCapturable(bool *check, int x, int y, eState color);
-	static std::set<Point> coups;
+	std::set<Point> coups;
 	std::vector<Point> theoricCapt;
 	eState map[19][19];
 	bool test[8];
