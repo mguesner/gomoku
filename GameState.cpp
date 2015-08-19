@@ -5,6 +5,8 @@
 // sort 35%
 //
 
+// int GameState::coups2[19][19];
+
 GameState::GameState()
 {
 	nbCaptWhite = 0;
@@ -26,6 +28,13 @@ GameState::GameState()
 			map[i][j] = NONE;
 		}
 	}
+	for (int i = 0; i < 19; ++i)
+	{
+		for (int j = 0; j < 19; ++j)
+		{
+			coups2[i][j] = 0;
+		}
+	}
 }
 
 GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt, eState turnColor)
@@ -41,7 +50,8 @@ GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt
 
 GameState::GameState(GameState const & src)
 {
-	coups = src.coups;
+	// coups = src.coups;
+	std::memcpy(&coups2, &(src.coups2), sizeof(int) * 19 * 19);
 	std::memcpy(&map, &(src.map), sizeof(eState) * 19 * 19);
 	nbCaptBlack = src.nbCaptBlack;
 	nbCaptWhite = src.nbCaptWhite;
@@ -236,14 +246,22 @@ int		GameState::BrainDead()
 void GameState::GameStart()
 {
 	map[9][9] = BLACK;
-	coups.insert(Point(8, 9, 0));
-	coups.insert(Point(8, 8, 0));
-	coups.insert(Point(8, 10, 0));
-	coups.insert(Point(10, 8, 0));
-	coups.insert(Point(10, 10, 0));
-	coups.insert(Point(9, 8, 0));
-	coups.insert(Point(10, 9, 0));
-	coups.insert(Point(9, 10, 0));
+	coups2[9][8]++;
+	coups2[8][8]++;
+	coups2[10][8]++;
+	coups2[8][10]++;
+	coups2[10][10]++;
+	coups2[8][9]++;
+	coups2[9][10]++;
+	coups2[10][9]++;
+	// coups.insert(Point(8, 9, 0));
+	// coups.insert(Point(8, 8, 0));
+	// coups.insert(Point(8, 10, 0));
+	// coups.insert(Point(10, 8, 0));
+	// coups.insert(Point(10, 10, 0));
+	// coups.insert(Point(9, 8, 0));
+	// coups.insert(Point(10, 9, 0));
+	// coups.insert(Point(9, 10, 0));
 }
 
 bool GameState::checkThree(int x, int y, eState color)
@@ -408,106 +426,138 @@ bool GameState::checkThree(int x, int y, eState color)
 void GameState::checkVoisin(int x, int y, eState color)
 {
 	(void)color;
-	if (y - 1 >= 0 && map[y - 1][x] == NONE)
-	{
-		auto check = coups.insert(Point(x, y - 1, 0));
-		if (check.second)
-			test[0] = true;
-		else
-			test[0] = false;
-	}
-	else
-		test[0] = false;
-	if (y + 1 < 19 && map[y + 1][x] == NONE)
-	{
-		auto check = coups.insert(Point(x, y + 1, 0));
-		if (check.second)
-			test[1] = true;
-		else
-			test[1] = false;
-	}
-	else
-		test[1] = false;
-	if (y - 1 >= 0 && x - 1 >= 0 && map[y - 1][x - 1] == NONE)
-	{
-		auto check = coups.insert(Point(x - 1, y - 1, 0));
-		if (check.second)
-			test[2] = true;
-		else
-			test[2] = false;
-	}
-	else
-		test[2] = false;
-	if (y + 1 < 19 && x + 1 < 19 && map[y + 1][x + 1] == NONE)
-	{
-		auto check = coups.insert(Point(x + 1, y + 1, 0));
-		if (check.second)
-			test[3] = true;
-		else
-			test[3] = false;
-	}
-	else
-		test[3] = false;
-	if (y - 1 >= 0 && x + 1 < 19 && map[y - 1][x + 1] == NONE)
-	{
-		auto check = coups.insert(Point(x + 1, y - 1, 0));
-		if (check.second)
-			test[4] = true;
-		else
-			test[4] = false;
-	}
-	else
-		test[4] = false;
-	if (y + 1 < 19 && x - 1 >= 0 && map[y + 1][x - 1] == NONE)
-	{
-		auto check = coups.insert(Point(x - 1, y + 1, 0));
-		if (check.second)
-			test[5] = true;
-		else
-			test[5] = false;
-	}
-	else
-		test[5] = false;
-	if (x + 1 < 19 && map[y][x + 1] == NONE)
-	{
-		auto check = coups.insert(Point(x + 1, y, 0));
-		if (check.second)
-			test[6] = true;
-		else
-			test[6] = false;
-	}
-	else
-		test[6] = false;
-	if (x - 1 >= 0 && map[y][x - 1] == NONE)
-	{
-		auto check = coups.insert(Point(x - 1, y, 0));
-		if (check.second)
-			test[7] = true;
-		else
-			test[7] = false;
-	}
-	else
-		test[7] = false;
+	// if (y - 1 >= 0 && map[y - 1][x] == NONE)
+	// {
+		coups2[y - 1][x]++;
+		// auto check = coups.insert(Point(x, y - 1, 0));
+		// if (coups2[y - 1][x] == 1)
+			// test[0] = true;
+		// else
+		// 	test[0] = false;
+	// }
+	// else
+	// 	test[0] = false;
+	// if (y + 1 < 19 && map[y + 1][x] == NONE)
+	// {
+		coups2[y + 1][x]++;
+		// auto check = coups.insert(Point(x, y + 1, 0));
+		// if (coups2[y + 1][x] == 1)
+			// test[1] = true;
+		// else
+		// 	test[1] = false;
+	// }
+	// else
+	// 	test[1] = false;
+	// if (y - 1 >= 0 && x - 1 >= 0 && map[y - 1][x - 1] == NONE)
+	// {
+		coups2[y - 1][x - 1]++;
+		// auto check = coups.insert(Point(x - 1, y - 1, 0));
+		// if (coups2[y - 1][x - 1] == 1)
+			// test[2] = true;
+		// else
+		// 	test[2] = false;
+	// }
+	// else
+	// 	test[2] = false;
+	// if (y + 1 < 19 && x + 1 < 19 && map[y + 1][x + 1] == NONE)
+	// {
+		coups2[y + 1][x + 1]++;
+		// auto check = coups.insert(Point(x + 1, y + 1, 0));
+		// if (coups2[y + 1][x + 1])
+			// test[3] = true;
+		// else
+		// 	test[3] = false;
+	// }
+	// else
+	// 	test[3] = false;
+	// if (y - 1 >= 0 && x + 1 < 19 && map[y - 1][x + 1] == NONE)
+	// {
+		coups2[y - 1][x + 1]++;
+		// auto check = coups.insert(Point(x + 1, y - 1, 0));
+		// if (coups2[y - 1][x + 1] == 1)
+			// test[4] = true;
+		// else
+		// 	test[4] = false;
+	// }
+	// else
+	// 	test[4] = false;
+	// if (y + 1 < 19 && x - 1 >= 0 && map[y + 1][x - 1] == NONE)
+	// {
+		coups2[y + 1][x - 1]++;
+		// auto check = coups.insert(Point(x - 1, y + 1, 0));
+		// if (coups2[y + 1][x - 1] == 1)
+			// test[5] = true;
+		// else
+		// 	test[5] = false;
+	// }
+	// else
+	// 	test[5] = false;
+	// if (x + 1 < 19 && map[y][x + 1] == NONE)
+	// {
+		coups2[y][x + 1]++;
+		// auto check = coups.insert(Point(x + 1, y, 0));
+		// if (coups2[y][x + 1] == 1)
+			// test[6] = true;
+		// else
+		// 	test[6] = false;
+	// }
+	// else
+	// 	test[6] = false;
+	// if (x - 1 >= 0 && map[y][x - 1] == NONE)
+	// {
+		coups2[y][x - 1]++;
+		// auto check = coups.insert(Point(x - 1, y, 0));
+		// if (coups2[y][x - 1] == 1)
+			// test[7] = true;
+		// else
+		// 	test[7] = false;
+	// }
+	// else
+	// 	test[7] = false;
 }
 
 void GameState::UnCheckVoisin(int x, int y)
 {
-	if (test[0])
-		coups.erase(Point(x, y - 1, 0));
-	if (test[1])
-		coups.erase(Point(x, y + 1, 0));
-	if (test[2])
-		coups.erase(Point(x - 1, y - 1, 0));
-	if (test[3])
-		coups.erase(Point(x + 1, y + 1, 0));
-	if(test[4])
-		coups.erase(Point(x + 1, y - 1, 0));
-	if (test[5])
-		coups.erase(Point(x - 1, y + 1, 0));
-	if (test[6])
-		coups.erase(Point(x + 1, y, 0));
-	if (test[7])
-		coups.erase(Point(x - 1, y, 0));
+	// if (test[0])
+	// {
+		coups2[y - 1][x]--;
+		// coups.erase(Point(x, y - 1, 0));
+	// }
+	// if (test[1])
+	// {
+		coups2[y + 1][x]--;
+		// coups.erase(Point(x, y + 1, 0));
+	// }
+	// if (test[2])
+	// {
+		coups2[y - 1][x - 1]--;
+		// coups.erase(Point(x - 1, y - 1, 0));
+	// }
+	// if (test[3])
+	// {
+		coups2[y + 1][x + 1]--;
+		// coups.erase(Point(x + 1, y + 1, 0));
+	// }
+	// if(test[4])
+	// {
+		coups2[y - 1][x + 1]--;
+		// coups.erase(Point(x + 1, y - 1, 0));
+	// }
+	// if (test[5])
+	// {
+		coups2[y + 1][x - 1]--;
+		// coups.erase(Point(x - 1, y + 1, 0));
+	// }
+	// if (test[6])
+	// {
+		coups2[y][x + 1]--;
+		// coups.erase(Point(x + 1, y, 0));
+	// }
+	// if (test[7])
+	// {
+		coups2[y][x - 1]--;
+		// coups.erase(Point(x - 1, y, 0));
+	// }
 }
 
 
@@ -553,8 +603,31 @@ eState GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y][x - i + 1] = NONE;
 				map[y][x - i + 2] = NONE;
-				coups.insert(Point(x - i + 1, y, 0));
-				coups.insert(Point(x - i + 2, y, 0));
+
+				// coups2[y][x - i + 1]++;
+
+				coups2[y - 1][x - i]--;
+				coups2[y - 1][x - i + 1]--;
+				coups2[y - 1][x - i + 2]--;
+				coups2[y][x - i]--;
+				coups2[y][x - i + 2]--;
+				coups2[y + 1][x - i]--;
+				coups2[y + 1][x - i + 1]--;
+				coups2[y + 1][x - i + 2]--;
+
+				// coups2[y][x - i + 2]++;
+
+				coups2[y - 1][x - i + 1]--;
+				coups2[y - 1][x - i + 2]--;
+				coups2[y - 1][x - i + 3]--;
+				coups2[y][x - i + 1]--;
+				coups2[y][x - i + 3]--;
+				coups2[y + 1][x - i + 1]--;
+				coups2[y + 1][x - i + 2]--;
+				coups2[y + 1][x - i + 3]--;
+
+				// coups.insert(Point(x - i + 1, y, 0));
+				// coups.insert(Point(x - i + 2, y, 0));
 				theoricCapt.push_back(Point(x - i + 1, y, 0));
 				theoricCapt.push_back(Point(x - i + 2, y, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
@@ -588,8 +661,30 @@ eState GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y][x + i - 1] = NONE;
 				map[y][x + i - 2] = NONE;
-				coups.insert(Point(x + i - 1, y, 0));
-				coups.insert(Point(x + i - 2, y, 0));
+				// coups2[y][x + i - 1]++;
+
+				coups2[y - 1][x + i]--;
+				coups2[y - 1][x + i - 1]--;
+				coups2[y - 1][x + i - 2]--;
+				coups2[y][x + i]--;
+				coups2[y][x + i - 2]--;
+				coups2[y + 1][x + i]--;
+				coups2[y + 1][x + i - 1]--;
+				coups2[y + 1][x + i - 2]--;
+
+				// coups2[y][x + i - 2]++;
+
+				coups2[y - 1][x + i - 1]--;
+				coups2[y - 1][x + i - 2]--;
+				coups2[y - 1][x + i - 3]--;
+				coups2[y][x + i - 1]--;
+				coups2[y][x + i - 3]--;
+				coups2[y + 1][x + i - 1]--;
+				coups2[y + 1][x + i - 2]--;
+				coups2[y + 1][x + i - 3]--;
+
+				// coups.insert(Point(x + i - 1, y, 0));
+				// coups.insert(Point(x + i - 2, y, 0));
 				theoricCapt.push_back(Point(x + i - 1, y, 0));
 				theoricCapt.push_back(Point(x + i - 2, y, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
@@ -627,8 +722,31 @@ eState GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y - i + 1][x] = NONE;
 				map[y - i + 2][x] = NONE;
-				coups.insert(Point(x, y - i + 1, 0));
-				coups.insert(Point(x, y - i + 2, 0));
+
+				// coups2[y - i + 1][x]++;
+
+				coups2[y - i][x - 1]--;
+				coups2[y - i][x]--;
+				coups2[y - i][x + 1]--;
+				coups2[y - i + 1][x - 1]--;
+				coups2[y - i + 1][x + 1]--;
+				coups2[y - i + 2][x - 1]--;
+				coups2[y - i + 2][x]--;
+				coups2[y - i + 2][x + 1]--;
+
+				// coups2[y - i + 2][x]++;
+
+				coups2[y - i + 1][x - 1]--;
+				coups2[y - i + 1][x]--;
+				coups2[y - i + 1][x + 1]--;
+				coups2[y - i + 2][x - 1]--;
+				coups2[y - i + 2][x + 1]--;
+				coups2[y - i + 3][x - 1]--;
+				coups2[y - i + 3][x]--;
+				coups2[y - i + 3][x + 1]--;
+
+				// coups.insert(Point(x, y - i + 1, 0));
+				// coups.insert(Point(x, y - i + 2, 0));
 				theoricCapt.push_back(Point(x, y - i + 1, 0));
 				theoricCapt.push_back(Point(x, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
@@ -663,8 +781,29 @@ eState GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y + i - 1][x] = NONE;
 				map[y + i - 2][x] = NONE;
-				coups.insert(Point(x, y + i - 1, 0));
-				coups.insert(Point(x, y + i - 2, 0));
+				// coups2[y + i - 1][x]++;
+
+				coups2[y + i - 2][x - 1]--;
+				coups2[y + i - 2][x]--;
+				coups2[y + i - 2][x + 1]--;
+				coups2[y + i - 1][x - 1]--;
+				coups2[y + i - 1][x + 1]--;
+				coups2[y + i][x - 1]--;
+				coups2[y + i][x]--;
+				coups2[y + i][x + 1]--;
+
+				// coups2[y + i - 2][x]++;
+
+				coups2[y + i - 3][x - 1]--;
+				coups2[y + i - 3][x]--;
+				coups2[y + i - 3][x + 1]--;
+				coups2[y + i - 2][x - 1]--;
+				coups2[y + i - 2][x + 1]--;
+				coups2[y + i - 1][x - 1]--;
+				coups2[y + i - 1][x]--;
+				coups2[y + i - 1][x + 1]--;
+				// coups.insert(Point(x, y + i - 1, 0));
+				// coups.insert(Point(x, y + i - 2, 0));
 				theoricCapt.push_back(Point(x, y + i - 1, 0));
 				theoricCapt.push_back(Point(x, y + i - 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
@@ -703,8 +842,29 @@ eState GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y - i + 1][x - i + 1] = NONE;
 				map[y - i + 2][x - i + 2] = NONE;
-				coups.insert(Point(x - i + 1, y - i + 1, 0));
-				coups.insert(Point(x - i + 2, y - i + 2, 0));
+				// coups2[y - i + 1][x - i + 1]++;
+
+				coups2[y - i][x - i]--;
+				coups2[y - i][x - i + 1]--;
+				coups2[y - i][x - i + 2]--;
+				coups2[y - i + 1][x - i]--;
+				coups2[y - i + 1][x - i + 2]--;
+				coups2[y - i + 2][x - i]--;
+				coups2[y - i + 2][x - i + 1]--;
+				coups2[y - i + 2][x - i + 2]--;
+
+				// coups2[y - i + 2][x - i + 2]++;
+
+				coups2[y - i + 1][x - i + 1]--;
+				coups2[y - i + 1][x - i + 2]--;
+				coups2[y - i + 1][x - i + 3]--;
+				coups2[y - i + 2][x - i + 1]--;
+				coups2[y - i + 2][x - i + 3]--;
+				coups2[y - i + 3][x - i + 1]--;
+				coups2[y - i + 3][x - i + 2]--;
+				coups2[y - i + 3][x - i + 3]--;
+				// coups.insert(Point(x - i + 1, y - i + 1, 0));
+				// coups.insert(Point(x - i + 2, y - i + 2, 0));
 				theoricCapt.push_back(Point(x - i + 1, y - i + 1, 0));
 				theoricCapt.push_back(Point(x - i + 2, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
@@ -739,8 +899,29 @@ eState GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y + i - 1][x + i - 1] = NONE;
 				map[y + i - 2][x + i - 2] = NONE;
-				coups.insert(Point(x + i - 1, y + i - 1, 0));
-				coups.insert(Point(x + i - 2, y + i - 2, 0));
+				// coups2[y + i - 1][x + i - 1]++;
+
+				coups2[y + i - 2][x + i - 2]--;
+				coups2[y + i - 2][x + i - 1]--;
+				coups2[y + i - 2][x + i]--;
+				coups2[y + i - 1][x + i - 2]--;
+				coups2[y + i - 1][x + i]--;
+				coups2[y + i][x + i - 2]--;
+				coups2[y + i][x + i - 1]--;
+				coups2[y + i][x + i]--;
+
+				// coups2[y + i - 2][x + i - 2]++;
+
+				coups2[y + i - 3][x + i - 3]--;
+				coups2[y + i - 3][x + i - 2]--;
+				coups2[y + i - 3][x + i - 1]--;
+				coups2[y + i - 2][x + i - 3]--;
+				coups2[y + i - 2][x + i - 1]--;
+				coups2[y + i - 1][x + i - 3]--;
+				coups2[y + i - 1][x + i - 2]--;
+				coups2[y + i - 1][x + i - 1]--;
+				// coups.insert(Point(x + i - 1, y + i - 1, 0));
+				// coups.insert(Point(x + i - 2, y + i - 2, 0));
 				theoricCapt.push_back(Point(x + i - 1, y + i + 1, 0));
 				theoricCapt.push_back(Point(x + i - 2, y + i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
@@ -779,8 +960,29 @@ eState GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y + i - 1][x - i + 1] = NONE;
 				map[y + i - 2][x - i + 2] = NONE;
-				coups.insert(Point(x - i + 1, y + i - 1, 0));
-				coups.insert(Point(x - i + 2, y + i - 2, 0));
+				// coups2[y + i - 1][x - i + 1]++;
+
+				coups2[y + i - 2][x - i]--;
+				coups2[y + i - 2][x - i + 1]--;
+				coups2[y + i - 2][x - i + 2]--;
+				coups2[y + i - 1][x - i]--;
+				coups2[y + i - 1][x - i + 2]--;
+				coups2[y + i][x - i]--;
+				coups2[y + i][x - i + 1]--;
+				coups2[y + i][x - i + 2]--;
+
+				// coups2[y + i - 2][x - i + 2]++;
+
+				coups2[y + i - 3][x - i + 1]--;
+				coups2[y + i - 3][x - i + 2]--;
+				coups2[y + i - 3][x - i + 3]--;
+				coups2[y + i - 2][x - i + 1]--;
+				coups2[y + i - 2][x - i + 3]--;
+				coups2[y + i - 1][x - i + 1]--;
+				coups2[y + i - 1][x - i + 2]--;
+				coups2[y + i - 1][x - i + 3]--;
+				// coups.insert(Point(x - i + 1, y + i - 1, 0));
+				// coups.insert(Point(x - i + 2, y + i - 2, 0));
 				theoricCapt.push_back(Point(x - i + 1, y + i - 1, 0));
 				theoricCapt.push_back(Point(x - i + 2, y + i - 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
@@ -815,8 +1017,29 @@ eState GameState::checkVictoire(int x, int y, eState color)
 			{
 				map[y - i + 1][x + i - 1] = NONE;
 				map[y - i + 2][x + i - 2] = NONE;
-				coups.insert(Point(x + i - 1, y - i + 1, 0));
-				coups.insert(Point(x + i - 2, y - i + 2, 0));
+				// coups2[y - i + 1][x + i - 1]++;
+
+				coups2[y - i][x + i - 2]--;
+				coups2[y - i][x + i - 1]--;
+				coups2[y - i][x + i]--;
+				coups2[y - i + 1][x + i - 2]--;
+				coups2[y - i + 1][x + i]--;
+				coups2[y - i + 2][x + i - 2]--;
+				coups2[y - i + 2][x + i - 1]--;
+				coups2[y - i + 2][x + i]--;
+
+				// coups2[y - i + 2][x + i - 2]++;
+
+				coups2[y - i + 1][x + i - 3]--;
+				coups2[y - i + 1][x + i - 2]--;
+				coups2[y - i + 1][x + i - 1]--;
+				coups2[y - i + 2][x + i - 3]--;
+				coups2[y - i + 2][x + i - 1]--;
+				coups2[y - i + 3][x + i - 3]--;
+				coups2[y - i + 3][x + i - 2]--;
+				coups2[y - i + 3][x + i - 1]--;
+				// coups.insert(Point(x + i - 1, y - i + 1, 0));
+				// coups.insert(Point(x + i - 2, y - i + 2, 0));
 				theoricCapt.push_back(Point(x + i - 1, y - i + 1, 0));
 				theoricCapt.push_back(Point(x + i - 2, y - i + 2, 0));
 				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
@@ -845,275 +1068,33 @@ eState GameState::checkVictoire(int x, int y, eState color)
 	return NONE;
 }
 
-void GameState::checkVictoireCrazy(int x, int y, eState color)
-{
-	eState opponent = (color == BLACK ? WHITE : BLACK);
-	int i = 1;
-	int capt = 0;
-	int win = 1;
-	bool check = true;
-	while (x - i >= 0 && i < 5)
-	{
-		if (map[y][x - i] == color)
-		{
-			if (capt == 2)
-			{
-				map[y][x - i + 1] = NONE;
-				map[y][x - i + 2] = NONE;
-				coups.insert(Point(x - i + 1, y, 0));
-				coups.insert(Point(x - i + 2, y, 0));
-				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
-				break;
-			}
-			capt = -1;
-			if (check)
-				win++;
-		}
-		else if (map[y][x - i] == opponent)
-		{
-			check = false;
-			capt++;
-		}
-		i++;
-	}
-	check = true;
-	capt = 0;
-	i = 1;
-	while (x + i < 19 && i < 5)
-	{
-		if (map[y][x + i] == color)
-		{
-			if (capt == 2)
-			{
-				map[y][x + i - 1] = NONE;
-				map[y][x + i - 2] = NONE;
-				coups.insert(Point(x + i - 1, y, 0));
-				coups.insert(Point(x + i - 2, y, 0));
-				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
-				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
-				break;
-			}
-			capt = -1;
-			if (check)
-				win++;
-		}
-		else if (map[y][x + i] == opponent)
-		{
-			check = false;
-			capt++;
-		}
-		i++;
-	}
-	if (win >= 5)
-		Finalstate = true;
-
-	capt = 0;
-	win = 1;
-	i = 1;
-	check = true;
-	while (y - i >= 0 && i < 5)
-	{
-		if (map[y - i][x] == color)
-		{
-			if (capt == 2)
-			{
-				map[y - i + 1][x] = NONE;
-				map[y - i + 2][x] = NONE;
-				coups.insert(Point(x, y - i + 1, 0));
-				coups.insert(Point(x, y - i + 2, 0));
-				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
-				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
-				break;
-			}
-			capt = -1;
-			if (check)
-				win++;
-		}
-		else if (map[y - i][x] == opponent)
-		{
-			check = false;
-			capt++;
-		}
-		i++;
-	}
-	capt = 0;
-	i = 1;
-	check = true;
-	while (y + i < 19 && i < 5)
-	{
-		if (map[y + i][x] == color)
-		{
-			if (capt == 2)
-			{
-				map[y + i - 1][x] = NONE;
-				map[y + i - 2][x] = NONE;
-				coups.insert(Point(x, y + i - 1, 0));
-				coups.insert(Point(x, y + i - 2, 0));
-				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
-				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
-				break;
-			}
-			capt = -1;
-			if (check)
-				win++;
-		}
-		else if (map[y + i][x] == opponent)
-		{
-			check = false;
-			capt++;
-		}
-		i++;
-	}
-	if (win >= 5)
-		Finalstate = true;
-
-	capt = 0;
-	win = 1;
-	i = 1;
-	check = true;
-	while (x - i >= 0 && y - i >= 0 && i < 5)
-	{
-		if (map[y - i][x - i] == color)
-		{
-			if (capt == 2)
-			{
-				map[y - i + 1][x - i + 1] = NONE;
-				map[y - i + 2][x - i + 2] = NONE;
-				coups.insert(Point(x - i + 1, y - i + 1, 0));
-				coups.insert(Point(x - i + 2, y - i + 2, 0));
-				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
-				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
-				break;
-			}
-			capt = -1;
-			if (check)
-				win++;
-		}
-		else if (map[y - i][x - i] == opponent)
-		{
-			check = false;
-			capt++;
-		}
-		i++;
-	}
-	capt = 0;
-	i = 1;
-	check = true;
-	while (x + i < 19 && y + i < 19 && i < 5)
-	{
-		if (map[y + i][x + i] == color)
-		{
-			if (capt == 2)
-			{
-				map[y + i - 1][x + i - 1] = NONE;
-				map[y + i - 2][x + i - 2] = NONE;
-				coups.insert(Point(x + i - 1, y + i - 1, 0));
-				coups.insert(Point(x + i - 2, y + i - 2, 0));
-				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
-				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
-				break;
-			}
-			capt = -1;
-			if (check)
-				win++;
-		}
-		else if (map[y + i][x + i] == opponent)
-		{
-			check = false;
-			capt++;
-		}
-		i++;
-	}
-	if (win >= 5)
-		Finalstate = true;
-
-	capt = 0;
-	win = 1;
-	i = 1;
-	check = true;
-	while (x - i > 0 && y + i < 19 && i < 5)
-	{
-		if (map[y + i][x - i] == color)
-		{
-			if (capt == 2)
-			{
-				map[y + i - 1][x - i + 1] = NONE;
-				map[y + i - 2][x - i + 2] = NONE;
-				coups.insert(Point(x - i + 1, y + i - 1, 0));
-				coups.insert(Point(x - i + 2, y + i - 2, 0));
-				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
-				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
-				break;
-			}
-			capt = -1;
-			if (check)
-				win++;
-		}
-		else if (map[y + i][x - i] == opponent)
-		{
-			check = false;
-			capt++;
-		}
-		i++;
-	}
-	capt = 0;
-	i = 1;
-	check = true;
-	while (x + i < 19 && y - i > 0 && i < 5)
-	{
-		if (map[y - i][x + i] == color)
-		{
-			if (capt == 2)
-			{
-				map[y - i + 1][x + i - 1] = NONE;
-				map[y - i + 2][x + i - 2] = NONE;
-				coups.insert(Point(x + i - 1, y - i + 1, 0));
-				coups.insert(Point(x + i - 2, y - i + 2, 0));
-				(color == BLACK ? nbCaptBlack : nbCaptWhite)++;
-				(color == BLACK ? nbWhiteTwoRow : nbBlackTwoRow)--;
-				break;
-			}
-			capt = -1;
-			if (check)
-				win++;
-		}
-		else if (map[y - i][x + i] == opponent)
-		{
-			check = false;
-			capt++;
-		}
-		i++;
-	}
-	if (win >= 5)
-		Finalstate = true;
-}
-
 bool GameState::Play(int x, int y, eState color, bool &win)
 {
-	if (coups.count(Point(x, y, 0)) > 0 && !coups.find(Point(x, y, 0))->IsForbiden(color))
+	if (map[y][x] == NONE && coups2[y][x] > 0)
 	{
 		map[y][x] = color;
 		if (checkVictoire(x, y, color)!= NONE)
 			win = true;
-		coups.erase(Point(x, y, 0));
+		// coups2[y][x]--;
+		// coups.erase(Point(x, y, 0));
 		checkVoisin(x, y, color);
-		std::set<Point> patate;
-		//TODO: a voir si juste le modifier a l'interieur marche
-		for (auto i = coups.begin(); i != coups.end(); ++i)
-		{
-			// if ((*i).IsForbiden(color == WHITE ? BLACK : WHITE))
-			// 	std::cout << "FORBIDDEN" << std::endl;
-			Point tmp(*i);
-			// std::cout << "copie -> (" << tmp.getX() << ", " << tmp.getY() << ")" << std::endl;
-			if (!checkThree((*i).getX(), (*i).getY(), color))
-				tmp.Forbiden(color, true);
-			else
-				tmp.Forbiden(color, false);
-			//coups.erase(*i);
-			patate.insert(tmp);
-		}
-		coups.clear();
-		coups.insert(patate.begin(), patate.end());
+		// std::set<Point> patate;
+		// //TODO: a voir si juste le modifier a l'interieur marche
+		// for (auto i = coups.begin(); i != coups.end(); ++i)
+		// {
+		// 	// if ((*i).IsForbiden(color == WHITE ? BLACK : WHITE))
+		// 	// 	std::cout << "FORBIDDEN" << std::endl;
+		// 	Point tmp(*i);
+		// 	// std::cout << "copie -> (" << tmp.getX() << ", " << tmp.getY() << ")" << std::endl;
+		// 	if (!checkThree((*i).getX(), (*i).getY(), color))
+		// 		tmp.Forbiden(color, true);
+		// 	else
+		// 		tmp.Forbiden(color, false);
+		// 	//coups.erase(*i);
+		// 	patate.insert(tmp);
+		// }
+		// coups.clear();
+		// coups.insert(patate.begin(), patate.end());
 		return true;
 	}
 	return false;
@@ -1127,7 +1108,8 @@ bool GameState::TheoricPlay(int x, int y, eState color)
 		checkVictoire(x, y, color);
 		// if (checkVictoire(x, y, color) != NONE)
 		// 	Finalstate = true;
-		coups.erase(Point(x, y, 0));
+		// coups2[y][x]--;
+		// coups.erase(Point(x, y, 0));
 		checkVoisin(x, y, color);
 		theoricPlay = true;
 		return true;
@@ -1142,7 +1124,8 @@ void GameState::UndoTheoricPlay()
 	int y = move.GetY();
 	map[y][x] = NONE;
 	UnCheckVoisin(x, y);
-	coups.insert(Point(move.GetX(), move.GetY(), 0));
+	// coups.insert(Point(move.GetX(), move.GetY(), 0));
+	// coups2[y][x]++;
 	int j = 0;
 	for(auto i : theoricCapt)
 	{
@@ -1154,7 +1137,17 @@ void GameState::UndoTheoricPlay()
 		int x = i.getX();
 		int y = i.getY();
 		map[y][x] = currentColor == BLACK ? WHITE : BLACK;
-		coups.erase(i);
+
+		coups2[y - 1][x - 1]++;
+		coups2[y - 1][x]++;
+		coups2[y - 1][x + 1]++;
+		coups2[y][x - 1]++;
+		coups2[y][x + 1]++;
+		coups2[y + 1][x - 1]++;
+		coups2[y + 1][x]++;
+		coups2[y + 1][x + 1]++;
+
+		// coups2[y][x]--;
 		j++;
 	}
 	theoricCapt.clear();
@@ -1175,7 +1168,8 @@ bool GameState::CheckMove(int x, int y, eState color)
 
 GameState& GameState::operator=(GameState const & src)
 {
-	coups = src.coups;
+	// coups = src.coups;
+	std::memcpy(&coups2, &(src.coups2), sizeof(int) * 19 * 19);
 	std::memcpy(&map, &(src.map), sizeof(eState) * 19 * 19);
 	nbCaptBlack = src.nbCaptBlack;
 	nbCaptWhite = src.nbCaptWhite;
@@ -1195,25 +1189,40 @@ GameState& GameState::operator=(GameState const & src)
 
 void GameState::GenerateSons(std::vector<GameState> &sons)
 {
-	sons.reserve(coups.size());
+	sons.reserve(40);
 	auto reverse = (currentColor == WHITE ? BLACK : WHITE);
 	GameState son(*this);
-	for (auto i = coups.begin(); i != coups.end(); ++i)
+	for (auto i = 0; i < 19 * 19; i++)
 	{
-		if(!i->IsForbiden(reverse))
+		int x = i % 19;
+		int y = i / 19;
+		if (map[y][x] == NONE && coups2[y][x] > 0)
 		{
-			Input test(NOINPUT, (*i).getX(), (*i).getY());
+			Input test(NOINPUT, x, y);
 			son.Update(test, reverse);
 			// printf("--->before\n");
 			// son.Display();
 			// printf("capture[%d][%d]\n", son.nbCaptBlack, son.nbCaptWhite);
 			sons.push_back(son);
 			son.UndoTheoricPlay();
-			// printf("--->after\n");
-			// son.Display();
-			// printf("capture[%d][%d]\n", son.nbCaptBlack, son.nbCaptWhite);
 		}
 	}
+	// for (auto i = coups.begin(); i != coups.end(); ++i)
+	// {
+	// 	if(!i->IsForbiden(reverse))
+	// 	{
+	// 		Input test(NOINPUT, (*i).getX(), (*i).getY());
+	// 		son.Update(test, reverse);
+	// 		// printf("--->before\n");
+	// 		// son.Display();
+	// 		// printf("capture[%d][%d]\n", son.nbCaptBlack, son.nbCaptWhite);
+	// 		sons.push_back(son);
+	// 		son.UndoTheoricPlay();
+	// 		// printf("--->after\n");
+	// 		// son.Display();
+	// 		// printf("capture[%d][%d]\n", son.nbCaptBlack, son.nbCaptWhite);
+	// 	}
+	// }
 }
 
 int GameState::GetHeuristic()
@@ -1221,9 +1230,9 @@ int GameState::GetHeuristic()
 	return heuristic;
 }
 
-std::set<Point> GameState::GetCoups()
+int *GameState::GetCoups()
 {
-	return coups;
+	return (int *)coups2;
 }
 
 Input GameState::GetMove()

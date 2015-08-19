@@ -90,7 +90,7 @@ void SFMLData::DrawHiScoreMenu()
 
 }
 
-void SFMLData::DrawNormalMode(eState color)
+void SFMLData::DrawNormalMode(eState)
 {
 	if (game == NULL)
 		return;
@@ -125,7 +125,7 @@ void SFMLData::DrawNormalMode(eState color)
 			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
 			win->draw(shape);
 		} 
-		else if (machin.count(Point(i % 19, i / 19, 0)) && !machin.find(Point(i % 19, i / 19, 0))->IsForbiden(color))
+		else if (machin[i] > 0)
 		{
 			prout = false;
 			sf::CircleShape shape(10);
@@ -134,15 +134,19 @@ void SFMLData::DrawNormalMode(eState color)
 			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
 			win->draw(shape);
 		}
-		if (prout && machin.count(Point(i % 19, i / 19, 0)))
-		{
-			sf::CircleShape shape(10);
-			shape.setFillColor(sf::Color(0, 250, 0));
+		// std::cout << machin[i] << " ";
+		// if (i && !((i + 1) % 19))
+		// 	std::cout << std::endl;
+		// if (machin[i] > 0)
+		// {
+		// 	sf::CircleShape shape(10);
+		// 	shape.setFillColor(sf::Color(0, 250, 0));
 
-			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
-			win->draw(shape);
-		}
+		// 	shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
+		// 	win->draw(shape);
+		// }
 	}
+	std::cout << std::endl;
 }
 
 void SFMLData::DrawMultiMode()
