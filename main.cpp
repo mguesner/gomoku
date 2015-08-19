@@ -92,15 +92,15 @@ Input do_MinMax(GameState *root, Timer timeout)
 	Input ret;
 	while (1 && depth < MAXDEPTH)
 	{
-		auto value = std::chrono::system_clock::now();
+		//auto value = std::chrono::system_clock::now();
 		int ALPHA = ALPHA_START;
 		int BETA = BETA_START;
 		best = MinMax(*root, depth, ALPHA, BETA, true, &ret, true);
 		if (best == WIN)
 			break;
-		auto turnValue = std::chrono::system_clock::now() - value;
-		if (std::chrono::system_clock::now() + turnValue * 40 > timeout)
-			break;
+		// auto turnValue = std::chrono::system_clock::now() - value;
+		// if (std::chrono::system_clock::now() + turnValue * 40 > timeout)
+		// 	break;
 		depth += 1;
 
 	}

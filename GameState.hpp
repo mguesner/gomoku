@@ -71,7 +71,10 @@ private:
 	bool isCapturable(bool *check, int x, int y, eState color);
 	// std::set<Point> coups;
 	std::vector<Point> theoricCapt;
+	union {
+	eState map1d[19 * 19];
 	eState map[19][19];
+};
 	Point coups2[19][19];
 	// bool test[8];
 	bool theoricPlay;

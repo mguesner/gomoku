@@ -25,7 +25,7 @@ GameState::GameState()
 	{
 		for (int j = 0; j < 19; ++j)
 		{
-			map[i][j] = NONE;
+			map1d[i + j * 19] = NONE;
 		}
 	}
 	for (int i = 0; i < 19; ++i)
@@ -123,7 +123,8 @@ int		GameState::BrainDead()
 	{
 		for (int j = 0; j < 19; ++j)
 		{
-			auto current = map[i][j];
+			eState current = map1d[i * 19 + j];
+			
 			if (current != NONE)
 			{
 				if (i - 1 >= 0 && current != map[i - 1][j])
