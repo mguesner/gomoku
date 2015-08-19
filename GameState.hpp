@@ -53,7 +53,7 @@ public:
 	std::vector<GameState> successors;
 
 	eState *GetMap();
-	int *GetCoups();
+	char *GetCoups();
 	void UndoTheoricPlay();
 	void UnCheckVoisin(int x, int y);
 	bool TheoricPlay(int, int, eState color);
@@ -72,7 +72,7 @@ private:
 	// std::set<Point> coups;
 	std::vector<Point> theoricCapt;
 	eState map[19][19];
-	int coups2[19][19];
+	char coups2[19][19];
 	// bool test[8];
 	bool theoricPlay;
 	int nbWhiteTwoRow;

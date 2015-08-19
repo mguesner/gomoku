@@ -51,7 +51,7 @@ GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt
 GameState::GameState(GameState const & src)
 {
 	// coups = src.coups;
-	std::memcpy(&coups2, &(src.coups2), sizeof(int) * 19 * 19);
+	std::memcpy(&coups2, &(src.coups2), sizeof(char) * 19 * 19);
 	std::memcpy(&map, &(src.map), sizeof(eState) * 19 * 19);
 	nbCaptBlack = src.nbCaptBlack;
 	nbCaptWhite = src.nbCaptWhite;
@@ -1169,7 +1169,7 @@ bool GameState::CheckMove(int x, int y, eState color)
 GameState& GameState::operator=(GameState const & src)
 {
 	// coups = src.coups;
-	std::memcpy(&coups2, &(src.coups2), sizeof(int) * 19 * 19);
+	std::memcpy(&coups2, &(src.coups2), sizeof(char) * 19 * 19);
 	std::memcpy(&map, &(src.map), sizeof(eState) * 19 * 19);
 	nbCaptBlack = src.nbCaptBlack;
 	nbCaptWhite = src.nbCaptWhite;
@@ -1230,9 +1230,9 @@ int GameState::GetHeuristic()
 	return heuristic;
 }
 
-int *GameState::GetCoups()
+char *GameState::GetCoups()
 {
-	return (int *)coups2;
+	return (char *)coups2;
 }
 
 Input GameState::GetMove()
