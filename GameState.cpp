@@ -32,7 +32,7 @@ GameState::GameState()
 	{
 		for (int j = 0; j < 19; ++j)
 		{
-			coups2[i][j] = 0;
+			coups2[i][j] = Point(j, i, 0);
 		}
 	}
 }
@@ -51,7 +51,7 @@ GameState::GameState(eState real[19][19], Input test, int blackcpt, int whitecpt
 GameState::GameState(GameState const & src)
 {
 	// coups = src.coups;
-	std::memcpy(&coups2, &(src.coups2), sizeof(char) * 19 * 19);
+	std::memcpy(&coups2, &(src.coups2), sizeof(Point) * 19 * 19);
 	std::memcpy(&map, &(src.map), sizeof(eState) * 19 * 19);
 	nbCaptBlack = src.nbCaptBlack;
 	nbCaptWhite = src.nbCaptWhite;
@@ -1070,7 +1070,7 @@ eState GameState::checkVictoire(int x, int y, eState color)
 
 bool GameState::Play(int x, int y, eState color, bool &win)
 {
-	if (map[y][x] == NONE && coups2[y][x] > 0)
+	if (map[y][x] == NONE && coups2[y][x].getNb() > 0 && !coups2[y][x].IsForbiden(color))
 	{
 		map[y][x] = color;
 		if (checkVictoire(x, y, color)!= NONE)
@@ -1080,6 +1080,15 @@ bool GameState::Play(int x, int y, eState color, bool &win)
 		checkVoisin(x, y, color);
 		// std::set<Point> patate;
 		// //TODO: a voir si juste le modifier a l'interieur marche
+		for(auto i = 0; i < 19 * 19; i++)
+		{
+			int x = i % 19;
+			int y = i / 19;
+			if (map[y][x] == NONE && coups2[y][x].getNb() > 0 && !checkThree(x, y, color))
+				coups2[y][x].Forbiden(color, true);
+			else
+				coups2[y][x].Forbiden(color, false);
+		}
 		// for (auto i = coups.begin(); i != coups.end(); ++i)
 		// {
 		// 	// if ((*i).IsForbiden(color == WHITE ? BLACK : WHITE))
@@ -1087,9 +1096,9 @@ bool GameState::Play(int x, int y, eState color, bool &win)
 		// 	Point tmp(*i);
 		// 	// std::cout << "copie -> (" << tmp.getX() << ", " << tmp.getY() << ")" << std::endl;
 		// 	if (!checkThree((*i).getX(), (*i).getY(), color))
-		// 		tmp.Forbiden(color, true);
+		// 		i->Forbiden(color, true);
 		// 	else
-		// 		tmp.Forbiden(color, false);
+		// 		i->Forbiden(color, false);
 		// 	//coups.erase(*i);
 		// 	patate.insert(tmp);
 		// }
@@ -1169,7 +1178,7 @@ bool GameState::CheckMove(int x, int y, eState color)
 GameState& GameState::operator=(GameState const & src)
 {
 	// coups = src.coups;
-	std::memcpy(&coups2, &(src.coups2), sizeof(char) * 19 * 19);
+	std::memcpy(&coups2, &(src.coups2), sizeof(Point) * 19 * 19);
 	std::memcpy(&map, &(src.map), sizeof(eState) * 19 * 19);
 	nbCaptBlack = src.nbCaptBlack;
 	nbCaptWhite = src.nbCaptWhite;
@@ -1196,7 +1205,7 @@ void GameState::GenerateSons(std::vector<GameState> &sons)
 	{
 		int x = i % 19;
 		int y = i / 19;
-		if (map[y][x] == NONE && coups2[y][x] > 0)
+		if (map[y][x] == NONE && coups2[y][x].getNb() > 0 && !coups2[y][x].IsForbiden(reverse))
 		{
 			Input test(NOINPUT, x, y);
 			son.Update(test, reverse);
@@ -1230,9 +1239,9 @@ int GameState::GetHeuristic()
 	return heuristic;
 }
 
-char *GameState::GetCoups()
+Point *GameState::GetCoups()
 {
-	return (char *)coups2;
+	return (Point *)coups2;
 }
 
 Input GameState::GetMove()

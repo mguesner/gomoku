@@ -21,6 +21,7 @@ class Point
 		double	getX() const;
 		double	getY() const;
 		double	getZ() const;
+		int		getNb() const;
 
 		void	SetX(double value);
 		void	SetY(double value);
@@ -39,6 +40,8 @@ class Point
 		bool operator!=(Point const & ref);
 		Point& operator+(Point const & ref);
 		Point& operator-(Point const & ref);
+		Point operator++(int);
+		Point operator--(int);
 	protected:
 		bool		black;
 		bool		white;
@@ -46,6 +49,7 @@ class Point
 		double		x;
 		double		y;
 		double		z;
+		int			nb;
 };
 
 std::ostream& operator<<(std::ostream& os, Point& pt);

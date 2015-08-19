@@ -10,6 +10,7 @@ Point::Point(double x, double y, double z) {
 	forbiden[0] = false;
 	forbiden[1] = false;
 	forbiden[2] = false;
+	nb = 0;
 }
 
 Point::Point(Point const & src) {
@@ -19,6 +20,7 @@ Point::Point(Point const & src) {
 	forbiden[0] = src.forbiden[0];
 	forbiden[1] = src.forbiden[1];
 	forbiden[2] = src.forbiden[2];
+	nb = src.nb;
 	// if (forbiden[1] || forbiden[2])
 	// 	std::cout << "FORBIDEN" <<std::endl;
 }
@@ -27,6 +29,7 @@ Point& Point::operator=(Point const & src) {
 	x = src.x;
 	y = src.y;
 	z = src.z;
+	nb = src.nb;
 	forbiden[0] = src.forbiden[0];
 	forbiden[1] = src.forbiden[1];
 	forbiden[2] = src.forbiden[2];
@@ -47,6 +50,18 @@ Point& Point::operator-=(Point const & ref)
 	x -= ref.x;
 	y -= ref.y;
 	z -= ref.z;
+	return *this;
+}
+
+Point Point::operator++(int)
+{
+	nb++;
+	return *this;
+}
+
+Point Point::operator--(int)
+{
+	nb--;
 	return *this;
 }
 
@@ -179,6 +194,11 @@ double	Point::getY() const
 double	Point::getZ() const
 {
 	return this->z;
+}
+
+int		Point::getNb() const
+{
+	return nb;
 }
 
 std::ostream& operator<<(std::ostream& os, Point& pt)
