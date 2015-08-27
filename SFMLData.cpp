@@ -125,7 +125,7 @@ void SFMLData::DrawNormalMode(eState cur)
 			shape.setPosition(i % 19 * CASESIZE + 110, i / 19 * CASESIZE + 110);
 			win->draw(shape);
 		} 
-		else if (machin[i].getNb() > 0)
+		else if (machin[i].nb > 0)
 		{
 			prout = false;
 			sf::CircleShape shape(10);
@@ -137,7 +137,7 @@ void SFMLData::DrawNormalMode(eState cur)
 		// std::cout << machin[i].getNb() << " ";
 		// if (i && !((i + 1) % 19))
 		// 	std::cout << std::endl;
-		if (machin[i].IsForbiden(cur))
+		if (cur == BLACK ? machin[i].blackForbiden : machin[i].whiteForbiden)
 		{
 			sf::CircleShape shape(10);
 			shape.setFillColor(sf::Color(0, 250, 0));

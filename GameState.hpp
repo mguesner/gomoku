@@ -25,6 +25,12 @@
 #define LOOSE -100000000
 #define WIN 100000000
 
+struct coup
+{
+	int nb :6;
+	bool blackForbiden;
+	bool whiteForbiden;
+};
 
 class GameState
 {
@@ -53,7 +59,7 @@ public:
 	std::vector<GameState> successors;
 
 	eState *GetMap();
-	Point *GetCoups();
+	struct coup *GetCoups();
 	void UndoTheoricPlay();
 	void UnCheckVoisin(int x, int y);
 	bool TheoricPlay(int, int, eState color);
@@ -71,11 +77,12 @@ private:
 	bool isCapturable(bool *check, int x, int y, eState color);
 	// std::set<Point> coups;
 	std::vector<Point> theoricCapt;
-	union {
-	eState map1d[19 * 19];
-	eState map[19][19];
-};
-	Point coups2[19][19];
+	union
+	{
+		eState map1d[19 * 19];
+		eState map[19][19];
+	};
+	struct coup coups2[19][19];
 	// bool test[8];
 	bool theoricPlay;
 	int nbWhiteTwoRow;
