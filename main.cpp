@@ -98,13 +98,13 @@ Input do_MinMax(GameState *root, Timer timeout)
 		int ALPHA = ALPHA_START;
 		int BETA = BETA_START;
 		best = MinMax(*root, depth, ALPHA, BETA, true, &ret, true);
-		if (best == WIN)
+		// std::cout << "depth end with " << best << std::endl;
+		if (best >= WIN)
 			break;
 		auto turnValue = std::chrono::system_clock::now() - value;
 		if (std::chrono::system_clock::now() + turnValue * 40 > timeout)
 			break;
 		depth += 1;
-
 	}
 	std::cout << "depth  : " << depth << " valeur heuristic: "<< best << std::endl;
 	ret.SetType(MOUSE);
